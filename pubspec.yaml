@@ -39,10 +39,10 @@ dependencies:
   permission_handler: ^5.0.1+1
   intl: ^0.16.0
   fluttertoast: ^7.1.8
-  firebase_analytics: any
-  firebase_crashlytics: ^0.2.4
-  firebase_messaging: ^7.0.3
-  firebase_core: ^0.5.0
+  # firebase_analytics: any
+  # firebase_crashlytics: ^0.2.4
+  # firebase_messaging: ^7.0.3
+  # firebase_core: ^0.5.0
   flutter_local_notifications: ^4.0.1+2
   flutter_barcode_scanner: ^1.0.1
   barcode: ^1.17.1
@@ -57,6 +57,8 @@ dependencies:
   flutter_native_splash: ^0.3.0
   apple_sign_in: ^0.1.0
   google_sign_in: ^4.0.7
+  bottom_navy_bar: ^4.2.0
+ 
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +80,11 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: font/Nunito-Regular.ttf
+        - asset: font/Nunito-Italic.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
