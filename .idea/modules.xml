@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/UTC2_Staff.iml" filepath="$PROJECT_DIR$/UTC2_Staff.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/UTC2_Staff_android.iml" filepath="$PROJECT_DIR$/android/UTC2_Staff_android.iml" />
+    </modules>
+  </component>
+</project>
