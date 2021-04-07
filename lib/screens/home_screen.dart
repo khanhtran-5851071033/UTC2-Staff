@@ -1,9 +1,10 @@
 import 'dart:ui';
 
+import 'package:UTC2_Staff/screens/home_page.dart';
+import 'package:UTC2_Staff/screens/profile_page.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:UTC2_Staff/widgets/drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,16 +14,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  PageController _pageController;
+
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
@@ -33,10 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          elevation: 1,
+          elevation: 10,
           backgroundColor: Colors.white,
           title: Text(
-            'Khánh Trần',
+            'Phạm Miên',
             style: TextStyle(color: ColorApp.black),
           ),
           leading: Builder(
@@ -49,37 +48,38 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () => Scaffold.of(context).openDrawer()),
           ),
           actions: [
-            Container(
-              margin: EdgeInsets.only(right: size.width * 0.03),
-              width: 40,
-              child: CircleAvatar(
-                radius: 50.0,
-                backgroundImage: NetworkImage(
-                    "https://scontent.fsgn2-5.fna.fbcdn.net/v/t1.6435-9/132520813_846603219451783_6386312700226999104_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=o4rFjC9w9mAAX8uytLC&_nc_ht=scontent.fsgn2-5.fna&oh=4c8653b5d4079ba4db437c5a09f2f239&oe=6091F89D"),
+            Builder(
+              builder: (context) => Container(
+                margin: EdgeInsets.only(right: size.width * 0.03),
+                width: 35,
+                child: InkWell(
+                  onTap: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: ColorApp.lightGrey,
+                    backgroundImage: NetworkImage(
+                        "https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1"),
+                  ),
+                ),
               ),
             )
           ],
         ),
         drawer: CustomDrawer(),
+        endDrawer: Drawer(child: ProFilePage()),
         body: SizedBox.expand(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() => _selectedIndex = index);
-            },
+          child: IndexedStack(
+            index: _selectedIndex,
             children: <Widget>[
+              HomePage(),
               Container(
-                color: Colors.white,
-              ),
+                  color: Colors.white, child: Center(child: Text('Thông báo'))),
               Container(
-                color: Colors.white,
-              ),
+                  color: Colors.white,
+                  child: Center(child: Text('Lịch trình'))),
               Container(
-                color: Colors.white,
-              ),
-              Container(
-                color: Colors.white,
-              ),
+                  color: Colors.white, child: Center(child: Text('Hoạt động'))),
             ],
           ),
         ),
@@ -88,30 +88,32 @@ class _HomeScreenState extends State<HomeScreen> {
           showElevation: true, // use this to remove appBar's elevation
           onItemSelected: (index) => setState(() {
             _selectedIndex = index;
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 300), curve: Curves.ease);
+
+            // duration: Duration(milliseconds: 300), curve: Curves.ease);
           }),
           items: [
             BottomNavyBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Trang chủ'),
-              activeColor: ColorApp.blue,
-            ),
+                icon: Icon(Icons.home),
+                title: Text('Trang chủ'),
+                activeColor: ColorApp.blue,
+                inactiveColor: ColorApp.black),
             BottomNavyBarItem(
-              icon: Icon(Icons.date_range),
-              title: Text('Lịch trình'),
-              activeColor: ColorApp.blue,
-            ),
+                icon: Icon(
+                  Icons.notifications,
+                ),
+                title: Text('Thông báo'),
+                activeColor: ColorApp.blue,
+                inactiveColor: ColorApp.black),
             BottomNavyBarItem(
-              icon: Icon(Icons.stacked_line_chart_rounded),
-              title: Text('Hoạt động'),
-              activeColor: ColorApp.blue,
-            ),
+                icon: Icon(Icons.date_range),
+                title: Text('Lịch trình'),
+                activeColor: ColorApp.blue,
+                inactiveColor: ColorApp.black),
             BottomNavyBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Cài đặt'),
-              activeColor: ColorApp.blue,
-            ),
+                icon: Icon(Icons.stacked_line_chart_rounded),
+                title: Text('Hoạt động'),
+                activeColor: ColorApp.blue,
+                inactiveColor: ColorApp.black),
           ],
         ));
   }
