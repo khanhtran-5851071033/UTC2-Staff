@@ -3,24 +3,56 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
+  final Function(String) linkWeb;
+
+  const CustomDrawer({this.linkWeb});
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
   List service = [
-    {'title': 'Trang chủ', 'icon': Icons.home},
-    {'title': 'Nhập điểm', 'icon': Icons.table_view},
+    {'title': 'Trang chủ', 'icon': Icons.home, 'link': 'https://utc2.edu.vn/'},
+    {
+      'title': 'Nhập điểm',
+      'icon': Icons.table_view,
+      'link': 'http://nhapdiem.tms.utc2.edu.vn/TaiKhoangv/#'
+    },
     {
       'title': 'Hệ thống Cố vấn học tập, Chủ nhiệm lớp',
-      'icon': Icons.fact_check
+      'icon': Icons.fact_check,
+      'link': 'http://smart.utc2.edu.vn:85/cvht/gv/login.jsp'
     },
-    {'title': 'Đăng ký sử dụng phòng học / báo dạy bù', 'icon': Icons.storage},
-    {'title': 'Đăng ký giấy đi công tác', 'icon': Icons.flight_land},
-    {'title': 'Đăng ký giấy giới thiệu', 'icon': Icons.badge},
-    {'title': 'Đăng ký xe đi công tác', 'icon': Icons.airport_shuttle},
-    {'title': 'Đăng ký lịch công tác tuần', 'icon': Icons.date_range},
-    {'title': 'Đăng ký ở nhà khách', 'icon': Icons.night_shelter},
+    {
+      'title': 'Đăng ký sử dụng phòng học / báo dạy bù',
+      'icon': Icons.storage,
+      'link': 'http://tmsweb.utc2.edu.vn/Dangkyphong/Dangkyphong'
+    },
+    {
+      'title': 'Đăng ký giấy đi công tác',
+      'icon': Icons.flight_land,
+      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+    },
+    {
+      'title': 'Đăng ký giấy giới thiệu',
+      'icon': Icons.badge,
+      'link': 'http://smart.utc2.edu.vn/dvc/vi-vn'
+    },
+    {
+      'title': 'Đăng ký xe đi công tác',
+      'icon': Icons.airport_shuttle,
+      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+    },
+    {
+      'title': 'Đăng ký lịch công tác tuần',
+      'icon': Icons.date_range,
+      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+    },
+    {
+      'title': 'Đăng ký ở nhà khách',
+      'icon': Icons.night_shelter,
+      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+    },
   ];
 
   @override
@@ -66,6 +98,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 child: ListTile(
                   onTap: () {
                     Navigator.of(context).pop();
+                    widget.linkWeb(service[index]['link']);
                   },
                   leading: Icon(
                     service[index]['icon'],
