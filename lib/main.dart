@@ -1,4 +1,5 @@
 import 'package:UTC2_Staff/screens/home_screen.dart';
+import 'package:UTC2_Staff/screens/login_screen.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
               .appBarTheme
               .copyWith(brightness: Brightness.light)),
       debugShowCheckedModeBanner: false,
+      // home: HomeScreen(),
       home: HomeScreen(),
     );
   }

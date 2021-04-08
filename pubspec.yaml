@@ -66,6 +66,7 @@ dependencies:
   google_sign_in: ^4.0.7
   bottom_navy_bar: ^4.2.0
   avatar_glow: ^1.2.0
+  syncfusion_flutter_calendar: ^18.4.49
  
 
 dev_dependencies:
@@ -79,8 +80,8 @@ flutter_launcher_name:
   name: "UTC2 Staff"
 
 flutter_icons:
-  image_path_android: "assets/icon/icon_app_android.jpg"
-  image_path_ios: "assets/icon/icon_app_ios.jpg"
+  image_path_android: "assets/images/logoUTC.png"
+  image_path_ios: "assets/images/logoUTC.png"
   android: true
   ios: true
 # For information on the generic Dart part of this file, see the
@@ -101,8 +102,8 @@ flutter:
 
   
   assets:
-    - assets/icons/
-    - assets/images/
+    -  assets/icons/
+    -  assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

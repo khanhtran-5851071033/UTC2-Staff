@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:UTC2_Staff/screens/login_screen.dart';
 import 'package:UTC2_Staff/screens/profile_screen/profile_info.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -155,7 +156,7 @@ class _ProFilePageState extends State<ProFilePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            ProfileInfo()));
+                                                            LoginScreen()));
                                               },
                                         leading: Icon(
                                           buttonList[index]['icon'],
@@ -220,8 +221,13 @@ class _ProFilePageState extends State<ProFilePage> {
           SafeArea(
             child: Column(
               children: [
-                Container(
-                    child: Center(child: _avatar(_image, size, linkImage))),
+                GestureDetector(
+                  onTap: () {
+                    _show(size);
+                  },
+                  child: Container(
+                      child: Center(child: _avatar(_image, size, linkImage))),
+                ),
                 SizedBox(
                   height: 10,
                 ),
