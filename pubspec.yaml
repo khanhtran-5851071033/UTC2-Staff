@@ -80,8 +80,9 @@ flutter_launcher_name:
   name: "UTC2 Staff"
 
 flutter_icons:
-  image_path_android: "assets/images/logoUTC.png"
-  image_path_ios: "assets/images/logoUTC.png"
+  
+  image_path_android: "assets/icons/icon_app.png"
+  image_path_ios: "assets/icons/icon_app.png"
   android: true
   ios: true
 # For information on the generic Dart part of this file, see the

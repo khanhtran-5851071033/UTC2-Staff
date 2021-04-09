@@ -1,5 +1,4 @@
 import 'package:UTC2_Staff/screens/home_screen.dart';
-import 'package:UTC2_Staff/screens/login_screen.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

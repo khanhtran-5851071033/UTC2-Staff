@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:UTC2_Staff/screens/login_screen.dart';
+import 'package:UTC2_Staff/screens/profile_screen/help_screen.dart';
+import 'package:UTC2_Staff/screens/profile_screen/payroll_table_screen.dart';
+import 'package:UTC2_Staff/screens/profile_screen/performance_work_screen.dart';
 import 'package:UTC2_Staff/screens/profile_screen/profile_info.dart';
+import 'package:UTC2_Staff/screens/profile_screen/setting_screen.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,12 +92,12 @@ class _ProFilePageState extends State<ProFilePage> {
 
   List screen = [
     ProfileInfo(),
-    ProfileInfo(),
-    ProfileInfo(),
-    ProfileInfo(),
-    ProfileInfo(),
-    ProfileInfo(),
-    ProfileInfo(),
+    TaskPerformanceScreen(),
+    PayrollScreen(),
+    HelpScreen(),
+    ProfileInfo(), //chia sẻ link
+    SettingScreen(),
+    ProfileInfo(), //Đăng xuất
   ];
 
   @override

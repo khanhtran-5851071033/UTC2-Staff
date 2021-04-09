@@ -60,6 +60,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     Size size = MediaQuery.of(context).size;
     return Drawer(
         child: new ListView(
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         GestureDetector(
           onTap: () {
@@ -77,7 +78,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
         ),
         Container(
-          height: size.height,
+          height: size.height - AppBar().preferredSize.height * 2,
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -85,6 +86,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   colors: [Colors.white, ColorApp.lightGrey])),
           child: ListView.builder(
             itemCount: service.length,
+            physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 6),
