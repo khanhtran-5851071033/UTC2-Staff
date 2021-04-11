@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:UTC2_Staff/screens/login_screen.dart';
+import 'package:UTC2_Staff/screens/login/login_screen.dart';
+import 'package:UTC2_Staff/screens/profile_screen/attendance_screen.dart';
 import 'package:UTC2_Staff/screens/profile_screen/help_screen.dart';
 import 'package:UTC2_Staff/screens/profile_screen/payroll_table_screen.dart';
 import 'package:UTC2_Staff/screens/profile_screen/performance_work_screen.dart';
@@ -82,6 +83,7 @@ class _ProFilePageState extends State<ProFilePage> {
 
   List buttonList = [
     {'title': 'Thông tin cá nhân', 'icon': Icons.person_pin},
+    {'title': 'Điểm danh', 'icon': Icons.library_add_check_outlined},
     {'title': 'Khối lượng công việc', 'icon': Icons.poll_outlined},
     {'title': 'Xem bảng lương', 'icon': Icons.money},
     {'title': 'Trợ giúp', 'icon': Icons.help_outline_outlined},
@@ -92,6 +94,7 @@ class _ProFilePageState extends State<ProFilePage> {
 
   List screen = [
     ProfileInfo(),
+    AttendanceScreen(),
     TaskPerformanceScreen(),
     PayrollScreen(),
     HelpScreen(),
@@ -133,8 +136,8 @@ class _ProFilePageState extends State<ProFilePage> {
                                     decoration: BoxDecoration(
                                       border: Border(
                                         bottom: BorderSide(
-                                            width: index == 2 ? 12.0 : 0,
-                                            color: index == 2
+                                            width: index == 3 ? 12.0 : 0,
+                                            color: index == 3
                                                 ? ColorApp.lightGrey
                                                 : Colors.transparent),
                                       ),
@@ -188,7 +191,7 @@ class _ProFilePageState extends State<ProFilePage> {
                                         : Divider(
                                             height: 1,
                                             thickness: 0.2,
-                                            color: index == 2
+                                            color: index == 3
                                                 ? Colors.transparent
                                                 : Colors.black54,
                                           ),

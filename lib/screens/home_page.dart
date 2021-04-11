@@ -29,37 +29,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomCenter,
-        stops: [
-          0.02,
-          0.1,
-          0.3,
-          0.5,
-          0.8,
-          0.9,
-        ],
-        colors: [
-          ColorApp.lightGrey,
-          ColorApp.lightBlue,
-          ColorApp.mediumBlue,
-          ColorApp.lightBlue,
-          ColorApp.lightBlue,
-          ColorApp.mediumBlue,
-        ],
-      )),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          taskToday(size, pageController, _pageNotifier),
-          Expanded(
-            child: taskThisTime(size),
-          )
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        height: size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomCenter,
+          stops: [
+            0.02,
+            0.1,
+            0.3,
+            0.5,
+            0.8,
+            0.9,
+          ],
+          colors: [
+            ColorApp.lightGrey,
+            ColorApp.lightBlue,
+            ColorApp.mediumBlue,
+            ColorApp.lightBlue,
+            ColorApp.lightBlue,
+            ColorApp.mediumBlue,
+          ],
+        )),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            taskToday(size, pageController, _pageNotifier),
+            Expanded(
+              child: taskThisTime(size),
+            )
+          ],
+        ),
       ),
     );
   }

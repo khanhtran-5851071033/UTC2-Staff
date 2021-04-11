@@ -36,6 +36,7 @@ dependencies:
   flutter_spinkit: ^4.1.2
   webview_flutter: ^1.0.7
   geolocator: ^5.3.1
+  geocoder: ^0.2.1
   shared_preferences: ^0.5.12+4
   otp_text_field: ^1.0.2
   permission_handler: ^5.0.1+1
@@ -50,6 +51,9 @@ dependencies:
   # firebase_crashlytics: ^0.2.4
   # firebase_messaging: ^7.0.3
   # firebase_core: ^0.5.0
+  flutter_bloc: ^5.0.1
+  equatable: ^1.2.2
+  firebase_auth: ^0.16.1
   flutter_local_notifications: ^4.0.1+2
   flutter_barcode_scanner: ^1.0.1
   barcode: ^1.17.1

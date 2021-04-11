@@ -2,7 +2,6 @@ import 'package:UTC2_Staff/utils/utils.dart';
 import 'package:UTC2_Staff/widgets/schedule_option.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class SchedulePage extends StatefulWidget {
   @override

@@ -1,5 +1,6 @@
 import 'dart:ui';
-import 'package:UTC2_Staff/screens/login_screen.dart';
+
+import 'package:UTC2_Staff/screens/notify_page.dart';
 import 'package:UTC2_Staff/screens/schedule_page.dart';
 import 'package:UTC2_Staff/screens/web_view.dart';
 import 'package:UTC2_Staff/utils/custom_glow.dart';
@@ -34,9 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: _selectedIndex == 2
-            ? null
-            : AppBar(
+        appBar: _selectedIndex == 0
+            ? AppBar(
                 centerTitle: true,
                 elevation: 10,
                 backgroundColor: Colors.white,
@@ -82,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 ],
-              ),
+              )
+            : null,
         drawer: CustomDrawer(linkWeb: (link) {
           setState(() {
             utc2 = Container(
@@ -103,8 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             index: _selectedIndex,
             children: <Widget>[
               utc2,
-              Container(
-                  color: Colors.white, child: Center(child: Text('Thông báo'))),
+              NotifyPage(),
               SchedulePage(),
               Container(
                   color: Colors.white, child: Center(child: Text('Hoạt động'))),

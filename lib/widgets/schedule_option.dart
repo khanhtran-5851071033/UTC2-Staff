@@ -14,11 +14,8 @@ class OpitonSchedule extends StatefulWidget {
 }
 
 class _OpitonScheduleState extends State<OpitonSchedule> {
-  CalendarController _controller;
-
   @override
   void initState() {
-    _controller = CalendarController();
     super.initState();
   }
 

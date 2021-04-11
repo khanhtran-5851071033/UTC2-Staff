@@ -37,8 +37,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+        padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(child: Center(child: _avatar(_image, size, linkImage))),
             SizedBox(
@@ -70,6 +71,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
 Widget info(String info, String day, Size size) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Text(info),
       Text(day,
@@ -83,6 +85,7 @@ Widget info(String info, String day, Size size) {
 
 Widget _email(String email, Size size) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Text('Email : '),
       Text(email,
@@ -96,6 +99,7 @@ Widget _email(String email, Size size) {
 
 Widget _name(String name, Size size) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Text('Họ và tên : '),
       Text(name,
