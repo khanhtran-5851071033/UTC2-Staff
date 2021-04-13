@@ -28,48 +28,38 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Geocoding geocoding;
   List<Address> results = [];
 
-  Future search() async {
+  Future search(String code) async {
     location = await getLocation();
     setState(() {
       isLoading = true;
     });
-    try {
-      var geocoding = Geocoder.local;
-      var longitude = location.longitude;
-      var latitude = location.latitude;
-      var results = await geocoding
-          .findAddressesFromCoordinates(new Coordinates(latitude, longitude));
-      this.setState(() {
-        this.results = results;
-      });
-      print(results[0].addressLine);
-    } catch (e) {
-      print("Error occured: $e");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void checkIn(String code) async {
-    setState(() {
-      isLoading = true;
-    });
-    // var id = await getMsv();
-    Position location = await getLocation();
-
     if (location == null) {
       setState(() {
         isLoading = false;
         error = 'Bật dịch vụ vị trí và thử lại';
       });
     } else {
-      print(location.latitude.toString() + '/' + location.longitude.toString());
       if (code == '123') {
         setState(() {
           isLoading = false;
         });
+        try {
+          var geocoding = Geocoder.local;
+          var longitude = location.longitude;
+          var latitude = location.latitude;
+          var results = await geocoding.findAddressesFromCoordinates(
+              new Coordinates(latitude, longitude));
+          this.setState(() {
+            this.results = results;
+          });
+          print(results[0].addressLine);
+        } catch (e) {
+          print("Error occured: $e");
+        } finally {
+          setState(() {
+            isLoading = false;
+          });
+        }
       } else {
         setState(() {
           isLoading = false;
@@ -118,7 +108,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     if (barcode == null) {
       print('Không tìm thấy mã code');
     } else {
-      checkIn(barcode);
+      search(barcode);
     }
   }
 
@@ -245,13 +235,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                     side: BorderSide(color: Colors.red)))),
                     onPressed: () {
                       if (_controller.text.isNotEmpty) {
+                        search(_controller.text);
                         setState(() {
-                          isErro ? isErro = false : isErro = true;
-                          search();
+                          isErro = false;
                         });
+                        _controller.text = '';
                       } else {
                         setState(() {
-                          isErro ? isErro = false : isErro = true;
+                          isErro = true;
                         });
                       }
                     }),

@@ -46,7 +46,7 @@ class _NotifyPageState extends State<NotifyPage> {
                         margin: EdgeInsets.only(bottom: 20),
                         child: ListTile(
                           leading: leading(size, '11-04-2021'),
-                          title: title(size,
+                          title: title(
                               'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021'),
                         ),
                       );
@@ -60,12 +60,12 @@ class _NotifyPageState extends State<NotifyPage> {
   }
 }
 
-Widget title(Size size, String title) {
+Widget title(String title) {
   return Container(
     child: Text(
       title,
       maxLines: 3,
-      style: TextStyle(fontSize: size.width * 0.052),
+      style: TextStyle(fontSize: 18),
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     ),
@@ -91,15 +91,13 @@ Widget leading(Size size, String date) {
         Text(
           date.split('-')[0],
           style: TextStyle(
-              color: Colors.white,
-              fontSize: size.width * 0.04,
-              fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Text(
           date.split('-')[1] + "/" + date.split('-')[2],
           style: TextStyle(
             color: Colors.white,
-            fontSize: size.width * 0.04,
+            fontSize: 16,
           ),
         ),
       ],

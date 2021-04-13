@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:UTC2_Staff/screens/activity_page.dart';
 import 'package:UTC2_Staff/screens/notify_page.dart';
 import 'package:UTC2_Staff/screens/schedule_page.dart';
 import 'package:UTC2_Staff/screens/web_view.dart';
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: _selectedIndex == 0
+        appBar: _selectedIndex == 0 || _selectedIndex == 3
             ? AppBar(
                 centerTitle: true,
                 elevation: 10,
@@ -106,8 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               utc2,
               NotifyPage(),
               SchedulePage(),
-              Container(
-                  color: Colors.white, child: Center(child: Text('Hoạt động'))),
+              ActivityPage(),
             ],
           ),
         ),
