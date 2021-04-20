@@ -71,6 +71,7 @@ dependencies:
   bottom_navy_bar: ^4.2.0
   avatar_glow: ^1.2.0
   syncfusion_flutter_calendar: ^18.4.49
+  fl_chart: ^0.8.7
  
 
 dev_dependencies:

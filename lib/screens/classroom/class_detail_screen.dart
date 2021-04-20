@@ -1,78 +1,68 @@
+import 'dart:math';
+
+import 'package:UTC2_Staff/utils/custom_glow.dart';
 import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:UTC2_Staff/widgets/class_drawer.dart';
 import 'package:flutter/material.dart';
 
-class NotifyPage extends StatefulWidget {
+import 'package:UTC2_Staff/utils/color_random.dart';
+
+class DetailClassScreen extends StatefulWidget {
+  final String className;
+  final List listClass;
+  DetailClassScreen({this.className, this.listClass});
   @override
-  _NotifyPageState createState() => _NotifyPageState();
+  _DetailClassScreenState createState() => _DetailClassScreenState();
 }
 
-class _NotifyPageState extends State<NotifyPage> {
+class _DetailClassScreenState extends State<DetailClassScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        //elevation: 0,
+        elevation: 10,
         backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          'Thông báo',
-          style: TextStyle(color: ColorApp.black),
+        leading: Builder(
+          builder: (context) => // Ensure Scaffold is in context
+              IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: ColorApp.black,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer()),
         ),
+        actions: [
+          Builder(
+            builder: (context) => Container(
+              margin: EdgeInsets.only(right: size.width * 0.03),
+              width: 40,
+              child: IconButton(
+                  onPressed: () => _showBottomSheet(context, size,
+                      widget.className.toUpperCase(), 'Thông tin lớp'),
+                  icon: Icon(
+                    Icons.info,
+                    color: Colors.grey,
+                  )),
+            ),
+          )
+        ],
+      ),
+      drawer: ClassDrawer(
+        active: widget.listClass,
       ),
       body: Container(
+        width: size.width,
         height: size.height,
-        padding: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                stops: [0.2, 0.9],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.white, ColorApp.lightGrey])),
+        color: Colors.white,
+        padding: EdgeInsets.all(size.width * 0.03),
         child: Column(
           children: [
-            Expanded(
-              child: RefreshIndicator(
-                color: ColorApp.blue,
-                displacement: 40,
-                onRefresh: () {},
-                child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: size.width,
-                        height: size.height * 0.1,
-                        margin: EdgeInsets.only(bottom: 20),
-                        // padding:
-                        //     EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                        child: FlatButton(
-                          onPressed: () {
-                            _showBottomSheet(context, size, 'Lễ tốt nghiệp',
-                                'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021');
-                          },
-                          splashColor: ColorApp.blue.withOpacity(.4),
-                          highlightColor: ColorApp.lightGrey,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                  flex: 3, child: leading(size, '11-04-2021')),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Flexible(
-                                flex: 7,
-                                child: title(
-                                    'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
+            title(size, widget.className.toUpperCase()),
+            SizedBox(
+              height: 7,
             ),
+            comment(size)
           ],
         ),
       ),
@@ -177,49 +167,76 @@ class _NotifyPageState extends State<NotifyPage> {
       },
     );
   }
-}
 
-Widget title(String title) {
-  return Container(
-    child: Text(
-      title,
-      maxLines: 3,
-      style: TextStyle(fontSize: 19),
-      softWrap: true,
-      overflow: TextOverflow.ellipsis,
-    ),
-  );
-}
+  Widget comment(Size size) {
+    return Container(
+      width: size.width,
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: ColorApp.blue.withOpacity(0.05),
+              spreadRadius: 3,
+              blurRadius: 3,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: ColorApp.lightGrey)),
+      child: TextButton(
+        onPressed: () {},
+        child: Row(
+          children: [
+            CustomAvatarGlow(
+              glowColor: ColorApp.blue,
+              endRadius: 20.0,
+              duration: Duration(milliseconds: 1000),
+              repeat: true,
+              showTwoGlows: true,
+              repeatPauseDuration: Duration(milliseconds: 100),
+              child: Container(
+                padding: EdgeInsets.all(4),
+                child: CircleAvatar(
+                  backgroundColor: ColorApp.lightGrey,
+                  backgroundImage: NetworkImage(
+                      "https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1"),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Thông báo gì đó cho lớp học của bạn...'),
+          ],
+        ),
+      ),
+    );
+  }
 
-Widget leading(Size size, String date) {
-  return Container(
-    alignment: Alignment.center,
-    // width: size.width * 0.22,
-    decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(width: 5.0, color: ColorApp.red),
-        ),
-        gradient: LinearGradient(
-            stops: [0.2, 0.9],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [ColorApp.lightBlue, ColorApp.mediumBlue])),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          date.split('-')[0],
-          style: TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          date.split('-')[1] + "/" + date.split('-')[2],
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-      ],
-    ),
-  );
+  Widget title(Size size, String name) {
+    return Container(
+      height: 100,
+      width: size.width,
+      alignment: Alignment.bottomLeft,
+      padding: EdgeInsets.all(size.width * 0.03),
+      decoration: BoxDecoration(
+          gradient: new LinearGradient(
+              colors: ColorRandom
+                  .colors[Random().nextInt(ColorRandom.colors.length)],
+              stops: [0.0, 1.0],
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomRight,
+              tileMode: TileMode.repeated),
+          borderRadius: BorderRadius.circular(10)),
+      child: Text(
+        name,
+        softWrap: true,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+    );
+  }
 }

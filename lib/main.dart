@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
           fontFamily: 'Nunito',
-          primaryColor: ColorApp.blue,
+          primaryColor: Colors.blue,
           appBarTheme: Theme.of(context)
               .appBarTheme
               .copyWith(brightness: Brightness.light)),

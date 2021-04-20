@@ -171,8 +171,9 @@ class _ProFilePageState extends State<ProFilePage> {
                                         ),
                                         title: Text(
                                           buttonList[index]['title'],
-                                          style:
-                                              TextStyle(color: ColorApp.black),
+                                          style: TextStyle(
+                                              color: ColorApp.black,
+                                              fontSize: 16),
                                         ),
                                         trailing: index == buttonList.length - 1
                                             ? null

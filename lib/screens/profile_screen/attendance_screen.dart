@@ -55,11 +55,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           print(results[0].addressLine);
         } catch (e) {
           print("Error occured: $e");
-        } finally {
-          setState(() {
-            isLoading = false;
-          });
         }
+        // finally {
+        //   setState(() {
+        //     isLoading = false;
+        //   });
+        // }
       } else {
         setState(() {
           isLoading = false;
@@ -157,7 +158,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomAvatarGlow(
-                glowColor: ColorApp.blue,
+                glowColor: Colors.blue,
                 endRadius: 70.0,
                 duration: Duration(milliseconds: 1000),
                 repeat: true,
@@ -227,7 +228,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.white),
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(ColorApp.blue),
+                            MaterialStateProperty.all<Color>(Colors.blue),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -262,7 +263,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   // _scan();
                   _scan();
                 },
-                color: ColorApp.blue,
+                color: Colors.blue,
                 textColor: Colors.white,
                 child: Icon(
                   Icons.qr_code_scanner_outlined,

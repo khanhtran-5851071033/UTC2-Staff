@@ -12,7 +12,7 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   List service = [
-    {'title': 'Trang chủ', 'icon': Icons.home, 'link': 'https://utc2.edu.vn/'},
+    {'title': 'Trang chủ', 'icon':   Icons.home_rounded, 'link': 'https://utc2.edu.vn/'},
     {
       'title': 'Nhập điểm',
       'icon': Icons.table_view,
@@ -59,69 +59,82 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Drawer(
-        child: new ListView(
-      physics: NeverScrollableScrollPhysics(),
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            //   homeTab();
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.03, vertical: size.width * 0.02),
-            height: AppBar().preferredSize.height,
-            color: Colors.white,
-            child: CachedNetworkImage(
-              imageUrl:
-                  'https://utc2.edu.vn/upload/company/logo-15725982242.png',
+        child: Container(
+      color: Colors.white,
+      child: new ListView(
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              //   homeTab();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.03, vertical: size.width * 0.02),
+              height: AppBar().preferredSize.height,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorApp.blue.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(0, 1), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://utc2.edu.vn/upload/company/logo-15725982242.png',
+              ),
             ),
           ),
-        ),
-        Container(
-          height: size.height - AppBar().preferredSize.height * 2,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.white, ColorApp.lightGrey])),
-          child: ListView.builder(
-            itemCount: service.length,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 6),
-                decoration: BoxDecoration(
-                    border: Border(
-                  bottom: BorderSide(
-                    color: ColorApp.grey,
-                    width: .2,
+          Container(
+            height: size.height - AppBar().preferredSize.height * 2,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.white, ColorApp.lightGrey])),
+            child: ListView.builder(
+              itemCount: service.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(
+                      border: Border(
+                    bottom: BorderSide(
+                      color: ColorApp.grey,
+                      width: .2,
+                    ),
+                  )),
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      widget.linkWeb(service[index]['link']);
+                    },
+                    leading: Icon(
+                      service[index]['icon'],
+                      color: ColorApp.black.withOpacity(.8),
+                      // size: 14,
+                    ),
+                    title: Text(
+                      service[index]['title'].toString(),
+                      style: TextStyle(
+                          color: ColorApp.black.withOpacity(.8),
+                          fontSize: size.width * 0.042,
+                          wordSpacing: 1.2,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.2),
+                    ),
                   ),
-                )),
-                child: ListTile(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    widget.linkWeb(service[index]['link']);
-                  },
-                  leading: Icon(
-                    service[index]['icon'],
-                    color: ColorApp.black.withOpacity(.8),
-                    // size: 14,
-                  ),
-                  title: Text(
-                    service[index]['title'].toString(),
-                    style: TextStyle(
-                        color: ColorApp.black.withOpacity(.8),
-                        fontSize: size.width * 0.042,
-                        wordSpacing: 1.2,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.2),
-                  ),
-                ),
-              );
-            },
-          ),
-        )
-      ],
+                );
+              },
+            ),
+          )
+        ],
+      ),
     ));
   }
 }

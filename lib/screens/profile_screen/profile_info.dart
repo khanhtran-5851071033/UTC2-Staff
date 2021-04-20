@@ -38,10 +38,17 @@ class _ProfileInfoState extends State<ProfileInfo> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.white, ColorApp.lightGrey])),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(child: Center(child: _avatar(_image, size, linkImage))),
+            Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Center(child: _avatar(_image, size, linkImage))),
             SizedBox(
               height: 20,
             ),

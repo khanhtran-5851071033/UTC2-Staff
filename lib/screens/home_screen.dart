@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Scaffold.of(context).openEndDrawer();
                         },
                         child: CustomAvatarGlow(
-                          glowColor: ColorApp.blue,
+                          glowColor: Colors.blue,
                           endRadius: 20.0,
                           duration: Duration(milliseconds: 1000),
                           repeat: true,
@@ -122,26 +122,26 @@ class _HomeScreenState extends State<HomeScreen> {
           }),
           items: [
             BottomNavyBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home_rounded),
                 title: Text('Trang chủ'),
-                activeColor: ColorApp.blue,
+                activeColor: Colors.blue,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(
                   Icons.notifications,
                 ),
                 title: Text('Thông báo'),
-                activeColor: ColorApp.blue,
+                activeColor: Colors.blue,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(Icons.date_range),
                 title: Text('Lịch trình'),
-                activeColor: ColorApp.blue,
+                activeColor: Colors.blue,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(Icons.stacked_line_chart_rounded),
                 title: Text('Hoạt động'),
-                activeColor: ColorApp.blue,
+                activeColor: Colors.blue,
                 inactiveColor: ColorApp.black),
           ],
         ));
