@@ -1,13 +1,13 @@
 import 'dart:ui';
-import 'package:UTC2_Staff/screens/activity_page.dart';
-import 'package:UTC2_Staff/screens/notify_page.dart';
-import 'package:UTC2_Staff/screens/schedule_page.dart';
-import 'package:UTC2_Staff/screens/web_view.dart';
-import 'package:UTC2_Staff/utils/custom_glow.dart';
-import 'package:UTC2_Staff/screens/home_page.dart';
-import 'package:UTC2_Staff/screens/profile_page.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
-import 'package:UTC2_Staff/widgets/drawer.dart';
+import 'package:utc2_staff/screens/activity_page.dart';
+import 'package:utc2_staff/screens/notify_page.dart';
+import 'package:utc2_staff/screens/schedule_page.dart';
+import 'package:utc2_staff/screens/web_view.dart';
+import 'package:utc2_staff/utils/custom_glow.dart';
+import 'package:utc2_staff/screens/home_page.dart';
+import 'package:utc2_staff/screens/profile_page.dart';
+import 'package:utc2_staff/utils/utils.dart';
+import 'package:utc2_staff/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 

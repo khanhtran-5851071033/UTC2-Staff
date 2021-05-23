@@ -1,4 +1,4 @@
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,11 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   List service = [
-    {'title': 'Trang chủ', 'icon':   Icons.home_rounded, 'link': 'https://utc2.edu.vn/'},
+    {
+      'title': 'Trang chủ',
+      'icon': Icons.home_rounded,
+      'link': 'https://utc2.edu.vn/'
+    },
     {
       'title': 'Nhập điểm',
       'icon': Icons.table_view,

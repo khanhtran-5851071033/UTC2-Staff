@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:circular_check_box/circular_check_box.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -178,16 +178,16 @@ class _HomePageState extends State<HomePage> {
                           itemCount: subTask.length,
                           itemBuilder: (context, i) {
                             return ListTile(
-                              leading: CircularCheckBox(
-                                value: subTask[i]['isComplete'],
-                                activeColor: ColorApp.mediumBlue,
-                                checkColor: ColorApp.lightGrey,
-                                onChanged: (value) {
-                                  setState(() {
-                                    subTask[i]['isComplete'] = value;
-                                  });
-                                },
-                              ),
+                              // leading: CircularCheckBox(
+                              //   value: subTask[i]['isComplete'],
+                              //   activeColor: ColorApp.mediumBlue,
+                              //   checkColor: ColorApp.lightGrey,
+                              //   onChanged: (value) {
+                              //     setState(() {
+                              //       subTask[i]['isComplete'] = value;
+                              //     });
+                              //   },
+                              // ),
                               title: Text(subTask[i]['title'].toString()),
                             );
                           },

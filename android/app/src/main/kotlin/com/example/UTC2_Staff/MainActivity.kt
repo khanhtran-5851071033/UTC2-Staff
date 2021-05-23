@@ -1,4 +1,4 @@
-package com.example.UTC2_Staff
+package com.example.utc2_staff
 
 import io.flutter.embedding.android.FlutterActivity
 

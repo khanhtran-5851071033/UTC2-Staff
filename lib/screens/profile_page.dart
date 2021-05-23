@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:UTC2_Staff/screens/login/login_screen.dart';
-import 'package:UTC2_Staff/screens/profile_screen/attendance_screen.dart';
-import 'package:UTC2_Staff/screens/profile_screen/help_screen.dart';
-import 'package:UTC2_Staff/screens/profile_screen/payroll_table_screen.dart';
-import 'package:UTC2_Staff/screens/profile_screen/profile_info.dart';
-import 'package:UTC2_Staff/screens/profile_screen/setting_screen.dart';
-import 'package:UTC2_Staff/screens/profile_screen/work/performance_work_screen.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/screens/login/login_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/attendance_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/help_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/payroll_table_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/profile_info.dart';
+import 'package:utc2_staff/screens/profile_screen/setting_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/work/performance_work_screen.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

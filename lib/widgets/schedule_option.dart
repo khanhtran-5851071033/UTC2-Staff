@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/utils/utils.dart';
 
 // ignore: must_be_immutable
 class OpitonSchedule extends StatefulWidget {

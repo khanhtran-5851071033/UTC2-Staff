@@ -1,9 +1,8 @@
 import 'dart:math';
-import 'package:UTC2_Staff/screens/classroom/class_detail_screen.dart';
-import 'package:UTC2_Staff/screens/classroom/new_class.dart';
-import 'package:UTC2_Staff/utils/color_random.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
-import 'package:circular_check_box/circular_check_box.dart';
+import 'package:utc2_staff/screens/classroom/class_detail_screen.dart';
+import 'package:utc2_staff/screens/classroom/new_class.dart';
+import 'package:utc2_staff/utils/color_random.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -68,8 +67,6 @@ class _ActivityPageState extends State<ActivityPage> {
       },
     );
   }
-
- 
 
   _showBottomSheet(BuildContext context, Size size, String title) {
     showModalBottomSheet(
@@ -149,12 +146,10 @@ class _ActivityPageState extends State<ActivityPage> {
                               tapTargetSize: MaterialTapTargetSize.padded,
                               shadowColor: MaterialStateProperty.all<Color>(
                                   Colors.lightBlue),
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(
-                                      Colors.white),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(
-                                      Colors.blue),
+                                  MaterialStateProperty.all<Color>(Colors.blue),
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -199,11 +194,7 @@ class _ActivityPageState extends State<ActivityPage> {
             foregroundColor: ColorApp.blue,
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewClass(
-                           
-                          )));
+                  context, MaterialPageRoute(builder: (context) => NewClass()));
             },
             child: Icon(Icons.add),
           ),

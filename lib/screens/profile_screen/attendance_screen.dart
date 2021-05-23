@@ -1,6 +1,6 @@
-import 'package:UTC2_Staff/service/geo_service.dart';
-import 'package:UTC2_Staff/utils/custom_glow.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/service/geo_service.dart';
+import 'package:utc2_staff/utils/custom_glow.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';

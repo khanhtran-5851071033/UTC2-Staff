@@ -1,12 +1,11 @@
-import 'package:UTC2_Staff/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:UTC2_Staff/blocs/authentication_bloc/authentication_event.dart';
-import 'package:UTC2_Staff/blocs/login_bloc/login_bloc.dart';
-import 'package:UTC2_Staff/blocs/login_bloc/login_event.dart';
-import 'package:UTC2_Staff/blocs/login_bloc/login_state.dart';
+import 'package:utc2_staff/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:utc2_staff/blocs/authentication_bloc/authentication_event.dart';
+import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
+import 'package:utc2_staff/blocs/login_bloc/login_event.dart';
+import 'package:utc2_staff/blocs/login_bloc/login_state.dart';
 
-
-import 'package:UTC2_Staff/repositories/user_repository.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/repositories/user_repository.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,5 +1,5 @@
-import 'package:UTC2_Staff/blocs/authentication_bloc/authentication_event.dart';
-import 'package:UTC2_Staff/repositories/user_repository.dart';
+import 'package:utc2_staff/blocs/authentication_bloc/authentication_event.dart';
+import 'package:utc2_staff/repositories/user_repository.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 

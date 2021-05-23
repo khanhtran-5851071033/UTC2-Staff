@@ -1,16 +1,14 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:UTC2_Staff/service/pdf/pdf_api.dart';
-import 'package:UTC2_Staff/service/pdf/pdf_class_detail.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
-
-import 'package:circular_check_box/circular_check_box.dart';
+import 'package:utc2_staff/service/pdf/pdf_api.dart';
+import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+// import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -101,8 +99,8 @@ class _NewClassState extends State<NewClass> {
       ByteData byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
-      await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
-          text: 'QR của tôi.');
+      // await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
+      //     text: 'QR của tôi.');
     } catch (e) {
       print('error: $e');
     }
@@ -448,24 +446,24 @@ class _NewClassState extends State<NewClass> {
                                       Text('Tất cả (' +
                                           user.length.toString() +
                                           ")"),
-                                      Transform.scale(
-                                        scale: 0.8,
-                                        child: CircularCheckBox(
-                                          value: isAll,
-                                          activeColor: ColorApp.mediumBlue,
-                                          checkColor: ColorApp.lightGrey,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              for (int i = 0;
-                                                  i < user.length;
-                                                  i++) {
-                                                user[i]['isComplete'] = value;
-                                              }
-                                              isAll = value;
-                                            });
-                                          },
-                                        ),
-                                      ),
+                                      // Transform.scale(
+                                      //   scale: 0.8,
+                                      //   child: CircularCheckBox(
+                                      //     value: isAll,
+                                      //     activeColor: ColorApp.mediumBlue,
+                                      //     checkColor: ColorApp.lightGrey,
+                                      //     onChanged: (value) {
+                                      //       setState(() {
+                                      //         for (int i = 0;
+                                      //             i < user.length;
+                                      //             i++) {
+                                      //           user[i]['isComplete'] = value;
+                                      //         }
+                                      //         isAll = value;
+                                      //       });
+                                      //     },
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -520,22 +518,22 @@ class _NewClassState extends State<NewClass> {
                                     Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        Transform.scale(
-                                          scale: 0.7,
-                                          child: CircularCheckBox(
-                                            value: user[index]['isComplete'],
-                                            activeColor: ColorApp.mediumBlue,
-                                            checkColor: ColorApp.lightGrey,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                setState(() {
-                                                  user[index]['isComplete'] =
-                                                      value;
-                                                });
-                                              });
-                                            },
-                                          ),
-                                        ),
+                                        // Transform.scale(
+                                        //   scale: 0.7,
+                                        //   child: CircularCheckBox(
+                                        //     value: user[index]['isComplete'],
+                                        //     activeColor: ColorApp.mediumBlue,
+                                        //     checkColor: ColorApp.lightGrey,
+                                        //     onChanged: (value) {
+                                        //       setState(() {
+                                        //         setState(() {
+                                        //           user[index]['isComplete'] =
+                                        //               value;
+                                        //         });
+                                        //       });
+                                        //     },
+                                        //   ),
+                                        // ),
                                         Text(
                                           (index + 1).toString(),
                                           style: TextStyle(

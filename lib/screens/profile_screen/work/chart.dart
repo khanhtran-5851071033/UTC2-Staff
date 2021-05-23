@@ -1,5 +1,5 @@
-import 'package:UTC2_Staff/utils/custom_glow.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/utils/custom_glow.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,8 @@ class PieChartSample3State extends State {
                               pieTouchResponse.touchInput is! PointerUpEvent;
                           if (desiredTouch &&
                               pieTouchResponse.touchedSection != null) {
-                            touchedIndex = pieTouchResponse.touchedSectionIndex;
+                            touchedIndex = pieTouchResponse
+                                .touchedSection.touchedSectionIndex;
                           } else {
                             touchedIndex = -1;
                           }

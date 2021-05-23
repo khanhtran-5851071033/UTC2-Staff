@@ -1,23 +1,21 @@
-
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class GeoService {
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  // final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Future<Position> getCurrentLocation() async {
-    var isEnabled = await geolocator.isLocationServiceEnabled();
-    var permission = await geolocator.checkGeolocationPermissionStatus();
-    if (permission == GeolocationStatus.denied ||
-        permission == GeolocationStatus.denied)
+    var isEnabled = await Geolocator.isLocationServiceEnabled();
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.denied)
       await Permission.location.request();
     Position curLocation;
-   
 
-    if (permission == GeolocationStatus.granted) {
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
       if (isEnabled) {
-        
-        curLocation = await geolocator.getCurrentPosition(
+        curLocation = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.best);
         return curLocation;
       } else

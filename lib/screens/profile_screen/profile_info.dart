@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

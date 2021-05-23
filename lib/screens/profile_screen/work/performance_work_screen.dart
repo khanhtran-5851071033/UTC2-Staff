@@ -1,5 +1,5 @@
-import 'package:UTC2_Staff/screens/profile_screen/work/chart.dart';
-import 'package:UTC2_Staff/utils/utils.dart';
+import 'package:utc2_staff/screens/profile_screen/work/chart.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
@@ -37,7 +37,7 @@ class _TaskPerformanceScreenState extends State<TaskPerformanceScreen> {
               physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  PieChartSample3(),
+                  Container(height: 300, child: PieChartSample3()),
                   Container(
                     padding: EdgeInsets.all(size.width * 0.03),
                     margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),

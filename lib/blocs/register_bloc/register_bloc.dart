@@ -1,7 +1,7 @@
-import 'package:UTC2_Staff/blocs/register_bloc/register_event.dart';
-import 'package:UTC2_Staff/blocs/register_bloc/register_state.dart';
-import 'package:UTC2_Staff/repositories/user_repository.dart';
-import 'package:UTC2_Staff/utils/validators.dart';
+import 'package:utc2_staff/blocs/register_bloc/register_event.dart';
+import 'package:utc2_staff/blocs/register_bloc/register_state.dart';
+import 'package:utc2_staff/repositories/user_repository.dart';
+import 'package:utc2_staff/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {

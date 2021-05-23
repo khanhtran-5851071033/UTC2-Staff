@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-import 'package:UTC2_Staff/service/pdf/pdf_api.dart';
+import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -137,7 +137,7 @@ class PdfParagraphApi {
           style: TextStyle(color: PdfColors.black, font: customFont),
         ),
       ]);
-      
+
   static Widget textCheck(String name, Font customFont, Font customFontBold) =>
       Container(
           width: 21 * PdfPageFormat.cm,

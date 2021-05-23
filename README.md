@@ -1,4 +1,4 @@
-# UTC2_Staff
+# utc2_staff
 
 A new Flutter project.
 
