@@ -173,15 +173,13 @@ class _ActivityPageState extends State<ActivityPage> {
     return Stack(
       children: [
         Container(
-          child: Expanded(
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: activity.length,
-              itemBuilder: (context, index) {
-                return customList(size, context, activity[index]['title'],
-                    activity[index]['name'], activity[index]['subAct']);
-              },
-            ),
+          child: ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: activity.length,
+            itemBuilder: (context, index) {
+              return customList(size, context, activity[index]['title'],
+                  activity[index]['name'], activity[index]['subAct']);
+            },
           ),
         ),
         Positioned(

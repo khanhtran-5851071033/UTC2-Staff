@@ -32,10 +32,10 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
       final DateTime endTime = startTime.add(const Duration(hours: 2));
       meetings.add(Meeting('Trí tuệ nhân tạo\n 204E7', startTime, endTime,
           ColorApp.lightBlue, false));
-      meetings.add(Meeting('Trí tuệ nhân tạo\n 204E7', startTime, endTime,
-          ColorApp.lightBlue, false));
+      meetings.add(Meeting(
+          'Trí tuệ nhân tạo\n 204E7', startTime, endTime, ColorApp.red, false));
       meetings.add(Meeting('Trí tuệ nhân tạo\n 204E7', startTime1, endTime,
-          ColorApp.lightBlue, false));
+          ColorApp.mediumBlue, false));
       return meetings;
     }
 
@@ -58,6 +58,7 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
           CalendarView.timelineMonth
         ],
         resourceViewSettings: ResourceViewSettings(
+            size: 100,
             displayNameTextStyle: TextStyle(
                 fontSize: 11,
                 color: Colors.redAccent,
@@ -67,6 +68,7 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
         showDatePickerButton: true,
         showNavigationArrow: true,
         headerHeight: 50,
+        
         todayHighlightColor: ColorApp.blue,
         appointmentTextStyle: TextStyle(fontSize: 15),
 
