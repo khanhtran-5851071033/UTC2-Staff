@@ -4,7 +4,6 @@ import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   List user = [
     'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    'https://scontent.fsgn2-5.fna.fbcdn.net/v/t1.6435-9/132520813_846603219451783_6386312700226999104_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=o4rFjC9w9mAAX8uytLC&_nc_ht=scontent.fsgn2-5.fna&oh=4c8653b5d4079ba4db437c5a09f2f239&oe=6091F89D'
+    'https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png'
   ];
   final _scrollController = ScrollController();
   @override
@@ -384,7 +383,7 @@ class _HomePageState extends State<HomePage> {
                                                           RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.circular(10),
-                                                          side: BorderSide(color: Colors.red)))),
+                                                          side: BorderSide(color: Colors.transparent)))),
                                               onPressed: () => null)
                                         ],
                                       ),

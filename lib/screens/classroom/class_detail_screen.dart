@@ -41,9 +41,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   void sendNoti() async {
     await MyLocalNotification.configureLocalTimeZone();
     await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-        notifications, 14, 20);
+        notifications, 14, 42);
     await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-        notifications, 14, 19);
+        notifications, 14, 43);
   }
 
   Future onSelectNotification(String payload) async => await Navigator.push(
@@ -205,7 +205,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
 
   Widget comment(
       Size size,
-      Future<void> comment(FlutterLocalNotificationsPlugin noti),
+      Future<void> comment(FlutterLocalNotificationsPlugin noti,String title,String body),
       FlutterLocalNotificationsPlugin noti) {
     return Container(
       width: size.width,
@@ -225,7 +225,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           border: Border.all(color: ColorApp.lightGrey)),
       child: TextButton(
         onPressed: () async {
-          await comment(noti);
+          await comment(noti,'sada','dsad');
           print('dsd');
         },
         child: Row(

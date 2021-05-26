@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.INTERNET" /> 
+   
    <application
         android:label="UTC2 Staff"
         android:icon="@mipmap/ic_launcher">
@@ -41,5 +42,20 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+              <service
+            android:name=".kotlin.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+             <service
+            android:name=".java.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

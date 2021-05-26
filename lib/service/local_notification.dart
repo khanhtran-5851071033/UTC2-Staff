@@ -49,7 +49,7 @@ class MyLocalNotification {
     return scheduledDate;
   }
 
-  static Future<void> showNotification(FlutterLocalNotificationsPlugin notifications) async {
+  static Future<void> showNotification(FlutterLocalNotificationsPlugin notifications, String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'your channel id', 'your channel name', 'your channel description',
@@ -59,7 +59,7 @@ class MyLocalNotification {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await notifications.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics,
+        0, title, body, platformChannelSpecifics,
         payload: 'item x');
   }
 

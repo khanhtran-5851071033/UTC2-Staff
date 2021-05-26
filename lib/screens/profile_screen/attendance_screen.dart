@@ -171,7 +171,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     radius: 100,
                     backgroundColor: ColorApp.lightGrey,
                     backgroundImage: NetworkImage(
-                        "https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1"),
+                        "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
                   ),
                 ),
               ),
@@ -229,11 +229,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             MaterialStateProperty.all<Color>(Colors.white),
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.blue),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    side: BorderSide(color: Colors.red)))),
+                        shape: MaterialStateProperty
+                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                side: BorderSide(color: Colors.transparent)))),
                     onPressed: () {
                       if (_controller.text.isNotEmpty) {
                         search(_controller.text);
