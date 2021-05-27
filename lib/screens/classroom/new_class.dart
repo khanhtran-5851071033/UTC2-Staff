@@ -32,7 +32,7 @@ class _NewClassState extends State<NewClass> {
     },
     {
       'avatar':
-          'https://scontent.fsgn2-5.fna.fbcdn.net/v/t1.6435-9/132520813_846603219451783_6386312700226999104_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=o4rFjC9w9mAAX8uytLC&_nc_ht=scontent.fsgn2-5.fna&oh=4c8653b5d4079ba4db437c5a09f2f239&oe=6091F89D',
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
       'title': '5851071033@st.utc2.edu.vn',
       'isComplete': false
     },
@@ -56,7 +56,7 @@ class _NewClassState extends State<NewClass> {
     },
     {
       'avatar':
-          'https://scontent.fsgn2-5.fna.fbcdn.net/v/t1.6435-9/132520813_846603219451783_6386312700226999104_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=o4rFjC9w9mAAX8uytLC&_nc_ht=scontent.fsgn2-5.fna&oh=4c8653b5d4079ba4db437c5a09f2f239&oe=6091F89D',
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
       'title': '5851071033@st.utc2.edu.vn',
       'isComplete': false
     },
