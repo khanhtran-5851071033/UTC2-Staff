@@ -45,10 +45,10 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
 
   void sendNoti() async {
     await MyLocalNotification.configureLocalTimeZone();
-    await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-        notifications, 14, 46);
-    await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-        notifications, 11, 48);
+    // await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
+    //     notifications, 14, 46);
+    // await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
+    //     notifications, 11, 48);
   }
 
   Future onSelectNotification(String payload) async =>
