@@ -35,7 +35,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     {
       'title': 'Đăng ký giấy đi công tác',
       'icon': Icons.flight_land,
-      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+      'link': 'http://smart.utc2.edu.vn/dvc/vi-vn/user-management/auth/login'
     },
     {
       'title': 'Đăng ký giấy giới thiệu',
@@ -45,7 +45,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     {
       'title': 'Đăng ký xe đi công tác',
       'icon': Icons.airport_shuttle,
-      'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
+      'link': 'http://smart.utc2.edu.vn/dvc/vi-vn/user-management/auth/login'
     },
     {
       'title': 'Đăng ký lịch công tác tuần',

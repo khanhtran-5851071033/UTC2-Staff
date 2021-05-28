@@ -93,7 +93,7 @@ class _ActivityPageState extends State<ActivityPage> {
           builder: (context, state) {
             if (state is LoadingClass)
               return SpinKitChasingDots(
-                color: ColorApp.blue,
+                color: ColorApp.lightBlue,
               );
             else if (state is LoadedClass) {
               print('loaded');
@@ -121,7 +121,9 @@ class _ActivityPageState extends State<ActivityPage> {
                                 state.list[index].teacherId,
                                 activity[1]['subAct'],
                                 state.list[index].id,
-                                state.list);
+                                state.list,
+                                state.list[index].note,
+                              );
                       }),
                     ),
                   ),
@@ -136,7 +138,7 @@ class _ActivityPageState extends State<ActivityPage> {
               );
             } else {
               return SpinKitChasingDots(
-                color: ColorApp.blue,
+                color: ColorApp.lightBlue,
               );
             }
           },
@@ -161,8 +163,15 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  Widget customList(Size size, BuildContext context, String className,
-      String teacherName, List sub, String id, List listClass) {
+  Widget customList(
+      Size size,
+      BuildContext context,
+      String className,
+      String teacherName,
+      List sub,
+      String id,
+      List listClass,
+      String description) {
     return Container(
       margin: EdgeInsets.all(size.width * 0.03),
       padding: EdgeInsets.all(size.width * 0.03),
@@ -183,6 +192,7 @@ class _ActivityPageState extends State<ActivityPage> {
                             className: className,
                             listClass: listClass,
                             idClass: id,
+                            description: description,
                           )));
             },
             child: Container(

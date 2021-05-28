@@ -14,9 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:utc2_staff/utils/color_random.dart';
 
 class DetailClassScreen extends StatefulWidget {
-  final String className, idClass;
+  final String className, idClass, description;
   final List listClass;
-  DetailClassScreen({this.className, this.listClass, this.idClass});
+  DetailClassScreen(
+      {this.className, this.listClass, this.idClass, this.description});
   @override
   _DetailClassScreenState createState() => _DetailClassScreenState();
 }
@@ -24,12 +25,13 @@ class DetailClassScreen extends StatefulWidget {
 class _DetailClassScreenState extends State<DetailClassScreen> {
   final notifications = FlutterLocalNotificationsPlugin();
   PostBloc postBloc;
-  String className = '';
+  String className = '', descriptions = '';
   @override
   void initState() {
     super.initState();
     sendNoti();
     className = widget.className;
+    descriptions = widget.description;
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(
@@ -79,8 +81,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
               margin: EdgeInsets.only(right: size.width * 0.03),
               width: 40,
               child: IconButton(
-                  onPressed: () => _showBottomSheet(context, size,
-                      widget.className.toUpperCase(), 'Thông tin lớp'),
+                  tooltip: descriptions,
+                  onPressed: () => _showBottomSheet(
+                      context, size, className.toUpperCase(), descriptions),
                   icon: Icon(
                     Icons.info,
                     color: Colors.grey,
@@ -91,10 +94,11 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
       ),
       drawer: ClassDrawer(
         active: widget.listClass,
-        change: (id, name) {
+        change: (id, name, description) {
           postBloc.add(GetPostEvent(id));
           setState(() {
             className = name;
+            descriptions = description;
           });
         },
       ),
@@ -137,7 +141,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                       margin: EdgeInsets.only(top: 10),
                       child: RefreshIndicator(
                         onRefresh: () async {
-                           postBloc.add(GetPostEvent(widget.idClass));
+                          postBloc.add(GetPostEvent(widget.idClass));
                         },
                         child: Scrollbar(
                           child: ListView.builder(
@@ -147,14 +151,14 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                               itemBuilder: (context, index) {
                                 var e = state.list[index];
                                 return customList(size, context, e.title,
-                                    'Đã đăng' + e.date, e.content, '2');
+                                    'Đã đăng ' + e.date, e.content, '2');
                               }),
                         ),
                       ),
                     );
                   } else if (state is LoadingPost) {
                     return SpinKitChasingDots(
-                      color: ColorApp.blue,
+                      color: ColorApp.lightBlue,
                     );
                   } else if (state is LoadErrorPost) {
                     return Center(
@@ -165,7 +169,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                     );
                   } else {
                     return SpinKitChasingDots(
-                      color: ColorApp.blue,
+                      color: ColorApp.lightBlue,
                     );
                   }
                 },
@@ -220,7 +224,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Center(
                           child: Text(
-                            title,
+                            title + ' - Thông tin lớp',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                                 color: Colors.black,

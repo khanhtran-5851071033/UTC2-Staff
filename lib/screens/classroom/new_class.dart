@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
@@ -65,7 +66,6 @@ class _NewClassState extends State<NewClass> {
       'isComplete': false
     },
   ];
- 
 
   GlobalKey globalKey = new GlobalKey();
   // String _dataString = "AziTask.com";
@@ -108,7 +108,7 @@ class _NewClassState extends State<NewClass> {
     }
   }
 
-  String idClass, nameClass;
+  String idClass, nameClass, description;
   bool isNewClass = false;
   bool isAll = false;
   @override
@@ -162,9 +162,10 @@ class _NewClassState extends State<NewClass> {
               Map<String, String> dataClass = {
                 'id': idClass,
                 'name': nameClass,
-                'note': 'note',
+                'note': description,
                 'teacherId': 'Phạm Thị Miên',
-                'date': DateTime.now().toString(),
+                'date':
+                    DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
               };
               classdb.createClass(dataClass, idClass);
               Get.back();
@@ -398,6 +399,11 @@ class _NewClassState extends State<NewClass> {
                         ),
                         Expanded(
                           child: TextField(
+                            onChanged: (val) {
+                              setState(() {
+                                description = val;
+                              });
+                            },
                             style: TextStyle(
                                 fontSize: 20, color: ColorApp.mediumBlue),
                             decoration: InputDecoration(

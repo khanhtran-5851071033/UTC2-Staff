@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
@@ -72,7 +73,8 @@ class _NewNotifyState extends State<NewNotify> {
                 'idClass': widget.idClass,
                 'title': title,
                 'content': content,
-                'date': DateTime.now().toString(),
+                'date':
+                    DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
               };
               postDatabase.createPost(dataPost, widget.idClass, idPost);
             },

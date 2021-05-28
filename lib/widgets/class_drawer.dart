@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ClassDrawer extends StatelessWidget {
   final List<Class> active;
-  final Function(String classId, String name) change;
+  final Function(String classId, String name, String description) change;
   ClassDrawer({this.active, this.change});
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class ClassDrawer extends StatelessWidget {
       color: Colors.white,
       child: new ListView(
         physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ 
+        children: <Widget>[
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -93,7 +93,8 @@ class ClassDrawer extends StatelessWidget {
                   child: ListTile(
                     onTap: () {
                       Navigator.of(context).pop();
-                      change(active[index].id, active[index].name);
+                      change(active[index].id, active[index].name,
+                          active[index].note);
                     },
                     leading: Container(
                       width: 30,
