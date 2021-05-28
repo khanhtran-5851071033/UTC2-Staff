@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -11,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
-// import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -23,6 +25,8 @@ class NewClass extends StatefulWidget {
 }
 
 class _NewClassState extends State<NewClass> {
+  ClassDatabase classdb = ClassDatabase();
+  final _formKey = GlobalKey<FormState>();
   List user = [
     {
       'avatar':
@@ -61,13 +65,7 @@ class _NewClassState extends State<NewClass> {
       'isComplete': false
     },
   ];
-  String generateRandomString(int len) {
-    var r = Random();
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
-        .join();
-  }
+ 
 
   GlobalKey globalKey = new GlobalKey();
   // String _dataString = "AziTask.com";
@@ -110,7 +108,7 @@ class _NewClassState extends State<NewClass> {
     }
   }
 
-  String idClass;
+  String idClass, nameClass;
   bool isNewClass = false;
   bool isAll = false;
   @override
@@ -160,22 +158,17 @@ class _NewClassState extends State<NewClass> {
           onPressed: () async {
             // final pdfFile = await PdfParagraphApi.generate();
             // PdfApi.openFile(pdfFile);
-            final response = await http.post(
-                Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                headers: <String, String>{
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'Authorization':
-                      'key=AAAAYogee34:APA91bFuj23NLRj88uqP9J-aRCehCgVSo8QgUOIPZy8CzBE-Xbubx58trUepsb2SABoIGsPYbONqa2jjS03l1fW5r2aQywmKkYN6L3RXHIML6795xTHyamls_ZwLSt-_n3AJ8av82CiW',
-                },
-                body: jsonEncode({
-                  "to": "/topics/fcm_test",
-                  "data": {"msg": "Hello"},
-                  "notification": {"title": "fcm", "body": "body"}
-                }));
-            if (response.statusCode == 200)
-              print('success');
-            else
-              print('faile');
+            if (_formKey.currentState.validate()) {
+              Map<String, String> dataClass = {
+                'id': idClass,
+                'name': nameClass,
+                'note': 'note',
+                'teacherId': 'Phạm Thị Miên',
+                'date': DateTime.now().toString(),
+              };
+              classdb.createClass(dataClass, idClass);
+              Get.back();
+            }
           }),
       body: SingleChildScrollView(
         child: Container(
@@ -232,27 +225,34 @@ class _NewClassState extends State<NewClass> {
                             ),
                           ],
                         ),
-                        TextField(
-                          onChanged: (value) {
-                            if (value.length > 0) {
-                              setState(() {
-                                idClass = generateRandomString(5);
-                                isNewClass = true;
-                              });
-                            } else {
-                              setState(() {
-                                idClass = value;
-                                isNewClass = false;
-                              });
-                            }
-                          },
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              labelText: 'Tên lớp..',
-                              labelStyle: TextStyle(
-                                  fontSize: 18, color: ColorApp.black)),
+                        Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            validator: (val) =>
+                                val.isEmpty ? 'Vui lòng nhập tên lớp' : null,
+                            onChanged: (value) {
+                              if (value.length > 0) {
+                                setState(() {
+                                  idClass = generateRandomString(5);
+                                  isNewClass = true;
+                                  nameClass = value;
+                                });
+                              } else {
+                                setState(() {
+                                  idClass = value;
+                                  isNewClass = false;
+                                  nameClass = value;
+                                });
+                              }
+                            },
+                            style: TextStyle(
+                                fontSize: 20, color: ColorApp.mediumBlue),
+                            decoration: InputDecoration(
+                                // border: InputBorder.none,
+                                labelText: 'Tên lớp..',
+                                labelStyle: TextStyle(
+                                    fontSize: 18, color: ColorApp.black)),
+                          ),
                         ),
                         Container(
                           child: isNewClass
