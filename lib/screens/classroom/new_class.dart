@@ -19,6 +19,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 class NewClass extends StatefulWidget {
   @override
@@ -102,11 +103,33 @@ class _NewClassState extends State<NewClass> {
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
       // await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
-      //     text: 'QR của tôi.');
+      //     text: 'QR của lớp học.');
     } catch (e) {
       print('error: $e');
     }
   }
+
+  // Future<String> upImage() async {
+  //   var path = await rootBundle.loadString('/assets/images/gv.jpg');
+  //   final http.Response response = await http.post(
+  //     Uri.parse('https://book-room-app.herokuapp.com/user/api/registerUser'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(<String, dynamic>{
+  //       'username': '1234567',
+  //       'password': '1234567',
+  //       'image': File(path)
+  //     }),
+  //   );
+  //   print(response.statusCode);
+  //   if (response.statusCode == 201) {
+  //     var body = jsonDecode(response.body);
+  //     return body;
+  //   } else {
+  //     throw Exception('Lỗi up');
+  //   }
+  // }
 
   String idClass, nameClass, description;
   bool isNewClass = false;
@@ -158,6 +181,7 @@ class _NewClassState extends State<NewClass> {
           onPressed: () async {
             // final pdfFile = await PdfParagraphApi.generate();
             // PdfApi.openFile(pdfFile);
+
             if (_formKey.currentState.validate()) {
               Map<String, String> dataClass = {
                 'id': idClass,
@@ -168,6 +192,7 @@ class _NewClassState extends State<NewClass> {
                     DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
               };
               classdb.createClass(dataClass, idClass);
+
               Get.back();
             }
           }),
@@ -418,6 +443,7 @@ class _NewClassState extends State<NewClass> {
                   ),
                   SizedBox(
                     height: size.width * 0.03,
+            
                   ),
                   Container(
                     width: size.width,
@@ -471,24 +497,25 @@ class _NewClassState extends State<NewClass> {
                                       Text('Tất cả (' +
                                           user.length.toString() +
                                           ")"),
-                                      // Transform.scale(
-                                      //   scale: 0.8,
-                                      //   child: CircularCheckBox(
-                                      //     value: isAll,
-                                      //     activeColor: ColorApp.mediumBlue,
-                                      //     checkColor: ColorApp.lightGrey,
-                                      //     onChanged: (value) {
-                                      //       setState(() {
-                                      //         for (int i = 0;
-                                      //             i < user.length;
-                                      //             i++) {
-                                      //           user[i]['isComplete'] = value;
-                                      //         }
-                                      //         isAll = value;
-                                      //       });
-                                      //     },
-                                      //   ),
-                                      // ),
+                                      Transform.scale(
+                                        scale: 0.8,
+                                        child: Checkbox(
+                                          value: isAll,
+                                          shape: CircleBorder(),
+                                          activeColor: ColorApp.mediumBlue,
+                                          checkColor: ColorApp.lightGrey,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              for (int i = 0;
+                                                  i < user.length;
+                                                  i++) {
+                                                user[i]['isComplete'] = value;
+                                              }
+                                              isAll = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -543,22 +570,23 @@ class _NewClassState extends State<NewClass> {
                                     Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        // Transform.scale(
-                                        //   scale: 0.7,
-                                        //   child: CircularCheckBox(
-                                        //     value: user[index]['isComplete'],
-                                        //     activeColor: ColorApp.mediumBlue,
-                                        //     checkColor: ColorApp.lightGrey,
-                                        //     onChanged: (value) {
-                                        //       setState(() {
-                                        //         setState(() {
-                                        //           user[index]['isComplete'] =
-                                        //               value;
-                                        //         });
-                                        //       });
-                                        //     },
-                                        //   ),
-                                        // ),
+                                        Transform.scale(
+                                          scale: 0.8,
+                                          child: Checkbox(
+                                            value: user[index]['isComplete'],
+                                            activeColor: ColorApp.mediumBlue,
+                                            checkColor: ColorApp.lightGrey,
+                                            shape: CircleBorder(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                setState(() {
+                                                  user[index]['isComplete'] =
+                                                      value;
+                                                });
+                                              });
+                                            },
+                                          ),
+                                        ),
                                         Text(
                                           (index + 1).toString(),
                                           style: TextStyle(

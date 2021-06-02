@@ -825,7 +825,7 @@ packages:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.1.64"
+    version: "19.1.66"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
@@ -833,6 +833,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "19.1.64-beta"
+  syncfusion_flutter_signaturepad:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_signaturepad
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.1.66-beta"
   synchronized:
     dependency: transitive
     description:

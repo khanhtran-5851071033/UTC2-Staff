@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -105,12 +104,12 @@ class PdfParagraphApi {
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
                 textInfo('Mô tả : ', '...', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
-                textInfo('Giảng viên : ', 'Phạm Thị Miên', customFont),
+                textInfo('Giảng viên phụ trách: ', 'Phạm Thị Miên', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
                 textInfo('Email : ', 'ptmien@utc2.edu.vn', customFont),
               ]),
               Column(children: [
-                qrCode(logo),
+                qrCode(logo,'mã lớp'),
               ])
             ]),
       );
@@ -143,15 +142,28 @@ class PdfParagraphApi {
           width: 21 * PdfPageFormat.cm,
           child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
             Text(
-              'Người xác nhận',
+              'Hồ Chí Minh, ngày ' +
+                  DateTime.now().day.toString() +
+                  ' tháng ' +
+                  DateTime.now().month.toString() +
+                  ' năm ' +
+                  DateTime.now().year.toString(),
               style: TextStyle(
                 color: PdfColors.black,
                 font: customFont,
               ),
             ),
-            SizedBox(height: 0.8 * PdfPageFormat.cm),
+            SizedBox(height: 0.5 * PdfPageFormat.cm),
             Text(
-              name,
+              'Người xác nhận          ',
+              style: TextStyle(
+                color: PdfColors.black,
+                font: customFont,
+              ),
+            ),
+            SizedBox(height: 1 * PdfPageFormat.cm),
+            Text(
+              name + '          ',
               style: TextStyle(
                   color: PdfColors.black,
                   font: customFontBold,
@@ -178,14 +190,14 @@ class PdfParagraphApi {
         ),
       );
 
-  static Widget qrCode(String logo) =>
+  static Widget qrCode(String logo,String idClass) =>
       Stack(alignment: Alignment.center, children: [
         Container(
           height: 70,
           width: 70,
           child: BarcodeWidget(
             barcode: Barcode.qrCode(),
-            data: '123',
+            data: idClass,
           ),
         ),
         SvgImage(svg: logo, width: 15, height: 15),

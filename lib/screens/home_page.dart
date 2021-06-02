@@ -177,34 +177,35 @@ class _HomePageState extends State<HomePage> {
                           itemCount: subTask.length,
                           itemBuilder: (context, i) {
                             return ListTile(
-                              // leading: CircularCheckBox(
-                              //   value: subTask[i]['isComplete'],
-                              //   activeColor: ColorApp.mediumBlue,
-                              //   checkColor: ColorApp.lightGrey,
-                              //   onChanged: (value) {
-                              //     setState(() {
-                              //       subTask[i]['isComplete'] = value;
-                              //     });
-                              //   },
-                              // ),
+                              leading: Checkbox(
+                                value: subTask[i]['isComplete'],
+                                activeColor: ColorApp.mediumBlue,
+                                checkColor: ColorApp.lightGrey,
+                                shape: CircleBorder(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    subTask[i]['isComplete'] = value;
+                                  });
+                                },
+                              ),
                               title: Text(subTask[i]['title'].toString()),
                             );
                           },
                         ),
                       ),
                     ),
-                    FlatButton.icon(
-                      height: 10,
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.add,
-                        color: ColorApp.blue,
-                      ),
-                      label: Text(
-                        "Thêm mô tả",
-                        style: TextStyle(color: ColorApp.blue),
-                      ),
-                    ),
+                    // FlatButton.icon(
+                    //   height: 10,
+                    //   onPressed: () {},
+                    //   icon: Icon(
+                    //     Icons.add,
+                    //     color: ColorApp.blue,
+                    //   ),
+                    //   label: Text(
+                    //     "Thêm mô tả",
+                    //     style: TextStyle(color: ColorApp.blue),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

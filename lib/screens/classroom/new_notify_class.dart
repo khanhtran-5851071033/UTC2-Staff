@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:utc2_staff/screens/classroom/new_quiz.dart';
+import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
@@ -17,9 +20,12 @@ class NewNotify extends StatefulWidget {
 
 class _NewNotifyState extends State<NewNotify> {
   bool expaned = false;
+  String idAtent = '';
+  int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
   String title, content;
-  final _formKey = GlobalKey<FormState>();
+  
+  GlobalKey globalKey = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +237,149 @@ class _NewNotifyState extends State<NewNotify> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 35,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue.withOpacity(.1),
+                            child: Icon(
+                              Icons.fact_check_rounded,
+                              color: Colors.blue,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Container(
+                              alignment: Alignment.centerLeft,
+                              height: 35,
+                              child: Text('Điểm danh')),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                expaned ? expaned = false : expaned = true;
+                                if (expaned) idAtent = generateRandomString(5);
+                              });
+                            },
+                            icon: Icon(
+                              expaned
+                                  ? Icons.remove_circle
+                                  : Icons.add_circle_rounded,
+                              color: ColorApp.mediumBlue,
+                            ))
+                      ],
+                    ),
+                    AnimatedCrossFade(
+                      firstChild: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Mã điểm danh: ',
+                                    style: TextStyle(
+                                        color: ColorApp.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: idAtent,
+                                          style: TextStyle(
+                                              color: ColorApp.red,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Hiệu lực:  '),
+                                    DropdownButton<int>(
+                                      value: _selectedTime,
+                                      items: <int>[10, 15, 20, 30]
+                                          .map((int value) {
+                                        return new DropdownMenuItem<int>(
+                                          value: value,
+                                          child: new Text(
+                                              value.toString() + ' Phút'),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          _selectedTime = newValue;
+                                        });
+                                      },
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            RepaintBoundary(
+                              key: globalKey,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ColorApp.blue.withOpacity(0.09),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(
+                                          2, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(0),
+                                  // border:
+                                  //     Border.all(color: ColorApp.lightGrey)
+                                ),
+                                child: QrImage(
+                                  data: idAtent,
+                                  embeddedImage:
+                                      AssetImage('assets/images/logoUTC.png'),
+                                  version: QrVersions.auto,
+                                  size: 120,
+                                  gapless: false,
+                                  embeddedImageStyle: QrEmbeddedImageStyle(
+                                    size: Size(15, 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      secondChild: Container(),
+                      crossFadeState: expaned
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: Duration(milliseconds: 300),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.width * 0.02,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    vertical: size.width * 0.03, horizontal: size.width * 0.03),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -256,171 +405,19 @@ class _NewNotifyState extends State<NewNotify> {
                     ),
                     IconButton(
                         onPressed: () {
-                          setState(() {
-                            expaned ? expaned = false : expaned = true;
-                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewQuiz()));
                         },
                         icon: Icon(
-                          expaned
-                              ? Icons.remove_circle
-                              : Icons.add_circle_rounded,
+                          Icons.add_circle_rounded,
                           color: ColorApp.mediumBlue,
                         ))
                   ],
                 ),
               ),
-              AnimatedCrossFade(
-                firstChild: Container(
-                  height: 500,
-                  padding: EdgeInsets.symmetric(
-                      vertical: size.width * 0.03,
-                      horizontal: size.width * 0.03),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextFormField(
-                          validator: (val) =>
-                              val.isEmpty ? 'Nhập câu hỏi' : null,
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'Câu hỏi 1',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
-                        ),
-                        TextFormField(
-                          validator: (val) =>
-                              val.isEmpty ? 'Nhập câu trả lời đúng' : null,
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'A --> Đán áp đúng',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
-                        ),
-                        TextFormField(
-                          validator: (val) => val.isEmpty
-                              ? 'Nhập ít nhất 1 câu trả lời sai'
-                              : null,
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'B',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
-                        ),
-                        TextFormField(
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'C',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
-                        ),
-                        TextFormField(
-                          onChanged: (value) {},
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'D',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  child: Text("Hoàn thành",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                style: ButtonStyle(
-                                    tapTargetSize: MaterialTapTargetSize.padded,
-                                    shadowColor: MaterialStateProperty.all<Color>(
-                                        Colors.lightBlue),
-                                    foregroundColor: MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            ColorApp.mediumBlue),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            side: BorderSide(
-                                                color: Colors.transparent)))),
-                                onPressed: () async {
-                                  final pdfFile =
-                                      await PdfParagraphApi.generate();
-                                  PdfApi.openFile(pdfFile);
-                                }),
-                            ElevatedButton(
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  child: Text("Tiếp tục",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          // letterSpacing: 1,
-                                          // wordSpacing: 1,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                style: ButtonStyle(
-                                    tapTargetSize: MaterialTapTargetSize.padded,
-                                    shadowColor: MaterialStateProperty.all<Color>(
-                                        Colors.lightBlue),
-                                    foregroundColor: MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            ColorApp.mediumBlue),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            side: BorderSide(
-                                                color: Colors.transparent)))),
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    print('validated');
-                                  }
-                                }),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                secondChild: Container(),
-                crossFadeState: expaned
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: Duration(milliseconds: 300),
-              )
+             
             ],
           ),
         ),

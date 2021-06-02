@@ -1,3 +1,4 @@
+import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,61 @@ class ClassDrawer extends StatelessWidget {
                       bottom: BorderSide(color: ColorApp.black, width: .3))),
               child: Text(
                 'Lớp học',
+                style: TextStyle(
+                    color: ColorApp.black.withOpacity(.9),
+                    fontSize: size.width * 0.042,
+                    wordSpacing: 1.2,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.2),
+              ),
+            ),
+          ),
+          // ListTile(
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pop();
+          //   },
+          //   leading: Container(
+          //       width: 30,
+          //       child: Icon(
+          //         Icons.fact_check_rounded,
+          //         color: ColorApp.black.withOpacity(.8),
+          //       )),
+          //   title: Container(
+          //     padding: EdgeInsets.symmetric(vertical: 15),
+          //     decoration: BoxDecoration(
+          //         border: Border(
+          //             bottom: BorderSide(color: ColorApp.black, width: .3))),
+          //     child: Text(
+          //       'Điểm danh',
+          //       style: TextStyle(
+          //           color: ColorApp.black.withOpacity(.9),
+          //           fontSize: size.width * 0.042,
+          //           wordSpacing: 1.2,
+          //           fontWeight: FontWeight.w500,
+          //           letterSpacing: 0.2),
+          //     ),
+          //   ),
+          // ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ReportClassScreen()));
+            },
+            leading: Container(
+                width: 30,
+                child: Icon(
+                  Icons.print_rounded,
+                  color: ColorApp.black.withOpacity(.8),
+                )),
+            title: Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: ColorApp.black, width: .3))),
+              child: Text(
+                'In báo cáo',
                 style: TextStyle(
                     color: ColorApp.black.withOpacity(.9),
                     fontSize: size.width * 0.042,
