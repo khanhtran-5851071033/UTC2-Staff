@@ -78,6 +78,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         ),
         actions: [
           TextButton.icon(
+              
               onPressed: () {
                 Navigator.push(
                     context,

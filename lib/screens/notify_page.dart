@@ -11,7 +11,7 @@ class _NotifyPageState extends State<NotifyPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -85,7 +85,9 @@ class _NotifyPageState extends State<NotifyPage>
                     child: RefreshIndicator(
                       color: ColorApp.blue,
                       displacement: 40,
-                      onRefresh: () {},
+                      onRefresh: () {
+                        print('adad');
+                      },
                       child: ListView.builder(
                           physics: BouncingScrollPhysics(),
                           itemCount: 10,
@@ -94,8 +96,6 @@ class _NotifyPageState extends State<NotifyPage>
                               width: size.width,
                               height: size.height * 0.1,
                               margin: EdgeInsets.only(bottom: 20),
-                              // padding:
-                              //     EdgeInsets.symmetric(horizontal: size.width * 0.03),
                               child: FlatButton(
                                 onPressed: () {
                                   _showBottomSheet(
