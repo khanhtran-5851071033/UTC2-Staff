@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:utc2_staff/service/pdf/pdf_api.dart';
+import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class QuizSreen extends StatefulWidget {
@@ -76,6 +78,23 @@ class _QuizSreenState extends State<QuizSreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          'Xem trước',
+          style: TextStyle(color: ColorApp.black),
+        ),
+          actions: [
+            TextButton.icon(
+                onPressed: () async {
+                  final pdfFile = await PdfParagraphApi.generate();
+                  PdfApi.openFile(pdfFile);
+                },
+                icon: Image.asset(
+                  'assets/icons/pdf.png',
+                  width: 20,
+                ),
+                label: Text('Tải xuống'))
+          ],
       ),
       body: Container(
         padding: EdgeInsets.all(size.width * 0.03),
