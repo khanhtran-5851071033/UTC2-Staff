@@ -4,18 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/screens/classroom/new_quiz.dart';
-import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
-import 'package:utc2_staff/service/pdf/pdf_api.dart';
-import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewNotify extends StatefulWidget {
   final String idClass;
-  final Student student;
+  final Teacher teacher;
 
-  const NewNotify({Key key, this.idClass, this.student}) : super(key: key);
+  const NewNotify({Key key, this.idClass, this.teacher}) : super(key: key);
   @override
   _NewNotifyState createState() => _NewNotifyState();
 }

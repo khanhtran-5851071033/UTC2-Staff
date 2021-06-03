@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
-import 'package:utc2_staff/repositories/google_signin_repo.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/enter_student_id_screen.dart';
 
@@ -12,9 +11,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
+
   LoginBloc loginBloc;
   @override
   void initState() {

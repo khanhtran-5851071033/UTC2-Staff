@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,14 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
-import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
-import 'package:utc2_staff/repositories/google_signin_repo.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:utc2_staff/service/local_notification.dart';
+import 'blocs/teacher_bloc/teacher_bloc.dart';
+import 'service/firestore/teacher_database.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -56,9 +53,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseMessaging _fireBaseMessaging;
   final notifications = FlutterLocalNotificationsPlugin();
-  GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
-  Widget body = Scaffold(
-  );
+  Widget body = Scaffold();
   @override
   void initState() {
     super.initState();
@@ -90,8 +85,8 @@ class _HomePageState extends State<HomePage> {
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessage event' + message.notification.body);
-      MyLocalNotification.showNotification(notifications,
-          message.notification.title, message.notification.body);
+      MyLocalNotification.showNotification(
+          notifications, message.notification.title, message.notification.body);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessageOpenedApp event');
@@ -112,7 +107,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<ClassBloc>(create: (context) => ClassBloc()),
         BlocProvider<PostBloc>(create: (context) => PostBloc()),
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
-        BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
+        BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -137,13 +132,13 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             body = HomeScreen();
           });
-          var student = await StudentDatabase.getStudentData(
+          var student = await TeacherDatabase.getTeacherData(
               prefs.getString('userEmail'));
 
           Map<String, String> data = {
             'token': token,
           };
-          StudentDatabase.updateStudentData(student.id, data);
+          TeacherDatabase.updateTeacherData(student.id, data);
         } else
           setState(() {
             body = LoginScreen();

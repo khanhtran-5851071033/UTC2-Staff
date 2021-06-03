@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
-import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
@@ -303,51 +303,51 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: ColorApp.lightGrey)),
-      child: BlocBuilder<StudentBloc, StudentState>(builder: (context, state) {
-          if (state is StudentLoaded) {
-            return TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NewNotify(
-                              idClass: widget.idClass,
-                              student: state.student,
-                            ))).then(
-                    (value) => postBloc.add(GetPostEvent(widget.idClass)));
-              },
-              child: Row(
-                children: [
-                  CustomAvatarGlow(
-                    glowColor: ColorApp.blue,
-                    endRadius: 20.0,
-                    duration: Duration(milliseconds: 1000),
-                    repeat: true,
-                    showTwoGlows: true,
-                    repeatPauseDuration: Duration(milliseconds: 100),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      child: CircleAvatar(
-                        backgroundColor: ColorApp.lightGrey,
-                        backgroundImage:
-                            CachedNetworkImageProvider(state.student.avatar),
-                      ),
+      child: BlocBuilder<TeacherBloc, TeacherState>(builder: (context, state) {
+        if (state is TeacherLoaded) {
+          return TextButton(
+            onPressed: () {
+              Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewNotify(
+                                idClass: widget.idClass,
+                                teacher: state.teacher,
+                              )))
+                  .then((value) => postBloc.add(GetPostEvent(widget.idClass)));
+            },
+            child: Row(
+              children: [
+                CustomAvatarGlow(
+                  glowColor: ColorApp.blue,
+                  endRadius: 20.0,
+                  duration: Duration(milliseconds: 1000),
+                  repeat: true,
+                  showTwoGlows: true,
+                  repeatPauseDuration: Duration(milliseconds: 100),
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    child: CircleAvatar(
+                      backgroundColor: ColorApp.lightGrey,
+                      backgroundImage:
+                          CachedNetworkImageProvider(state.teacher.avatar),
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Thông báo gì đó cho lớp học của bạn...',
-                    style: TextStyle(color: ColorApp.lightBlue),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Container();
-          }
-        }),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Thông báo gì đó cho lớp học của bạn...',
+                  style: TextStyle(color: ColorApp.lightBlue),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container();
+        }
+      }),
     );
   }
 

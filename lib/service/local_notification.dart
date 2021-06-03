@@ -4,7 +4,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:utc2_staff/utils/utils.dart';
 
 class MyLocalNotification {
   static Future<void> scheduleWeeklyMondayTenAMNotification(

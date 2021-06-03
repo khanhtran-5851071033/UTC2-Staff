@@ -1,15 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
-import 'package:utc2_staff/service/pdf/pdf_api.dart';
-import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
+
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,8 +12,6 @@ import 'dart:ui' as ui;
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart' show rootBundle;
 
 class NewClass extends StatefulWidget {
   @override

@@ -3,30 +3,30 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 
-part 'student_event.dart';
-part 'student_state.dart';
+part 'teacher_event.dart';
+part 'teacher_state.dart';
 
-class StudentBloc extends Bloc<StudentEvent, StudentState> {
-  StudentBloc() : super(StudentInitial());
+class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
+  TeacherBloc() : super(TeacherInitial());
 
   @override
-  Stream<StudentState> mapEventToState(
-    StudentEvent event,
+  Stream<TeacherState> mapEventToState(
+    TeacherEvent event,
   ) async* {
     switch (event.runtimeType) {
-      case GetStudent:
-        yield StudentLoading();
+      case GetTeacher:
+        yield TeacherLoading();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var userEmail = prefs.getString('userEmail');
         print('Prefs ' + userEmail.toString());
-        Student student = await StudentDatabase.getStudentData(userEmail);
+        Teacher student = await TeacherDatabase.getTeacherData(userEmail);
         print('student ' + student.email);
         if (student != null) {
-          yield StudentLoaded(student);
+          yield TeacherLoaded(student);
         } else {
-          yield StudentError();
+          yield TeacherError();
         }
         break;
       default:

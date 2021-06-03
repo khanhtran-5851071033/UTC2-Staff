@@ -1,7 +1,6 @@
 import 'package:utc2_staff/screens/profile_screen/work/chart.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 
 class TaskPerformanceScreen extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/activity_page.dart';
 import 'package:utc2_staff/screens/notify_page.dart';
 import 'package:utc2_staff/screens/schedule_page.dart';
 import 'package:utc2_staff/screens/web_view.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/screens/home_page.dart';
 import 'package:utc2_staff/screens/profile_page.dart';
@@ -22,13 +22,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   AppBar appBar = AppBar(title: Text(''));
-  StudentBloc studentBloc;
+  TeacherBloc teacherBloc;
   @override
   void initState() {
     super.initState();
 
-    studentBloc = BlocProvider.of<StudentBloc>(context);
-    studentBloc.add(GetStudent());
+    teacherBloc = BlocProvider.of<TeacherBloc>(context);
+    teacherBloc.add(GetTeacher());
   }
 
   @override
@@ -45,10 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: _selectedIndex == 0 || _selectedIndex == 3
             ? PreferredSize(
                 preferredSize: Size(size.width, appBar.preferredSize.height),
-                child: BlocBuilder<StudentBloc, StudentState>(
+                child: BlocBuilder<TeacherBloc, TeacherState>(
                     builder: (context, state) {
-                  if (state is StudentLoaded)
-                    return mainAppBar(size, state.student);
+                  if (state is TeacherLoaded)
+                    return mainAppBar(size, state.teacher);
                   else
                     return loadingAppBar(size);
                 }))
@@ -67,11 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           });
         }),
-        endDrawer: BlocBuilder<StudentBloc, StudentState>(builder: (context, state) {
-          if (state is StudentLoaded)
+        endDrawer: BlocBuilder<TeacherBloc, TeacherState>(builder: (context, state) {
+          if (state is TeacherLoaded)
             return Drawer(
                 child: ProFilePage(
-              student: state.student,
+              teacher: state.teacher,
             ));
           else
             return Container();
@@ -124,13 +124,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  Widget mainAppBar(Size size, Student student) {
+  Widget mainAppBar(Size size, Teacher teacher) {
     return AppBar(
       centerTitle: true,
       elevation: 10,
       backgroundColor: Colors.white,
       title: Text(
-        student.name,
+        teacher.name,
         style: TextStyle(color: ColorApp.black),
       ),
       leading: Builder(
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.all(4),
                   child: CircleAvatar(
                     backgroundColor: ColorApp.lightGrey,
-                    backgroundImage: NetworkImage(student.avatar),
+                    backgroundImage: NetworkImage(teacher.avatar),
                   ),
                 ),
               ),

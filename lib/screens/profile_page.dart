@@ -10,16 +10,16 @@ import 'package:utc2_staff/screens/profile_screen/payroll_table_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/profile_info.dart';
 import 'package:utc2_staff/screens/profile_screen/setting_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/work/performance_work_screen.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProFilePage extends StatefulWidget {
-  final Student student;
+  final Teacher teacher;
 
-  const ProFilePage({Key key, this.student}) : super(key: key);
+  const ProFilePage({Key key, this.teacher}) : super(key: key);
   @override
   _ProFilePageState createState() => _ProFilePageState();
 }
@@ -60,7 +60,7 @@ class _ProFilePageState extends State<ProFilePage> {
                     style: TextStyle(
                         color: Colors.black87, fontSize: size.width * 0.035))),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('Chụp ảnh mới',
                     style: TextStyle(
                       color: Colors.black87,
@@ -72,7 +72,7 @@ class _ProFilePageState extends State<ProFilePage> {
                   Navigator.pop(context);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Chọn ảnh từ thư viện',
                     style: TextStyle(
                       color: Colors.black87,
@@ -270,13 +270,13 @@ class _ProFilePageState extends State<ProFilePage> {
                   },
                   child: Container(
                       child: Center(
-                          child: _avatar(_image, size, widget.student.avatar))),
+                          child: _avatar(_image, size, widget.teacher.avatar))),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                _name(widget.student.name, size),
-                _email(widget.student.email, size),
+                _name(widget.teacher.name, size),
+                _email(widget.teacher.email, size),
               ],
             ),
           ),

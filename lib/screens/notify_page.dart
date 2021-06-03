@@ -96,7 +96,7 @@ class _NotifyPageState extends State<NotifyPage>
                               width: size.width,
                               height: size.height * 0.1,
                               margin: EdgeInsets.only(bottom: 20),
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   _showBottomSheet(
                                       context,
@@ -104,8 +104,7 @@ class _NotifyPageState extends State<NotifyPage>
                                       'Lễ tốt nghiệp',
                                       'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021');
                                 },
-                                splashColor: ColorApp.blue.withOpacity(.4),
-                                highlightColor: ColorApp.lightGrey,
+                                
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

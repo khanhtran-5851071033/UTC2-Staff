@@ -37,7 +37,6 @@ class _QuizSreenState extends State<QuizSreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedRadio = 0;
   }

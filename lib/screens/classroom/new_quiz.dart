@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
-import 'package:utc2_staff/service/pdf/pdf_api.dart';
-import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewQuiz extends StatefulWidget {
