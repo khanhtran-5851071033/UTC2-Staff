@@ -33,6 +33,6 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
 
   List<Class> sapXepGiamDan(List<Class> list) {
     list.sort((a, b) => a.date.compareTo(b.date));
-    return list.reversed.toList();
+    return list;
   }
 }
