@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "423190494078",
+    "firebase_url": "https://utc2-ea569-default-rtdb.firebaseio.com",
     "project_id": "utc2-ea569",
     "storage_bucket": "utc2-ea569.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "423190494078-9ahtj1cpdje6td8g7abgtdsutd3ta9j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.utc2_staff",
+            "certificate_hash": "fc5ec382de1ebd4f817bf3dd51ce37b358c81043"
+          }
+        },
+        {
+          "client_id": "423190494078-q7cictmashb5gkbb2paad4jrofbt47fd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.utc2_staff",
+            "certificate_hash": "dfa31766d50edb53d5eaada542fc899149aac415"
+          }
+        },
         {
           "client_id": "423190494078-d09ttrg4cdutjqmc63a9oq8m0tmal1ti.apps.googleusercontent.com",
           "client_type": 3
@@ -42,6 +59,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "423190494078-5tajfmc0c3b8qn5shbtqk83a4moudl3n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.utc2_student",
+            "certificate_hash": "fc5ec382de1ebd4f817bf3dd51ce37b358c81043"
+          }
+        },
+        {
+          "client_id": "423190494078-f238c0gc4kqdkh727vc0dgfa7r4cdnfg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.utc2_student",
+            "certificate_hash": "dfa31766d50edb53d5eaada542fc899149aac415"
+          }
+        },
         {
           "client_id": "423190494078-d09ttrg4cdutjqmc63a9oq8m0tmal1ti.apps.googleusercontent.com",
           "client_type": 3

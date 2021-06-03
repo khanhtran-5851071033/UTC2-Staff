@@ -18,10 +18,11 @@ class MyLocalNotification {
       String room,
       int maMon,
       int maLich) async {
+    String sem = em == 0 ? '00' : '$em';
     await notifications.zonedSchedule(
         int.parse('$maMon$maLich'),
         'Đến giờ học môn $tenMon - $room',
-        '$sh:$sm - $em:$em',
+        '$sh:$sm - $eh:$sem',
         nextInstanceOfWeekDayTime(sh, sm, wd),
         NotificationDetails(
           android: AndroidNotificationDetails(

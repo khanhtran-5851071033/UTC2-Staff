@@ -1,45 +1,92 @@
-import 'package:utc2_staff/blocs/login_bloc/login_event.dart';
-import 'package:utc2_staff/blocs/login_bloc/login_state.dart';
-import 'package:utc2_staff/repositories/user_repository.dart';
-import 'package:utc2_staff/utils/validators.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:utc2_staff/repositories/google_signin_repo.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
+
+part 'login_event.dart';
+part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final UserRepository _userRepository;
+  LoginBloc() : super(LoginInitial());
 
-  LoginBloc({UserRepository userRepository})
-      : _userRepository = userRepository,
-        super(LoginState.initial());
+  final studentDB = StudentDatabase();
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginEmailChange) {
-      yield* _mapLoginEmailChangeToState(event.email);
-    } else if (event is LoginPasswordChanged) {
-      yield* _mapLoginPasswordChangeToState(event.password);
-    } else if (event is LoginWithCredentialsPressed) {
-      yield* _mapLoginWithCredentialsPressedToState(
-          email: event.email, password: event.password);
-    }
-  }
+  Stream<LoginState> mapEventToState(
+    LoginEvent event,
+  ) async* {
+    switch (event.runtimeType) {
+      case SignInEvent:
+        GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
+        yield SigningState();
 
-  Stream<LoginState> _mapLoginEmailChangeToState(String email) async* {
-    yield state.update(isEmailValid: Validators.isValidEmail(email));
-  }
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var login = await _googleSignIn.signIn();
 
-  Stream<LoginState> _mapLoginPasswordChangeToState(String password) async* {
-    yield state.update(isPasswordValid: true);
-  }
+        if (login != null) {
+          int len = login.email.length - 14;
+          if (login.email.substring(len) == 'st.utc2.edu.vn') {
+            print(login.email.substring(len) == 'st.utc2.edu.vn');
 
-  Stream<LoginState> _mapLoginWithCredentialsPressedToState(
-      {String email, String password}) async* {
-    yield LoginState.loading();
-    try {
-      await _userRepository.signInWithCredentials(email, password);
-      yield LoginState.success();
-    } catch (e) {
-      print(e.toString());
-      yield LoginState.failure();
+            Map<String, String> dataStudent = {
+              'id': login.email.substring(0, len - 1),
+              'name': login.displayName,
+              'email': login.email,
+              'avatar': login.photoUrl,
+              'token': prefs.getString('token'),
+            };
+            try {
+              await studentDB.createStudent(
+                  dataStudent, login.email.substring(0, len - 1));
+            } catch (e) {
+              print('Lỗi =====>' + e.toString());
+            }
+          }
+          prefs.setString('userEmail', login.email);
+          bool isRegister = await StudentDatabase.isRegister(login.email);
+          if (isRegister) {
+            print('update');
+            var student = await StudentDatabase.getStudentData(login.email);
+
+            Map<String, String> data = {
+              'id': student.id,
+              'name': login.displayName,
+              'email': login.email,
+              'avatar': login.photoUrl,
+              'token': prefs.getString('token'),
+            };
+            StudentDatabase.updateStudentData(student.id, data);
+          }
+          yield SignedInState(login, isRegister);
+        } else
+          yield SignInErrorState();
+
+        break;
+      case EnterSIDEvent:
+        yield UpdatingSIDState();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        GoogleSignInAccount ggLogin = event.props[0];
+        Map<String, String> dataStudent = {
+          'id': event.props[1],
+          'name': ggLogin.displayName,
+          'email': ggLogin.email,
+          'avatar': ggLogin.photoUrl,
+          'token': prefs.getString('token'),
+        };
+        try {
+          await studentDB.createStudent(dataStudent, event.props[1]);
+        } catch (e) {
+          print('Lỗi =====>' + e.toString());
+        }
+
+        prefs.setString('userEmail', ggLogin.email);
+        yield EnteredSIDState();
+        break;
+      default:
     }
   }
 }

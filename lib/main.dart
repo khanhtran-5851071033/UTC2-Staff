@@ -1,13 +1,20 @@
 import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
+import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
-import 'package:utc2_staff/screens/classroom/class_detail_screen.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/repositories/google_signin_repo.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
+import 'package:utc2_staff/screens/login/login_screen.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:utc2_staff/service/local_notification.dart';
@@ -49,10 +56,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseMessaging _fireBaseMessaging;
   final notifications = FlutterLocalNotificationsPlugin();
+  GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
+  Widget body = Scaffold(
+  );
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance.subscribeToTopic('fcm_test');
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(
@@ -67,6 +76,11 @@ class _HomePageState extends State<HomePage> {
           alert: true, badge: true, sound: true, provisional: true);
     }
 
+    // LoginEmailBloc.getInstance().init();
+    // ConnectionStatusSingleton.getInstance()
+    //     .connectionChange
+    //     .listen(_updateConnectivity);
+    // _notificationPlugin = NotificationPlugin();
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage message) {
@@ -76,29 +90,29 @@ class _HomePageState extends State<HomePage> {
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessage event' + message.notification.body);
-      MyLocalNotification.showNotification(
-          notifications, message.notification.title, message.notification.body);
+      MyLocalNotification.showNotification(notifications,
+          message.notification.title, message.notification.body);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessageOpenedApp event');
-      // Future.delayed(Duration(seconds: 2), () {
-      Get.to(DetailClassScreen());
-      // });
+      Get.to(HomeScreen());
     });
-  }
+    FirebaseMessaging.instance.subscribeToTopic('fcm_test');
+    // login();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     getTokenFCM();
   }
+
+  // Future login() async {}
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ClassBloc>(create: (context) => ClassBloc()),
-        BlocProvider<PostBloc>(create: (context) => PostBloc())
+        BlocProvider<PostBloc>(create: (context) => PostBloc()),
+        BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
+        BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -108,25 +122,40 @@ class _HomePageState extends State<HomePage> {
                 .appBarTheme
                 .copyWith(brightness: Brightness.light)),
         debugShowCheckedModeBanner: false,
-        // home: HomeScreen(),
-        home: HomeScreen(),
+        home: body,
       ),
     );
   }
 
-  getTokenFCM() {
+  getTokenFCM() async {
     try {
-      FirebaseMessaging.instance.getToken().then((token) => {
-            // LoginEmailBloc.getInstance().setFCMToken = token,
-            print('token : ' + token)
+      FirebaseMessaging.instance.getToken().then((token) async {
+        print('token : ' + token);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('token', token);
+        if (prefs.getString('userEmail') != null) {
+          setState(() {
+            body = HomeScreen();
           });
+          var student = await StudentDatabase.getStudentData(
+              prefs.getString('userEmail'));
+
+          Map<String, String> data = {
+            'token': token,
+          };
+          StudentDatabase.updateStudentData(student.id, data);
+        } else
+          setState(() {
+            body = LoginScreen();
+          });
+      });
     } catch (e) {
       print('get token exception : ' + e.toString());
     }
   }
 
   Future onSelectNotification(String payload) async {
-    print('onSelect');
-    Get.to(DetailClassScreen());
+    print(payload);
+    // Get.to(DetailClassScreen());
   }
 }

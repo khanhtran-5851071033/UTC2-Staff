@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
@@ -78,7 +80,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         ),
         actions: [
           TextButton.icon(
-              
               onPressed: () {
                 Navigator.push(
                     context,
@@ -165,8 +166,8 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                               itemBuilder: (context, index) {
                                 var e = state.list[index];
                                 return ItemNoti(
-                                  avatar: 'link avatar',
-                                  userName: 'Miên Phạm',
+                                  avatar: e.avatar,
+                                  userName: e.name,
                                   title: e.title,
                                   time: e.date,
                                   content: e.content,
@@ -302,38 +303,51 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: ColorApp.lightGrey)),
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewNotify(idClass: widget.idClass)))
-              .then((value) => postBloc.add(GetPostEvent(widget.idClass)));
-        },
-        child: Row(
-          children: [
-            CustomAvatarGlow(
-              glowColor: ColorApp.blue,
-              endRadius: 20.0,
-              duration: Duration(milliseconds: 1000),
-              repeat: true,
-              showTwoGlows: true,
-              repeatPauseDuration: Duration(milliseconds: 100),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                child: CircleAvatar(
-                  backgroundColor: ColorApp.lightGrey,
-                  backgroundImage: AssetImage('assets/images/logoUTC.png'),
-                ),
+      child: BlocBuilder<StudentBloc, StudentState>(builder: (context, state) {
+          if (state is StudentLoaded) {
+            return TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewNotify(
+                              idClass: widget.idClass,
+                              student: state.student,
+                            ))).then(
+                    (value) => postBloc.add(GetPostEvent(widget.idClass)));
+              },
+              child: Row(
+                children: [
+                  CustomAvatarGlow(
+                    glowColor: ColorApp.blue,
+                    endRadius: 20.0,
+                    duration: Duration(milliseconds: 1000),
+                    repeat: true,
+                    showTwoGlows: true,
+                    repeatPauseDuration: Duration(milliseconds: 100),
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      child: CircleAvatar(
+                        backgroundColor: ColorApp.lightGrey,
+                        backgroundImage:
+                            CachedNetworkImageProvider(state.student.avatar),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Thông báo gì đó cho lớp học của bạn...',
+                    style: TextStyle(color: ColorApp.lightBlue),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Thông báo gì đó cho lớp học của bạn...'),
-          ],
-        ),
-      ),
+            );
+          } else {
+            return Container();
+          }
+        }),
     );
   }
 
@@ -404,8 +418,7 @@ class ItemNoti extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: ColorApp.lightGrey,
                         radius: 15,
-                        backgroundImage:
-                            AssetImage('assets/images/logoUTC.png'),
+                        backgroundImage: CachedNetworkImageProvider(avatar),
                       ),
                     ),
                     SizedBox(

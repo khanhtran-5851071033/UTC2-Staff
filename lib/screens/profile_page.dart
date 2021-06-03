@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:utc2_staff/repositories/google_signin_repo.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/attendance_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/help_screen.dart';
@@ -7,18 +10,23 @@ import 'package:utc2_staff/screens/profile_screen/payroll_table_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/profile_info.dart';
 import 'package:utc2_staff/screens/profile_screen/setting_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/work/performance_work_screen.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProFilePage extends StatefulWidget {
+  final Student student;
+
+  const ProFilePage({Key key, this.student}) : super(key: key);
   @override
   _ProFilePageState createState() => _ProFilePageState();
 }
 
 class _ProFilePageState extends State<ProFilePage> {
   File _image;
+  GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
   String linkImage =
       'https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1';
   final picker = ImagePicker();
@@ -158,12 +166,39 @@ class _ProFilePageState extends State<ProFilePage> {
                                                             builder: (context) =>
                                                                 screen[index]));
                                               }
-                                            : () {
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()));
+                                            : () async {
+                                                ScaffoldMessenger.of(context)
+                                                  ..removeCurrentSnackBar()
+                                                  ..showSnackBar(
+                                                    SnackBar(
+                                                      content: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            'Đã đăng xuất',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      backgroundColor:
+                                                          Color(0xFFFF7434),
+                                                    ),
+                                                  );
+                                                final SharedPreferences prefs =
+                                                    await SharedPreferences
+                                                            .getInstance()
+                                                        .then((value) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .removeCurrentSnackBar();
+                                                  return value;
+                                                });
+                                                prefs.remove('userEmail');
+                                                _googleSignIn.signOut();
+                                                Get.offAll(() => LoginScreen());
                                               },
                                         leading: Icon(
                                           buttonList[index]['icon'],
@@ -234,13 +269,14 @@ class _ProFilePageState extends State<ProFilePage> {
                     _show(size);
                   },
                   child: Container(
-                      child: Center(child: _avatar(_image, size, linkImage))),
+                      child: Center(
+                          child: _avatar(_image, size, widget.student.avatar))),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                _name('Phạm Thị Miên', size),
-                _email('ptmien@utc2.edu.vn', size),
+                _name(widget.student.name, size),
+                _email(widget.student.email, size),
               ],
             ),
           ),

@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/activity_page.dart';
 import 'package:utc2_staff/screens/notify_page.dart';
 import 'package:utc2_staff/screens/schedule_page.dart';
 import 'package:utc2_staff/screens/web_view.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/screens/home_page.dart';
 import 'package:utc2_staff/screens/profile_page.dart';
@@ -18,10 +21,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
+  AppBar appBar = AppBar(title: Text(''));
+  StudentBloc studentBloc;
   @override
   void initState() {
     super.initState();
+
+    studentBloc = BlocProvider.of<StudentBloc>(context);
+    studentBloc.add(GetStudent());
   }
 
   @override
@@ -36,53 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: _selectedIndex == 0 || _selectedIndex == 3
-            ? AppBar(
-                centerTitle: true,
-                elevation: 10,
-                backgroundColor: Colors.white,
-                title: Text(
-                  'Phạm Thị Miên',
-                  style: TextStyle(color: ColorApp.black),
-                ),
-                leading: Builder(
-                  builder: (context) => // Ensure Scaffold is in context
-                      IconButton(
-                          icon: Icon(
-                            Icons.menu,
-                            color: ColorApp.black,
-                          ),
-                          onPressed: () => Scaffold.of(context).openDrawer()),
-                ),
-                actions: [
-                  Builder(
-                    builder: (context) => Container(
-                      margin: EdgeInsets.only(right: size.width * 0.03),
-                      width: 40,
-                      child: GestureDetector(
-                        onTap: () {
-                          Scaffold.of(context).openEndDrawer();
-                        },
-                        child: CustomAvatarGlow(
-                          glowColor: Colors.blue,
-                          endRadius: 20.0,
-                          duration: Duration(milliseconds: 1000),
-                          repeat: true,
-                          showTwoGlows: true,
-                          repeatPauseDuration: Duration(milliseconds: 100),
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            child: CircleAvatar(
-                              backgroundColor: ColorApp.lightGrey,
-                              backgroundImage: NetworkImage(
-                                  "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              )
+            ? PreferredSize(
+                preferredSize: Size(size.width, appBar.preferredSize.height),
+                child: BlocBuilder<StudentBloc, StudentState>(
+                    builder: (context, state) {
+                  if (state is StudentLoaded)
+                    return mainAppBar(size, state.student);
+                  else
+                    return loadingAppBar(size);
+                }))
             : null,
         drawer: CustomDrawer(linkWeb: (link) {
           setState(() {
@@ -98,7 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           });
         }),
-        endDrawer: Drawer(child: ProFilePage()),
+        endDrawer: BlocBuilder<StudentBloc, StudentState>(builder: (context, state) {
+          if (state is StudentLoaded)
+            return Drawer(
+                child: ProFilePage(
+              student: state.student,
+            ));
+          else
+            return Container();
+        }),
         body: SizedBox.expand(
           child: IndexedStack(
             index: _selectedIndex,
@@ -145,5 +122,77 @@ class _HomeScreenState extends State<HomeScreen> {
                 inactiveColor: ColorApp.black),
           ],
         ));
+  }
+
+  Widget mainAppBar(Size size, Student student) {
+    return AppBar(
+      centerTitle: true,
+      elevation: 10,
+      backgroundColor: Colors.white,
+      title: Text(
+        student.name,
+        style: TextStyle(color: ColorApp.black),
+      ),
+      leading: Builder(
+        builder: (context) => // Ensure Scaffold is in context
+            IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: ColorApp.black,
+                ),
+                onPressed: () => Scaffold.of(context).openDrawer()),
+      ),
+      actions: [
+        Builder(
+          builder: (context) => Container(
+            margin: EdgeInsets.only(right: size.width * 0.03),
+            width: 40,
+            child: GestureDetector(
+              onTap: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              child: CustomAvatarGlow(
+                glowColor: ColorApp.lightBlue,
+                endRadius: 20.0,
+                duration: Duration(milliseconds: 1000),
+                repeat: true,
+                showTwoGlows: true,
+                repeatPauseDuration: Duration(milliseconds: 100),
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  child: CircleAvatar(
+                    backgroundColor: ColorApp.lightGrey,
+                    backgroundImage: NetworkImage(student.avatar),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget loadingAppBar(Size size) {
+    return AppBar(
+        centerTitle: true,
+        elevation: 10,
+        backgroundColor: Colors.white,
+        title: Text(
+          '',
+          style: TextStyle(color: ColorApp.black),
+        ),
+        leading: Builder(
+          builder: (context) => // Ensure Scaffold is in context
+              IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: ColorApp.black,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer()),
+        ),
+        actions: [
+          Container(),
+        ]);
   }
 }

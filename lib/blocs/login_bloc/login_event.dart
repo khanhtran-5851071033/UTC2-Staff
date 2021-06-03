@@ -1,34 +1,21 @@
-import 'package:equatable/equatable.dart';
+part of 'login_bloc.dart';
 
 abstract class LoginEvent extends Equatable {
+  const LoginEvent();
+
   @override
   List<Object> get props => [];
 }
 
-class LoginEmailChange extends LoginEvent {
-  final String email;
+class SignInEvent extends LoginEvent {}
 
-  LoginEmailChange({this.email});
+class EnterSIDEvent extends LoginEvent {
+  final GoogleSignInAccount ggLogin;
+  final String sID;
 
+  EnterSIDEvent(this.ggLogin, this.sID);
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [this.ggLogin, this.sID];
 }
 
-class LoginPasswordChanged extends LoginEvent {
-  final String password;
-
-  LoginPasswordChanged({this.password});
-
-  @override
-  List<Object> get props => [password];
-}
-
-class LoginWithCredentialsPressed extends LoginEvent {
-  final String email;
-  final String password;
-
-  LoginWithCredentialsPressed({this.email, this.password});
-
-  @override
-  List<Object> get props => [email, password];
-}
+class SignOutEvent extends LoginEvent {}
