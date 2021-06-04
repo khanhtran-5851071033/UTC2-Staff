@@ -82,18 +82,18 @@ class _QuizSreenState extends State<QuizSreen> {
           'Xem trước',
           style: TextStyle(color: ColorApp.black),
         ),
-          actions: [
-            TextButton.icon(
-                onPressed: () async {
-                  final pdfFile = await PdfParagraphApi.generate();
-                  PdfApi.openFile(pdfFile);
-                },
-                icon: Image.asset(
-                  'assets/icons/pdf.png',
-                  width: 20,
-                ),
-                label: Text('Tải xuống'))
-          ],
+        actions: [
+          TextButton.icon(
+              onPressed: () async {
+                final pdfFile = await PdfParagraphApi.generate();
+                PdfApi.openFile(pdfFile);
+              },
+              icon: Image.asset(
+                'assets/icons/pdf.png',
+                width: 20,
+              ),
+              label: Text('Tải xuống'))
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(size.width * 0.03),
@@ -129,6 +129,7 @@ class _QuizSreenState extends State<QuizSreen> {
                 duration: Duration(milliseconds: 500),
                 firstChild: Container(
                   width: size.width,
+                  height: size.height,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       boxShadow: [

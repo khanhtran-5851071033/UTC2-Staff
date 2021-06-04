@@ -1,8 +1,8 @@
-
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class NewClass extends StatefulWidget {
+  final Teacher teacher;
+
+  const NewClass({Key key, this.teacher}) : super(key: key);
   @override
   _NewClassState createState() => _NewClassState();
 }
@@ -101,31 +104,16 @@ class _NewClassState extends State<NewClass> {
     }
   }
 
-  // Future<String> upImage() async {
-  //   var path = await rootBundle.loadString('/assets/images/gv.jpg');
-  //   final http.Response response = await http.post(
-  //     Uri.parse('https://book-room-app.herokuapp.com/user/api/registerUser'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       'username': '1234567',
-  //       'password': '1234567',
-  //       'image': File(path)
-  //     }),
-  //   );
-  //   print(response.statusCode);
-  //   if (response.statusCode == 201) {
-  //     var body = jsonDecode(response.body);
-  //     return body;
-  //   } else {
-  //     throw Exception('Lỗi up');
-  //   }
-  // }
-
-  String idClass, nameClass, description;
+  String idClass, nameClass, description, idTeacher;
   bool isNewClass = false;
   bool isAll = false;
+  @override
+  void initState() {
+    idTeacher = widget.teacher.id;
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -179,7 +167,7 @@ class _NewClassState extends State<NewClass> {
                 'id': idClass,
                 'name': nameClass,
                 'note': description,
-                'teacherId': 'Phạm Thị Miên',
+                'teacherId': idTeacher,
                 'date':
                     DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
               };
@@ -272,109 +260,110 @@ class _NewClassState extends State<NewClass> {
                                     fontSize: 18, color: ColorApp.black)),
                           ),
                         ),
-                        Container(
-                          child: isNewClass
-                              ? Container(
-                                  width: size.width,
-                                  margin: EdgeInsets.only(top: 15),
-                                  child: Column(
+                        AnimatedCrossFade(
+                            secondChild: Container(),
+                            crossFadeState: isNewClass
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                            duration: Duration(milliseconds: 300),
+                            firstChild: Container(
+                              width: size.width,
+                              margin: EdgeInsets.only(top: 15),
+                              child: Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text('Mã lớp :'),
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            idClass,
-                                            style: TextStyle(
-                                                color: Colors.blue,
-                                                fontSize: 20,
-                                                letterSpacing: 1,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Clipboard.setData(
-                                                  ClipboardData(text: idClass));
-                                              Fluttertoast.showToast(
-                                                  msg: "Đã sao chép " + idClass,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.CENTER,
-                                                  timeInSecForIosWeb: 1,
-                                                  backgroundColor:
-                                                      ColorApp.mediumBlue,
-                                                  textColor: Colors.white,
-                                                  fontSize: 16.0);
-                                            },
-                                            child: Icon(
-                                              Icons.copy_rounded,
-                                              size: 15,
-                                            ),
-                                          )
-                                        ],
+                                      Text('Mã lớp :'),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        idClass == null ? '' : idClass,
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 20,
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(
-                                        height: 15,
+                                        width: 15,
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Mã QR :'),
-                                          RepaintBoundary(
-                                            key: globalKey,
-                                            child: Container(
-                                              color: Colors.white,
-                                              child: QrImage(
-                                                data: idClass,
-                                                embeddedImage: AssetImage(
-                                                    'assets/images/logoUTC.png'),
-                                                version: QrVersions.auto,
-                                                size: 120,
-                                                gapless: false,
-                                                embeddedImageStyle:
-                                                    QrEmbeddedImageStyle(
-                                                  size: Size(15, 15),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 16.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                _captureAndSharePng();
-                                              },
-                                              child: Text(
-                                                'Lưu vào thư viện',
-                                                style: TextStyle(
-                                                    color: ColorApp.blue),
-                                              ),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _shareImage();
-                                            },
-                                            child: Text(
-                                              'Chia sẻ',
-                                              style: TextStyle(
-                                                  color: ColorApp.blue),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Clipboard.setData(
+                                              ClipboardData(text: idClass));
+                                          Fluttertoast.showToast(
+                                              msg: "Đã sao chép " + idClass,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor:
+                                                  ColorApp.mediumBlue,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        },
+                                        child: Icon(
+                                          Icons.copy_rounded,
+                                          size: 15,
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )
-                              : Container(),
-                        ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Mã QR :'),
+                                      RepaintBoundary(
+                                        key: globalKey,
+                                        child: Container(
+                                          color: Colors.white,
+                                          child: QrImage(
+                                            data:
+                                                idClass == null ? '' : idClass,
+                                            embeddedImage: AssetImage(
+                                                'assets/images/logoUTC.png'),
+                                            version: QrVersions.auto,
+                                            size: 120,
+                                            gapless: false,
+                                            embeddedImageStyle:
+                                                QrEmbeddedImageStyle(
+                                              size: Size(15, 15),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 16.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _captureAndSharePng();
+                                          },
+                                          child: Text(
+                                            'Lưu vào thư viện',
+                                            style:
+                                                TextStyle(color: ColorApp.blue),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _shareImage();
+                                        },
+                                        child: Text(
+                                          'Chia sẻ',
+                                          style:
+                                              TextStyle(color: ColorApp.blue),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -435,7 +424,6 @@ class _NewClassState extends State<NewClass> {
                   ),
                   SizedBox(
                     height: size.width * 0.03,
-            
                   ),
                   Container(
                     width: size.width,

@@ -54,11 +54,22 @@ class LoginScreen extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: size.width * 0.06),
                         child: LoginForm()),
                     Spacer(),
-                    Image.asset(
-                      'assets/images/teaching.png',
-                      width: size.width / 1.5,
-                      // height: 300,
-                      //  fit: BoxFit.fill,
+                    Container(
+                      height: 300,
+                      child: PageView(children: [
+                        Image.asset(
+                          'assets/images/teaching1.png',
+                          width: size.width / 1.5,
+                          // height: 300,
+                          //  fit: BoxFit.fill,
+                        ),
+                        Image.asset(
+                          'assets/images/teaching.png',
+                          width: size.width / 1.5,
+                          // height: 300,
+                          //  fit: BoxFit.fill,
+                        ),
+                      ]),
                     ),
                     SizedBox(
                       height: 30,

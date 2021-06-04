@@ -5,11 +5,15 @@ import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/screens/classroom/class_detail_screen.dart';
 import 'package:utc2_staff/screens/classroom/new_class.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/color_random.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ActivityPage extends StatefulWidget {
+  final Teacher teacher;
+
+  const ActivityPage({Key key, this.teacher}) : super(key: key);
   @override
   _ActivityPageState createState() => _ActivityPageState();
 }
@@ -52,7 +56,7 @@ class _ActivityPageState extends State<ActivityPage> {
       onPressed: () {
         Navigator.pop(context);
         classDatabase.deleteClass(id);
-        classBloc.add(GetClassEvent());
+        classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
       },
     );
 
@@ -79,8 +83,9 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
+    // print(widget.teacher.id);
     classBloc = BlocProvider.of<ClassBloc>(context);
-    classBloc.add(GetClassEvent());
+    classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
   }
 
   @override
@@ -95,13 +100,11 @@ class _ActivityPageState extends State<ActivityPage> {
                 color: ColorApp.lightBlue,
               );
             else if (state is LoadedClass) {
-              print('loaded');
-
               return Container(
                 child: RefreshIndicator(
                   displacement: 20,
                   onRefresh: () async {
-                    classBloc.add(GetClassEvent());
+                    classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
                   },
                   child: Scrollbar(
                     child: ListView.builder(
@@ -111,13 +114,13 @@ class _ActivityPageState extends State<ActivityPage> {
                       itemBuilder: ((context, index) {
                         return index == state.list.length
                             ? Container(
-                                height: 200,
+                                height: state.list.length < 2 ? 500 : 200,
                               )
                             : customList(
                                 size,
                                 context,
                                 state.list[index].name,
-                                state.list[index].teacherId,
+                                widget.teacher.name,
                                 activity[1]['subAct'],
                                 state.list[index].id,
                                 state.list,
@@ -151,9 +154,13 @@ class _ActivityPageState extends State<ActivityPage> {
             hoverColor: ColorApp.lightGrey,
             foregroundColor: ColorApp.blue,
             onPressed: () {
-              Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewClass()))
-                  .then((value) => classBloc.add(GetClassEvent()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewClass(
+                            teacher: widget.teacher,
+                          ))).then((value) =>
+                  classBloc.add(GetClassEvent(teacherID: widget.teacher.id)));
             },
             child: Icon(Icons.add),
           ),

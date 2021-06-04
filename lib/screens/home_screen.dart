@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/activity_page.dart';
+import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:utc2_staff/screens/notify_page.dart';
 import 'package:utc2_staff/screens/schedule_page.dart';
 import 'package:utc2_staff/screens/web_view.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   AppBar appBar = AppBar(title: Text(''));
   TeacherBloc teacherBloc;
+  Teacher teacher;
   @override
   void initState() {
     super.initState();
@@ -47,9 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 preferredSize: Size(size.width, appBar.preferredSize.height),
                 child: BlocBuilder<TeacherBloc, TeacherState>(
                     builder: (context, state) {
-                  if (state is TeacherLoaded)
-                    return mainAppBar(size, state.teacher);
-                  else
+                  if (state is TeacherLoaded) {
+                    {
+                      teacher = state.teacher;
+                      return mainAppBar(size, state.teacher);
+                    }
+                  } else
                     return loadingAppBar(size);
                 }))
             : null,
@@ -67,13 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           });
         }),
-        endDrawer: BlocBuilder<TeacherBloc, TeacherState>(builder: (context, state) {
-          if (state is TeacherLoaded)
+        endDrawer:
+            BlocBuilder<TeacherBloc, TeacherState>(builder: (context, state) {
+          if (state is TeacherLoaded) {
             return Drawer(
                 child: ProFilePage(
               teacher: state.teacher,
             ));
-          else
+          } else
             return Container();
         }),
         body: SizedBox.expand(
@@ -83,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               utc2,
               NotifyPage(),
               SchedulePage(),
-              ActivityPage(),
+              teacher != null ? ActivityPage(teacher: teacher) : Container(),
             ],
           ),
         ),

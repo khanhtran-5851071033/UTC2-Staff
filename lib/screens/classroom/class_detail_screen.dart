@@ -422,7 +422,7 @@ class ItemNoti extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 7,
+                      width: 10,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,6 +440,46 @@ class ItemNoti extends StatelessWidget {
                         ),
                       ],
                     ),
+                    Spacer(),
+                    PopupMenuButton<String>(
+                      onSelected: (String value) {
+                        // setState(() {
+                        //     _selection = value;
+                        // });
+                      },
+                      child: Icon(Icons.more_horiz_rounded),
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                            value: 'Value1',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.label_important_outline_rounded,
+                                  size: 15,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text('Ghim'),
+                              ],
+                            )),
+                        PopupMenuItem<String>(
+                            value: 'Value2',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.delete_forever_rounded,
+                                  size: 15,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text('Gỡ'),
+                              ],
+                            )),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(
@@ -453,12 +493,15 @@ class ItemNoti extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  content,
-                  softWrap: true,
-                  style: TextStyle(
-                      color: ColorApp.black.withOpacity(.6), fontSize: 16),
-                ),
+                content != null
+                    ? Text(
+                        content,
+                        softWrap: true,
+                        style: TextStyle(
+                            color: ColorApp.black.withOpacity(.6),
+                            fontSize: 16),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 10,
                 ),

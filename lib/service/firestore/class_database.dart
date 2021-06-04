@@ -12,9 +12,9 @@ class ClassDatabase {
         .delete();
   }
 
-  getClassData() async {
+  getClassData(String teacherID) async {
     List<Class> list = [];
-    var data = await FirebaseFirestore.instance.collection('Class').get();
+    var data = await FirebaseFirestore.instance.collection('Class').where('teacherId',isEqualTo:teacherID ).get();
     list = data.docs.map((e) => Class(e)).toList();
     return list;
   }

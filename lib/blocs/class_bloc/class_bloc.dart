@@ -19,7 +19,7 @@ class ClassBloc extends Bloc<ClassEvent, ClassState> {
     switch (event.runtimeType) {
       case GetClassEvent:
         yield LoadingClass();
-        listClass = await classDatabase.getClassData();
+        listClass = await classDatabase.getClassData(event.props[0]);
         if (listClass.isNotEmpty)
           //sort
 

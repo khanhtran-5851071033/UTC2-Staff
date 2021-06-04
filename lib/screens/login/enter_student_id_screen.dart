@@ -48,9 +48,19 @@ class _EnterSIDScreenState extends State<EnterSIDScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 20,
+            ),
             Text(
-              'Nhập mã sinh viên của bạn',
-              style: TextStyle(fontSize: 17, color: Colors.black54),
+              '    Vì bạn đang sử dụng tài khoản cá nhân để đăng nhập ngoài phạm vi truy cập của UTC2.',
+              style: TextStyle(fontSize: 17, color: ColorApp.black),
+            ),
+            SizedBox(
+              height: 7,
+            ),
+            Text(
+              '    Vui lòng nhập mã giảng viên để xác nhận !',
+              style: TextStyle(fontSize: 17, color: ColorApp.black),
             ),
             SizedBox(
               height: 20,
@@ -60,26 +70,29 @@ class _EnterSIDScreenState extends State<EnterSIDScreen> {
               child: TextFormField(
                 controller: sIdController,
                 validator: (val) =>
-                    val.isEmpty ? 'Hãy nhập mã sinh viên' : null,
+                    val.isEmpty ? 'Vui lòng nhập mã giảng viên' : null,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
+                  hintText: 'Nhập mã Giảng Viên',
+                  hintStyle: TextStyle(
+                      color: ColorApp.black.withOpacity(.5),
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black87, width: 2),
-                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.black87, width: 1.1),
+                    borderRadius: BorderRadius.circular(13),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide:
-                        BorderSide(color: ColorApp.mediumBlue, width: 3),
+                    borderRadius: BorderRadius.circular(13),
+                    borderSide: BorderSide(color: Colors.blue, width: 1.3),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide:
-                        BorderSide(color: ColorApp.mediumBlue, width: 3),
+                    borderRadius: BorderRadius.circular(13),
+                    borderSide: BorderSide(color: Colors.red, width: 1.5),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.red, width: 3),
+                    borderRadius: BorderRadius.circular(13),
+                    borderSide: BorderSide(color: Colors.red, width: 1.5),
                   ),
                 ),
               ),
@@ -118,7 +131,7 @@ class _EnterSIDScreenState extends State<EnterSIDScreen> {
         children: [
           Expanded(
             child: MaterialButton(
-              color: Colors.black87,
+              color: Colors.blue,
               onPressed: () {
                 if (_formKey.currentState.validate())
                   loginBloc.add(
@@ -135,7 +148,7 @@ class _EnterSIDScreenState extends State<EnterSIDScreen> {
                 ),
               ),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(30)),
             ),
           ),
         ],

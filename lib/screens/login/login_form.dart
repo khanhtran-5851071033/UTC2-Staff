@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/enter_student_id_screen.dart';
+import 'package:utc2_staff/utils/utils.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -11,7 +12,6 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-
   LoginBloc loginBloc;
   @override
   void initState() {
@@ -42,8 +42,8 @@ class _LoginFormState extends State<LoginForm> {
         child: RawMaterialButton(
           padding: EdgeInsets.all(15.0),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          fillColor: Colors.black,
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          fillColor: ColorApp.black,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             Container(
@@ -51,7 +51,7 @@ class _LoginFormState extends State<LoginForm> {
                 width: 30,
                 child: Image.asset('assets/icons/google.png')),
             Text(
-              'Đăng nhập bằng tài khoản sinh viên',
+              'Đăng nhập bằng tài khoản Giảng Viên',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
             children: <Widget>[
               Text(
                 text,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 17),
               ),
               show
                   ? CircularProgressIndicator(
@@ -89,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
                     )
             ],
           ),
-          backgroundColor: Color(0xFFFF7434),
+          backgroundColor: Colors.blue,
         ),
       );
   }
