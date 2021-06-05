@@ -63,10 +63,34 @@ class MyLocalNotification {
       FlutterLocalNotificationsPlugin notifications,
       String title,
       String body) async {
-    int insistentFlag = 4;
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
+      'your channel id',
+      'your channel name',
+      'your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      enableLights: true,
+      largeIcon: FilePathAndroidBitmap('assets/images/logoUTC.jpg'),
+      styleInformation: BigTextStyleInformation(''),
+    );
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await notifications.show(0, title, body, platformChannelSpecifics,
+        payload: 'item x');
+  }
+
+  static Future<void> showNotificationEvent(
+      FlutterLocalNotificationsPlugin notifications,
+      String idChannel,
+      String chanelName,
+      String chanelDescription,
+      String title,
+      String body) async {
+    int insistentFlag = 4;
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(idChannel, chanelName, chanelDescription,
             importance: Importance.max,
             priority: Priority.high,
             ticker: 'ticker',

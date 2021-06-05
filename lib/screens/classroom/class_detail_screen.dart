@@ -4,11 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
+import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -29,6 +31,8 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   final notifications = FlutterLocalNotificationsPlugin();
   PostBloc postBloc;
   String className = '', descriptions = '';
+  PostDatabase postDatabase = new PostDatabase();
+  String deleteOrPin;
   @override
   void initState() {
     super.initState();
@@ -165,13 +169,32 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                   horizontal: size.width * 0.03),
                               itemBuilder: (context, index) {
                                 var e = state.list[index];
+                                DateTime parseDate =
+                                    new DateFormat("yyyy-MM-dd HH:mm:ss")
+                                        .parse(e.date);
+                                print(parseDate);
                                 return ItemNoti(
                                   avatar: e.avatar,
                                   userName: e.name,
                                   title: e.title,
-                                  time: e.date,
+                                  time: DateFormat('HH:mm - dd-MM-yyyy')
+                                      .format(parseDate),
                                   content: e.content,
                                   numberFile: index,
+                                  function: (value) {
+                                    if (value == 'delete') {
+                                      postDatabase.deletePost(
+                                          widget.idClass, e.id);
+                                      postBloc
+                                          .add(GetPostEvent(widget.idClass));
+                                    }
+                                  },
+                                  idAttendend: e.idAtten,
+                                  timeAttendend: e.timeAtten != null
+                                      ? DateFormat('HH:mm').format(
+                                          DateFormat("yyyy-MM-dd HH:mm:ss")
+                                              .parse(e.timeAtten))
+                                      : null,
                                 );
                               }),
                         ),
@@ -268,7 +291,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                     vertical: 8, horizontal: 16),
                                 // child:
                                 child: Text(
-                                  description,
+                                  description != null ? descriptions : '',
                                 ));
                           },
                         ),
@@ -384,13 +407,19 @@ class ItemNoti extends StatelessWidget {
   final String title;
   final String content;
   final int numberFile;
+  final Function function;
+  final String idAttendend;
+  final String timeAttendend;
   ItemNoti(
       {this.avatar,
       this.userName,
       this.time,
       this.title,
       this.content,
-      this.numberFile});
+      this.numberFile,
+      this.function,
+      this.idAttendend,
+      this.timeAttendend});
 
   @override
   Widget build(BuildContext context) {
@@ -442,16 +471,14 @@ class ItemNoti extends StatelessWidget {
                     ),
                     Spacer(),
                     PopupMenuButton<String>(
-                      onSelected: (String value) {
-                        // setState(() {
-                        //     _selection = value;
-                        // });
+                      onSelected: (value) {
+                        function(value);
                       },
                       child: Icon(Icons.more_horiz_rounded),
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
                         PopupMenuItem<String>(
-                            value: 'Value1',
+                            value: 'pin',
                             child: Row(
                               children: [
                                 Icon(
@@ -465,7 +492,7 @@ class ItemNoti extends StatelessWidget {
                               ],
                             )),
                         PopupMenuItem<String>(
-                            value: 'Value2',
+                            value: 'delete',
                             child: Row(
                               children: [
                                 Icon(
@@ -500,6 +527,46 @@ class ItemNoti extends StatelessWidget {
                         style: TextStyle(
                             color: ColorApp.black.withOpacity(.6),
                             fontSize: 16),
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 10,
+                ),
+                idAttendend != null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: 'Mã điểm danh: ',
+                              style: TextStyle(
+                                  color: ColorApp.black,
+                                  fontWeight: FontWeight.normal),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: idAttendend,
+                                    style: TextStyle(
+                                      color: ColorApp.red,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Hạn: ',
+                              style: TextStyle(
+                                  color: ColorApp.black,
+                                  fontWeight: FontWeight.normal),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: timeAttendend,
+                                    style: TextStyle(
+                                      color: ColorApp.red,
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ],
                       )
                     : Container(),
                 SizedBox(

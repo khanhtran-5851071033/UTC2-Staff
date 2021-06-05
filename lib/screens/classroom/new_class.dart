@@ -168,8 +168,7 @@ class _NewClassState extends State<NewClass> {
                 'name': nameClass,
                 'note': description,
                 'teacherId': idTeacher,
-                'date':
-                    DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
+                'date': DateTime.now().toString()
               };
               classdb.createClass(dataClass, idClass);
 

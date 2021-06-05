@@ -19,13 +19,14 @@ import 'package:image_picker/image_picker.dart';
 class ProFilePage extends StatefulWidget {
   final Teacher teacher;
 
-  const ProFilePage({Key key, this.teacher}) : super(key: key);
+  ProFilePage({this.teacher});
   @override
   _ProFilePageState createState() => _ProFilePageState();
 }
 
 class _ProFilePageState extends State<ProFilePage> {
   File _image;
+
   GoogleSignInRepository _googleSignIn = GoogleSignInRepository();
   String linkImage =
       'https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1';
@@ -158,13 +159,24 @@ class _ProFilePageState extends State<ProFilePage> {
                                                     ? Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ProfileInfo()))
+                                                            builder:
+                                                                (context) =>
+                                                                    ProfileInfo(
+                                                                      teacher:
+                                                                          widget
+                                                                              .teacher,
+                                                                    )))
                                                     : Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                screen[index]));
+                                                                index == 1
+                                                                    ? AttendanceScreen(
+                                                                        teacher:
+                                                                            widget.teacher,
+                                                                      )
+                                                                    : screen[
+                                                                        index]));
                                               }
                                             : () async {
                                                 ScaffoldMessenger.of(context)

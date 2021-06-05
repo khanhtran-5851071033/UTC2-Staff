@@ -1,3 +1,4 @@
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/geo_service.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -9,6 +10,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class AttendanceScreen extends StatefulWidget {
+  final Teacher teacher;
+
+  AttendanceScreen({this.teacher});
   @override
   _AttendanceScreenState createState() => _AttendanceScreenState();
 }
@@ -170,8 +174,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   child: CircleAvatar(
                     radius: 100,
                     backgroundColor: ColorApp.lightGrey,
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
+                    backgroundImage: NetworkImage(widget.teacher.avatar != null
+                        ? widget.teacher.avatar
+                        : "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
                   ),
                 ),
               ),

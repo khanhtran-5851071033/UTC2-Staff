@@ -24,6 +24,10 @@ class _NewNotifyState extends State<NewNotify> {
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
   String title, content;
+  String genId() {
+    return DateFormat('HHmmss')
+        .format(DateTime.now().add(Duration(minutes: _selectedTime)));
+  }
 
   GlobalKey globalKey = new GlobalKey();
 
@@ -81,8 +85,17 @@ class _NewNotifyState extends State<NewNotify> {
                 'content': content,
                 'name': widget.teacher.name,
                 'avatar': widget.teacher.avatar,
-                'date':
-                    DateFormat('HH:mm –  dd-MM-yyyy').format(DateTime.now()),
+                'date': DateTime.now().toString(),
+                'idAtten': expaned
+                    ? idAtent != null
+                        ? idAtent
+                        : null
+                    : null,
+                'timeAtten': expaned
+                    ? DateTime.now()
+                        .add(Duration(minutes: _selectedTime))
+                        .toString()
+                    : null,
               };
               postDatabase.createPost(dataPost, widget.idClass, idPost);
             },
@@ -268,7 +281,7 @@ class _NewNotifyState extends State<NewNotify> {
                             onPressed: () {
                               setState(() {
                                 expaned ? expaned = false : expaned = true;
-                                if (expaned) idAtent = generateRandomString(5);
+                                if (expaned) idAtent = genId();
                               });
                             },
                             icon: Icon(
@@ -322,6 +335,7 @@ class _NewNotifyState extends State<NewNotify> {
                                       onChanged: (newValue) {
                                         setState(() {
                                           _selectedTime = newValue;
+                                          idAtent = genId();
                                         });
                                       },
                                     )

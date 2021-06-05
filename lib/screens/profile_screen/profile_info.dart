@@ -1,18 +1,28 @@
 import 'dart:io';
 
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileInfo extends StatefulWidget {
+  final Teacher teacher;
+
+  ProfileInfo({Key key, this.teacher}) : super(key: key);
   @override
   _ProfileInfoState createState() => _ProfileInfoState();
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
   File _image;
-  String linkImage =
-      'https://scontent.fvca1-2.fna.fbcdn.net/v/t1.6435-9/83499693_1792923720844190_4433367952779116544_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0qsq2LoR4KAAX91KY5Y&_nc_ht=scontent.fvca1-2.fna&oh=3885c959ab4a00fc44f57791a46f2132&oe=6092C8E1';
+  String linkImage = '';
+  @override
+  void initState() {
+    linkImage = widget.teacher.avatar;
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,7 +62,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
             SizedBox(
               height: 20,
             ),
-            _name('Phạm Thị Miên', size),
+            _name(widget.teacher.name, size),
             SizedBox(
               height: 7,
             ),
@@ -60,7 +70,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
             SizedBox(
               height: 7,
             ),
-            info('Mã : ', 'GV36515', size),
+            info('Mã : ', widget.teacher.id, size),
             SizedBox(
               height: 7,
             ),
@@ -68,7 +78,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
             SizedBox(
               height: 7,
             ),
-            _email('ptmien@utc2.edu.vn', size),
+            _email(widget.teacher.email, size),
           ],
         ),
       ),

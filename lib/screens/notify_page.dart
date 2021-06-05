@@ -104,7 +104,6 @@ class _NotifyPageState extends State<NotifyPage>
                                       'Lễ tốt nghiệp',
                                       'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021');
                                 },
-                                
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -248,7 +247,7 @@ Widget title(String title) {
     child: Text(
       title,
       maxLines: 3,
-      style: TextStyle(fontSize: 19),
+      style: TextStyle(fontSize: 19, color: ColorApp.black),
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     ),
