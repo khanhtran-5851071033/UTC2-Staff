@@ -84,9 +84,27 @@ class _HomePageState extends State<HomePage> {
       }
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('>>>>>>>>>>A new onMessage event' + message.notification.body);
-      MyLocalNotification.showNotification(
-          notifications, message.notification.title, message.notification.body);
+  
+      print('Có điểm danh hông ????????????' + message.data['isAtten']);
+      message.data['isAtten']=='false'
+          ? MyLocalNotification.showNotification(
+              notifications,
+              message.data['idChannel'],
+              message.data['className'],
+              message.data['classDescription'],
+              message.notification.title,
+              message.notification.body,
+            )
+          : MyLocalNotification.showNotificationAttenden(
+              notifications,
+              message.data['msg'],
+              message.data['idChannel'],
+              message.data['className'],
+              message.data['classDescription'],
+              message.notification.title,
+              message.notification.body,
+              message.data['timeAtten'],
+            );
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessageOpenedApp event');

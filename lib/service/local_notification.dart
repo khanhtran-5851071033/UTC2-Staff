@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -61,19 +64,29 @@ class MyLocalNotification {
 
   static Future<void> showNotification(
       FlutterLocalNotificationsPlugin notifications,
-      String title,
-      String body) async {
+      String idChannel, //id lớp học
+      String chanelName, //tên lớp học
+      String chanelDescription, //miêu tả của lớp
+      String title, //Tiêu đề thông báo
+      String body //Nội dung
+      ) async {
+    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        body,
+        htmlFormatBigText: true,
+        htmlFormatContentTitle: true,
+        htmlFormatSummaryText: true,
+        htmlFormatContent: true,
+        summaryText: chanelName);
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      'your channel description',
+      idChannel,
+      chanelName,
+      chanelDescription,
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
       enableLights: true,
-      largeIcon: FilePathAndroidBitmap('assets/images/logoUTC.jpg'),
-      styleInformation: BigTextStyleInformation(''),
+      styleInformation: bigTextStyleInformation,
     );
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -83,11 +96,13 @@ class MyLocalNotification {
 
   static Future<void> showNotificationEvent(
       FlutterLocalNotificationsPlugin notifications,
-      String idChannel,
-      String chanelName,
-      String chanelDescription,
-      String title,
-      String body) async {
+      String idChannel, //id lớp học
+      String chanelName, //tên lớp học
+      String chanelDescription, //miêu tả của lớp
+      String title, //Tiêu đề thông báo
+      String body //Nội dung
+
+      ) async {
     int insistentFlag = 4;
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(idChannel, chanelName, chanelDescription,
@@ -95,16 +110,68 @@ class MyLocalNotification {
             priority: Priority.high,
             ticker: 'ticker',
             enableLights: true,
-            styleInformation: BigTextStyleInformation(''),
+            styleInformation: BigTextStyleInformation(body),
             additionalFlags: Int32List.fromList(<int>[insistentFlag]));
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-    await notifications.show(0, title, body, platformChannelSpecifics,
+    await notifications.show(0, chanelName, title, platformChannelSpecifics,
         payload: 'item x');
   }
 
   static Future<void> cancelNotification(
       FlutterLocalNotificationsPlugin notifications) async {
     await notifications.cancel(0);
+  }
+
+  static Future<void> showNotificationAttenden(
+      FlutterLocalNotificationsPlugin notifications,
+      String idQR, //mã điểm danh
+      String idChannel, //id lớp học
+      String chanelName, //tên lớp học
+      String chanelDescription, //miêu tả của lớp
+      String title, //Tiêu đề thông báo
+      String body, //Nội dung
+      String timeAtten //Thời gian kết thúc điểm danh
+      ) async {
+    final String largeIconPath = await _downloadAndSaveFile(
+        'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=$idQR',
+        idQR + 'small');
+    final String bigPicturePath = await _downloadAndSaveFile(
+        'https://chart.googleapis.com/chart?chs=85x85&cht=qr&chl=$idQR',
+        idQR + 'big');
+    final BigPictureStyleInformation bigPictureStyleInformation =
+        BigPictureStyleInformation(
+      FilePathAndroidBitmap(bigPicturePath),
+      hideExpandedLargeIcon: true,
+      contentTitle:
+          'Mã điểm danh : ' +
+          '<b>$idQR</b> ' +
+          ' - Hạn : ' +
+          '<b>$timeAtten</b>',
+      htmlFormatContentTitle: true,
+      summaryText: body,
+      htmlFormatContent: true
+    );
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(idChannel, chanelName, chanelDescription,
+            largeIcon: FilePathAndroidBitmap(largeIconPath),
+            styleInformation: bigPictureStyleInformation);
+    final NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await notifications.show(
+        0,
+        chanelName,
+        title + '  -   Mã điểm danh: ' + idQR + '  -   Hạn: ' + timeAtten,
+        platformChannelSpecifics);
+  }
+
+  static Future<String> _downloadAndSaveFile(
+      String url, String fileName) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String filePath = '${directory.path}/$fileName';
+    final http.Response response = await http.get(Uri.parse(url));
+    final File file = File(filePath);
+    await file.writeAsBytes(response.bodyBytes);
+    return filePath;
   }
 }

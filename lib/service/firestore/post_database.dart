@@ -31,6 +31,7 @@ class PostDatabase {
     list = data.docs.map((e) => Post(e)).toList();
     return list;
   }
+
 }
 
 class Post {

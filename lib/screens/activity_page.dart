@@ -5,6 +5,7 @@ import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/screens/classroom/class_detail_screen.dart';
 import 'package:utc2_staff/screens/classroom/new_class.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/color_random.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -20,6 +21,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   ClassDatabase classDatabase = ClassDatabase();
+  List<Post> post = [];
   List activity = [
     {
       'title': 'Đồ án tốt nghiệp',
@@ -114,14 +116,14 @@ class _ActivityPageState extends State<ActivityPage> {
                       itemBuilder: ((context, index) {
                         return index == state.list.length
                             ? Container(
-                                height: state.list.length < 2 ? 500 : 200,
+                                height: state.list.length <= 2 ? 500 : 200,
                               )
                             : customList(
                                 size,
                                 context,
                                 state.list[index].name,
                                 widget.teacher.name,
-                                activity[1]['subAct'],
+                                post,
                                 state.list[index].id,
                                 state.list,
                                 state.list[index].note,
@@ -174,9 +176,9 @@ class _ActivityPageState extends State<ActivityPage> {
       BuildContext context,
       String className,
       String teacherName,
-      List sub,
+      List<Post> list,
       String id,
-      List listClass,
+      List<Class> listClass,
       String description) {
     return Container(
       margin: EdgeInsets.all(size.width * 0.03),
@@ -253,7 +255,7 @@ class _ActivityPageState extends State<ActivityPage> {
               ),
             ),
           ),
-          sub.isNotEmpty
+          list.isNotEmpty
               ? Container(
                   width: size.width,
                   padding: EdgeInsets.all(size.width * 0.03),
@@ -273,12 +275,12 @@ class _ActivityPageState extends State<ActivityPage> {
                       border: Border.all(color: ColorApp.lightGrey, width: 1)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(sub.length, (index) {
+                    children: List.generate(list.length, (index) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(sub[index].toString()),
-                          index == sub.length - 1
+                          Text(list[index].title.toString()),
+                          index == list.length - 1
                               ? Container()
                               : Divider(
                                   color: ColorApp.black,

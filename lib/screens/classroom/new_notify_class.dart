@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/screens/classroom/new_quiz.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -12,8 +13,10 @@ import 'package:utc2_staff/utils/utils.dart';
 class NewNotify extends StatefulWidget {
   final String idClass;
   final Teacher teacher;
+  final Class classUtc;
 
-  const NewNotify({Key key, this.idClass, this.teacher}) : super(key: key);
+  const NewNotify({Key key, this.idClass, this.teacher, this.classUtc})
+      : super(key: key);
   @override
   _NewNotifyState createState() => _NewNotifyState();
 }
@@ -65,7 +68,17 @@ class _NewNotifyState extends State<NewNotify> {
                   },
                   body: jsonEncode({
                     "to": "/topics/fcm_test",
-                    "data": {"msg": "Hello"},
+                    "data": {
+                      "isAtten": expaned,
+                      "msg": idAtent,
+                      "idChannel": widget.idClass,
+                      "className": widget.classUtc.name,
+                      "classDescription": widget.classUtc.note,
+                      "timeAtten": DateFormat('HH:mm').format(
+                          DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
+                              .add(Duration(minutes: _selectedTime))
+                              .toString())),
+                    },
                     "notification": {
                       "title": title,
                       "body": content,

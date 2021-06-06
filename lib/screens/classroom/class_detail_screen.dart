@@ -5,12 +5,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
+import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -20,7 +24,7 @@ import 'package:utc2_staff/utils/color_random.dart';
 
 class DetailClassScreen extends StatefulWidget {
   final String className, idClass, description;
-  final List listClass;
+  final List<Class> listClass;
   DetailClassScreen(
       {this.className, this.listClass, this.idClass, this.description});
   @override
@@ -30,15 +34,20 @@ class DetailClassScreen extends StatefulWidget {
 class _DetailClassScreenState extends State<DetailClassScreen> {
   final notifications = FlutterLocalNotificationsPlugin();
   PostBloc postBloc;
-  String className = '', descriptions = '';
+
   PostDatabase postDatabase = new PostDatabase();
   String deleteOrPin;
+  Class _class;
+  Teacher teacher;
   @override
   void initState() {
     super.initState();
     sendNoti();
-    className = widget.className;
-    descriptions = widget.description;
+
+    _class = widget.listClass
+        .where((element) => element.id.contains(widget.idClass))
+        .toList()
+        .first;
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(
@@ -84,25 +93,24 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         ),
         actions: [
           TextButton.icon(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReportClassScreen()));
-              },
-              icon: Image.asset(
-                'assets/icons/pdf.png',
-                width: 20,
-              ),
-              label: Text('In báo cáo')),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ReportClassScreen()));
+            },
+            icon: Image.asset(
+              'assets/icons/pdf.png',
+              width: 20,
+            ),
+            label: Text('In báo cáo'),
+          ),
           Builder(
             builder: (context) => Container(
               margin: EdgeInsets.only(right: size.width * 0.03),
               width: 40,
               child: IconButton(
-                  tooltip: descriptions,
-                  onPressed: () => _showBottomSheet(
-                      context, size, className.toUpperCase(), descriptions),
+                  tooltip: 'Thông tin lớp học',
+                  onPressed: () =>
+                      _showBottomSheet(context, size, _class, teacher),
                   icon: Icon(
                     Icons.info,
                     color: Colors.grey,
@@ -113,11 +121,13 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
       ),
       drawer: ClassDrawer(
         active: widget.listClass,
-        change: (id, name, description) {
+        change: (id) {
           postBloc.add(GetPostEvent(id));
           setState(() {
-            className = name;
-            descriptions = description;
+            _class = widget.listClass
+                .where((element) => element.id.contains(id))
+                .toList()
+                .first;
           });
         },
       ),
@@ -128,7 +138,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         padding: EdgeInsets.all(size.width * 0.03),
         child: Column(
           children: [
-            Flexible(flex: 3, child: title(size, className.toUpperCase())),
+            Flexible(flex: 3, child: title(size, _class.name.toUpperCase())),
             SizedBox(
               height: 7,
             ),
@@ -226,7 +236,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   }
 
   void _showBottomSheet(
-      BuildContext context, Size size, String title, String description) {
+      BuildContext context, Size size, Class _class, Teacher teacher) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -237,67 +247,14 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           child: Container(
             color: Color.fromRGBO(0, 0, 0, 0.001),
             child: DraggableScrollableSheet(
-              initialChildSize: 0.4,
+              initialChildSize: 0.85,
               minChildSize: 0.2,
-              maxChildSize: 0.85,
+              maxChildSize: 0.9,
               builder: (_, controller) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(20.0),
-                      topRight: const Radius.circular(20.0),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Center(
-                          child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          color: ColorApp.grey,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(3),
-                            topRight: const Radius.circular(3),
-                          ),
-                        ),
-                        height: 3,
-                        width: 50,
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Center(
-                          child: Text(
-                            title + ' - Thông tin lớp',
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      Divider(
-                        thickness: 0.5,
-                        height: 5,
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: controller,
-                          itemCount: 1,
-                          itemBuilder: (_, index) {
-                            return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                // child:
-                                child: Text(
-                                  description != null ? descriptions : '',
-                                ));
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                return InfoDetailClass(
+                  controller: controller,
+                  teacher: teacher,
+                  classUtc: _class,
                 );
               },
             ),
@@ -328,6 +285,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           border: Border.all(color: ColorApp.lightGrey)),
       child: BlocBuilder<TeacherBloc, TeacherState>(builder: (context, state) {
         if (state is TeacherLoaded) {
+          teacher = state.teacher;
           return TextButton(
             onPressed: () {
               Navigator.push(
@@ -336,6 +294,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           builder: (context) => NewNotify(
                                 idClass: widget.idClass,
                                 teacher: state.teacher,
+                                classUtc: _class,
                               )))
                   .then((value) => postBloc.add(GetPostEvent(widget.idClass)));
             },

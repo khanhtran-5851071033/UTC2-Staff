@@ -52,39 +52,46 @@ class _NewQuizState extends State<NewQuiz> {
             children: [
               Container(
                 padding: EdgeInsets.all(size.width * 0.03),
+                width: size.width,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Row(
+                child: Column(
                   children: [
-                    Container(
-                      width: 30,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue.withOpacity(.1),
-                        child: Icon(
+                    TextField(
+                      decoration: InputDecoration(hintText: 'Chủ đề bài Test'),
+                    ),
+                    SizedBox(
+                      height: 7,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
                           Icons.schedule_rounded,
                           color: Colors.blue,
                           size: 16,
                         ),
-                      ),
+                        Text('   Thời gian Test:   '),
+                        DropdownButton<int>(
+                          value: _selectedTime,
+                          items: <int>[10, 15, 20, 30, 45, 60].map((int value) {
+                            return new DropdownMenuItem<int>(
+                              value: value,
+                              child: new Text(value.toString() + '  Phút  '),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedTime = newValue;
+                            });
+                          },
+                        ),
+                        Spacer(),
+                        Text('Số câu: '),
+                        Text('2')
+                      ],
                     ),
-                    Text('   Thời gian Test:  '),
-                    DropdownButton<int>(
-                      value: _selectedTime,
-                      items: <int>[10, 15, 20, 30, 45, 60].map((int value) {
-                        return new DropdownMenuItem<int>(
-                          value: value,
-                          child: new Text(value.toString() + ' Phút'),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedTime = newValue;
-                        });
-                      },
-                    ),
-                    Spacer(),
                   ],
                 ),
               ),

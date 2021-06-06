@@ -13,7 +13,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial());
 
-  final studentDB = TeacherDatabase();
+  final teacherDB = TeacherDatabase();
 
   @override
   Stream<LoginState> mapEventToState(
@@ -30,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (login != null) {
           int len = login.email.length - 14;
           if (login.email.substring(len) == 'st.utc2.edu.vn') {
-            print(login.email.substring(len) == 'st.utc2.edu.vn');
+        
 
             Map<String, String> dataTeacher = {
               'id': login.email.substring(0, len - 1),
@@ -40,7 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               'token': prefs.getString('token'),
             };
             try {
-              await studentDB.createTeacher(
+              await teacherDB.createTeacher(
                   dataTeacher, login.email.substring(0, len - 1));
             } catch (e) {
               print('Lỗi =====>' + e.toString());
@@ -78,7 +78,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           'token': prefs.getString('token'),
         };
         try {
-          await studentDB.createTeacher(dataTeacher, event.props[1]);
+          await teacherDB.createTeacher(dataTeacher, event.props[1]);
         } catch (e) {
           print('Lỗi =====>' + e.toString());
         }
