@@ -27,12 +27,21 @@ class _NewNotifyState extends State<NewNotify> {
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
   String title, content;
+
   String genId() {
     return DateFormat('HHmmss')
         .format(DateTime.now().add(Duration(minutes: _selectedTime)));
   }
 
   GlobalKey globalKey = new GlobalKey();
+  TextEditingController _controller = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    _controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,58 +68,61 @@ class _NewNotifyState extends State<NewNotify> {
         actions: [
           TextButton(
             onPressed: () async {
-              final response = await http.post(
-                  Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Authorization':
-                        'key=AAAAYogee34:APA91bFuj23NLRj88uqP9J-aRCehCgVSo8QgUOIPZy8CzBE-Xbubx58trUepsb2SABoIGsPYbONqa2jjS03l1fW5r2aQywmKkYN6L3RXHIML6795xTHyamls_ZwLSt-_n3AJ8av82CiW',
-                  },
-                  body: jsonEncode({
-                    "to": "/topics/fcm_test",
-                    "data": {
-                      "isAtten": expaned,
-                      "msg": idAtent,
-                      "idChannel": widget.idClass,
-                      "className": widget.classUtc.name,
-                      "classDescription": widget.classUtc.note,
-                      "timeAtten": DateFormat('HH:mm').format(
-                          DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
-                              .add(Duration(minutes: _selectedTime))
-                              .toString())),
+              if (_formKey.currentState.validate()) {
+                final response = await http.post(
+                    Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                      'Authorization':
+                          'key=AAAAYogee34:APA91bFuj23NLRj88uqP9J-aRCehCgVSo8QgUOIPZy8CzBE-Xbubx58trUepsb2SABoIGsPYbONqa2jjS03l1fW5r2aQywmKkYN6L3RXHIML6795xTHyamls_ZwLSt-_n3AJ8av82CiW',
                     },
-                    "notification": {
-                      "title": title,
-                      "body": content,
-                    }
-                  }));
-              if (response.statusCode == 200) {
-                print('success');
-                Navigator.pop(context);
-              } else
-                print('faile');
-              var idPost = generateRandomString(5);
+                    body: jsonEncode({
+                      "to": "/topics/fcm_test",
+                      "data": {
+                        "isAtten": expaned,
+                        "msg": idAtent,
+                        "idChannel": widget.idClass,
+                        "className": widget.classUtc.name,
+                        "classDescription": widget.classUtc.note,
+                        "timeAtten": DateFormat('HH:mm').format(
+                            DateFormat("yyyy-MM-dd HH:mm:ss").parse(
+                                DateTime.now()
+                                    .add(Duration(minutes: _selectedTime))
+                                    .toString())),
+                      },
+                      "notification": {
+                        "title": _controller.text.trim(),
+                        "body": content != null ? content : '',
+                      }
+                    }));
+                if (response.statusCode == 200) {
+                  print('success');
+                  Navigator.pop(context);
+                } else
+                  print('faile');
+                var idPost = generateRandomString(5);
 
-              Map<String, String> dataPost = {
-                'id': idPost,
-                'idClass': widget.idClass,
-                'title': title,
-                'content': content,
-                'name': widget.teacher.name,
-                'avatar': widget.teacher.avatar,
-                'date': DateTime.now().toString(),
-                'idAtten': expaned
-                    ? idAtent != null
-                        ? idAtent
-                        : null
-                    : null,
-                'timeAtten': expaned
-                    ? DateTime.now()
-                        .add(Duration(minutes: _selectedTime))
-                        .toString()
-                    : null,
-              };
-              postDatabase.createPost(dataPost, widget.idClass, idPost);
+                Map<String, String> dataPost = {
+                  'id': idPost,
+                  'idClass': widget.idClass,
+                  'title': _controller.text.trim(),
+                  'content': content,
+                  'name': widget.teacher.name,
+                  'avatar': widget.teacher.avatar,
+                  'date': DateTime.now().toString(),
+                  'idAtten': expaned
+                      ? idAtent != null
+                          ? idAtent
+                          : null
+                      : null,
+                  'timeAtten': expaned
+                      ? DateTime.now()
+                          .add(Duration(minutes: _selectedTime))
+                          .toString()
+                      : null,
+                };
+                postDatabase.createPost(dataPost, widget.idClass, idPost);
+              }
             },
             child: Text("Đăng    ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -150,21 +162,25 @@ class _NewNotifyState extends State<NewNotify> {
                     Expanded(
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        height: 35,
-                        child: TextField(
-                          onChanged: (val) {
-                            setState(() {
-                              title = val;
-                            });
-                          },
-                          style: TextStyle(
-                              fontSize: 20, color: ColorApp.mediumBlue),
-                          decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              isCollapsed: true,
-                              hintText: 'Tiêu đề',
-                              hintStyle: TextStyle(
-                                  fontSize: 16, color: ColorApp.black)),
+                        height: 40,
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: _controller,
+                            style: TextStyle(
+                                fontSize: 20, color: ColorApp.mediumBlue),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Vui lòng nhập tiêu đề';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                isCollapsed: true,
+                                hintText: 'Tiêu đề',
+                                hintStyle: TextStyle(
+                                    fontSize: 16, color: ColorApp.black)),
+                          ),
                         ),
                       ),
                     ),

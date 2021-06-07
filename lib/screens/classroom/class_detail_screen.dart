@@ -189,7 +189,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                   title: e.title,
                                   time: DateFormat('HH:mm - dd-MM-yyyy')
                                       .format(parseDate),
-                                  content: e.content,
+                                  content: e.content != null ? e.content : '',
                                   numberFile: index,
                                   function: (value) {
                                     if (value == 'delete') {

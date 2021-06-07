@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:utc2_staff/screens/classroom/invite_student.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 
@@ -24,44 +25,6 @@ class NewClass extends StatefulWidget {
 class _NewClassState extends State<NewClass> {
   ClassDatabase classdb = ClassDatabase();
   final _formKey = GlobalKey<FormState>();
-  List user = [
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': true
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033@st.utc2.edu.vn',
-      'isComplete': false
-    },
-  ];
 
   GlobalKey globalKey = new GlobalKey();
   // String _dataString = "AziTask.com";
@@ -104,6 +67,104 @@ class _NewClassState extends State<NewClass> {
     }
   }
 
+  List user = [
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      'title': '5851071033',
+      'isComplete': false
+    },
+    {
+      'avatar':
+          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      'title': '5851071033',
+      'isComplete': false
+    },
+  ];
   String idClass, nameClass, description, idTeacher;
   bool isNewClass = false;
   bool isAll = false;
@@ -136,45 +197,35 @@ class _NewClassState extends State<NewClass> {
           'Lớp học mới',
           style: TextStyle(color: ColorApp.black),
         ),
+        actions: [
+          TextButton.icon(
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  Map<String, String> dataClass = {
+                    'id': idClass,
+                    'name': nameClass,
+                    'note': description,
+                    'teacherId': idTeacher,
+                    'date': DateTime.now().toString()
+                  };
+                  classdb.createClass(dataClass, idClass);
+
+                  Get.back();
+                }
+              },
+              icon: Icon(
+                Icons.add_circle,
+                size: 15,
+              ),
+              label: Text(
+                'Tạo mới',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              )),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: size.width * 0.2, vertical: 10),
-            child: Text("Tạo mới",
-                style: TextStyle(
-                    fontSize: size.width * 0.045,
-                    letterSpacing: 1,
-                    wordSpacing: 1,
-                    fontWeight: FontWeight.normal)),
-          ),
-          style: ButtonStyle(
-              tapTargetSize: MaterialTapTargetSize.padded,
-              shadowColor: MaterialStateProperty.all<Color>(Colors.lightBlue),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      side: BorderSide(color: Colors.transparent)))),
-          onPressed: () async {
-            // final pdfFile = await PdfParagraphApi.generate();
-            // PdfApi.openFile(pdfFile);
-
-            if (_formKey.currentState.validate()) {
-              Map<String, String> dataClass = {
-                'id': idClass,
-                'name': nameClass,
-                'note': description,
-                'teacherId': idTeacher,
-                'date': DateTime.now().toString()
-              };
-              classdb.createClass(dataClass, idClass);
-
-              Get.back();
-            }
-          }),
       body: SingleChildScrollView(
         child: Container(
           child: Padding(
@@ -445,8 +496,8 @@ class _NewClassState extends State<NewClass> {
                         Container(
                           width: size.width,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(bottom: BorderSide(width: .5))),
+                            color: Colors.white,
+                          ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -464,122 +515,93 @@ class _NewClassState extends State<NewClass> {
                               SizedBox(
                                 width: 15,
                               ),
-                              Text('Thêm',
-                                  style: TextStyle(
-                                      fontSize: 18, color: ColorApp.black)),
                               Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
+                                child: Text('Thêm',
+                                    style: TextStyle(
+                                        fontSize: 18, color: ColorApp.black)),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                InviteStudentScreen()));
+                                  },
+                                  icon: Icon(
+                                    Icons.add_circle_rounded,
+                                    color: ColorApp.mediumBlue,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: size.width,
+                          height: 500,
+                          child: Expanded(
+                            child: ListView.builder(
+                              itemCount: user.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3),
+                                      color: index.isEven
+                                          ? ColorApp.lightBlue.withOpacity(.05)
+                                          : ColorApp.lightGrey.withOpacity(.2)),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Tất cả (' +
-                                          user.length.toString() +
-                                          ")"),
-                                      Transform.scale(
-                                        scale: 0.8,
-                                        child: Checkbox(
-                                          value: isAll,
-                                          shape: CircleBorder(),
-                                          activeColor: ColorApp.mediumBlue,
-                                          checkColor: ColorApp.lightGrey,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              for (int i = 0;
-                                                  i < user.length;
-                                                  i++) {
-                                                user[i]['isComplete'] = value;
-                                              }
-                                              isAll = value;
-                                            });
-                                          },
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Transform.scale(
+                                            scale: 0.8,
+                                            child: Checkbox(
+                                              value: user[index]['isComplete'],
+                                              activeColor: ColorApp.mediumBlue,
+                                              checkColor: ColorApp.lightGrey,
+                                              shape: CircleBorder(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  setState(() {
+                                                    user[index]['isComplete'] =
+                                                        value;
+                                                  });
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            (index + 1).toString(),
+                                            style: TextStyle(
+                                                fontSize: 9,
+                                                color: user[index]['isComplete']
+                                                    ? Colors.transparent
+                                                    : ColorApp.blue),
+                                          )
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Khánh Trần'),
+                                            Text(
+                                              user[index]['title'] + '   ',
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: size.height * 0.4,
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: ListView.builder(
-                            itemCount: user.length,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 35,
-                                          decoration: BoxDecoration(
-                                              color: ColorApp.lightGrey,
-                                              shape: BoxShape.circle),
-                                          padding: EdgeInsets.all(2),
-                                          child: CircleAvatar(
-                                            radius: 20.0,
-                                            backgroundImage: NetworkImage(
-                                                user[index]['avatar']),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          user[index]['title'],
-                                          style: TextStyle(
-                                              color: ColorApp.black
-                                                  .withOpacity(.8),
-                                              fontSize: 16,
-                                              wordSpacing: 1.2,
-                                              fontWeight: FontWeight.w500,
-                                              letterSpacing: 0.2),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Transform.scale(
-                                          scale: 0.8,
-                                          child: Checkbox(
-                                            value: user[index]['isComplete'],
-                                            activeColor: ColorApp.mediumBlue,
-                                            checkColor: ColorApp.lightGrey,
-                                            shape: CircleBorder(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                setState(() {
-                                                  user[index]['isComplete'] =
-                                                      value;
-                                                });
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        Text(
-                                          (index + 1).toString(),
-                                          style: TextStyle(
-                                              fontSize: 9,
-                                              color: user[index]['isComplete']
-                                                  ? Colors.transparent
-                                                  : ColorApp.blue),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         )
                       ],
