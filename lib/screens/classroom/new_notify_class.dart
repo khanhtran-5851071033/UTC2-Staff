@@ -8,6 +8,7 @@ import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
+import 'package:utc2_staff/service/push_noti_firebase.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewNotify extends StatefulWidget {
@@ -39,7 +40,6 @@ class _NewNotifyState extends State<NewNotify> {
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -69,37 +69,27 @@ class _NewNotifyState extends State<NewNotify> {
           TextButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                final response = await http.post(
-                    Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                    headers: <String, String>{
-                      'Content-Type': 'application/json; charset=UTF-8',
-                      'Authorization':
-                          'key=AAAAYogee34:APA91bFuj23NLRj88uqP9J-aRCehCgVSo8QgUOIPZy8CzBE-Xbubx58trUepsb2SABoIGsPYbONqa2jjS03l1fW5r2aQywmKkYN6L3RXHIML6795xTHyamls_ZwLSt-_n3AJ8av82CiW',
+                var response = await PushNotiFireBaseAPI.pushNotiTopic(
+                    _controller.text.trim(),
+                    content,
+                    {
+                      'idNoti': 2,
+                      "isAtten": expaned,
+                      "msg": idAtent,
+                      "idChannel": widget.idClass,
+                      "className": widget.classUtc.name,
+                      "classDescription": widget.classUtc.note,
+                      "timeAtten": DateFormat('HH:mm').format(
+                          DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
+                              .add(Duration(minutes: _selectedTime))
+                              .toString())),
                     },
-                    body: jsonEncode({
-                      "to": "/topics/fcm_test",
-                      "data": {
-                        "isAtten": expaned,
-                        "msg": idAtent,
-                        "idChannel": widget.idClass,
-                        "className": widget.classUtc.name,
-                        "classDescription": widget.classUtc.note,
-                        "timeAtten": DateFormat('HH:mm').format(
-                            DateFormat("yyyy-MM-dd HH:mm:ss").parse(
-                                DateTime.now()
-                                    .add(Duration(minutes: _selectedTime))
-                                    .toString())),
-                      },
-                      "notification": {
-                        "title": _controller.text.trim(),
-                        "body": content != null ? content : '',
-                      }
-                    }));
+                    widget.idClass);
                 if (response.statusCode == 200) {
                   print('success');
                   Navigator.pop(context);
                 } else
-                  print('faile');
+                  print('fail');
                 var idPost = generateRandomString(5);
 
                 Map<String, String> dataPost = {

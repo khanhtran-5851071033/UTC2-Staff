@@ -85,32 +85,43 @@ class _HomePageState extends State<HomePage> {
       }
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Có điểm danh hông ????????????' + message.data['isAtten']);
-      message.data['isAtten'] == 'false'
-          ? MyLocalNotification.showNotification(
-              notifications,
-              message.data['idChannel'],
-              message.data['className'],
-              message.data['classDescription'],
-              message.notification.title,
-              message.notification.body,
-            )
-          : MyLocalNotification.showNotificationAttenden(
-              notifications,
-              message.data['msg'],
-              message.data['idChannel'],
-              message.data['className'],
-              message.data['classDescription'],
-              message.notification.title,
-              message.notification.body,
-              message.data['timeAtten'],
-            );
+      if (message.data['idNoti'] == 1) {
+        message.data['isAtten'] == 'false'
+            ? MyLocalNotification.showNotification(
+                notifications,
+                message.data['idChannel'],
+                message.data['className'],
+                message.data['classDescription'],
+                message.notification.title,
+                message.notification.body,
+              )
+            : MyLocalNotification.showNotificationAttenden(
+                notifications,
+                message.data['msg'],
+                message.data['idChannel'],
+                message.data['className'],
+                message.data['classDescription'],
+                message.notification.title,
+                message.notification.body,
+                message.data['timeAtten'],
+              );
+      } else {
+        MyLocalNotification.showNotification(
+          notifications,
+          message.data['idChannel'],
+          message.data['className'],
+          message.data['classDescription'],
+          message.notification.title,
+          message.notification.body,
+        );
+      }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('>>>>>>>>>>A new onMessageOpenedApp event');
       Get.to(HomeScreen());
     });
-    FirebaseMessaging.instance.subscribeToTopic('fcm_test');
+    FirebaseMessaging.instance.unsubscribeFromTopic('fcm_test');
+    FirebaseMessaging.instance.subscribeToTopic('nen_nen');
     // login();
 
     getTokenFCM();

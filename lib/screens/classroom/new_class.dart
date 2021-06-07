@@ -1,9 +1,12 @@
 import 'dart:typed_data';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:utc2_staff/screens/classroom/invite_student.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
+import 'package:utc2_staff/service/push_noti_firebase.dart';
 
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -67,111 +70,13 @@ class _NewClassState extends State<NewClass> {
     }
   }
 
-  List user = [
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-  ];
+  List<Student> listInvite = [];
   String idClass, nameClass, description, idTeacher;
   bool isNewClass = false;
   bool isAll = false;
   @override
   void initState() {
     idTeacher = widget.teacher.id;
-    // TODO: implement initState
     super.initState();
   }
 
@@ -199,7 +104,7 @@ class _NewClassState extends State<NewClass> {
         ),
         actions: [
           TextButton.icon(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   Map<String, String> dataClass = {
                     'id': idClass,
@@ -209,7 +114,23 @@ class _NewClassState extends State<NewClass> {
                     'date': DateTime.now().toString()
                   };
                   classdb.createClass(dataClass, idClass);
+                  // for (var e in listInvite) {
+                  //   PushNotiFireBaseAPI.pushNotiToken('Lớp mới ' + nameClass,
+                  //       'Tham gia lớp ' + idClass, {}, e.token);
+                  // }
 
+                  await FirebaseMessaging.instance.subscribeToTopic(idClass);
+                  PushNotiFireBaseAPI.pushNotiTopic(
+                      'Lớp mới ' + nameClass,
+                      'Tham gia lớp ' + idClass,
+                      {
+                        "idNoti":1,
+                        "msg": idClass,
+                        "idChannel": idClass,
+                        "className": nameClass,
+                        "classDescription": '',
+                      },
+                      idClass);
                   Get.back();
                 }
               },
@@ -529,7 +450,28 @@ class _NewClassState extends State<NewClass> {
                                                     InviteStudentScreen()))
                                         .then((value) {
                                       if (value != null) {
-                                        print(value);
+                                        if (listInvite.isNotEmpty) {
+                                          for (Student item in value) {
+                                            bool trung = false;
+                                            for (var st in listInvite) {
+                                              if (item.id == st.id) {
+                                                trung = true;
+                                                break;
+                                              }
+                                            }
+                                            if (!trung) {
+                                              setState(() {
+                                                listInvite.add(item);
+                                              });
+                                            }
+                                          }
+                                        } else {
+                                          for (Student item in value) {
+                                            setState(() {
+                                              listInvite.add(item);
+                                            });
+                                          }
+                                        }
                                       }
                                     });
                                   },
@@ -544,62 +486,26 @@ class _NewClassState extends State<NewClass> {
                           width: size.width,
                           height: 500,
                           child: ListView.builder(
-                            itemCount: user.length,
+                            itemCount: listInvite.length,
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: EdgeInsets.only(bottom: 5),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 5),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(3),
                                     color: index.isEven
                                         ? ColorApp.lightBlue.withOpacity(.05)
                                         : ColorApp.lightGrey.withOpacity(.2)),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Transform.scale(
-                                          scale: 0.8,
-                                          child: Checkbox(
-                                            value: user[index]['isComplete'],
-                                            activeColor: ColorApp.mediumBlue,
-                                            checkColor: ColorApp.lightGrey,
-                                            shape: CircleBorder(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                setState(() {
-                                                  user[index]['isComplete'] =
-                                                      value;
-                                                });
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        Text(
-                                          (index + 1).toString(),
-                                          style: TextStyle(
-                                              fontSize: 9,
-                                              color: user[index]['isComplete']
-                                                  ? Colors.transparent
-                                                  : ColorApp.blue),
-                                        )
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Khánh Trần'),
-                                          Text(
-                                            user[index]['title'] + '   ',
-                                          ),
-                                        ],
-                                      ),
+                                    Text(listInvite[index].name),
+                                    Text(
+                                      listInvite[index].id + '   ',
                                     ),
                                   ],
                                 ),
