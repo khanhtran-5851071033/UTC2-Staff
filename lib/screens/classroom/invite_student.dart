@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class InviteStudentScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
   String course = "Tất cả";
   String nameClass = "Tất cả";
   StudentBloc studentBloc;
-  List<String> listInvite = [];
+  List<Student> listInvite = [];
   List<String> listHeDaoTao = [
     'Tất cả',
     'Chính quy',
@@ -177,8 +178,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                                     for (int i = 0; i < user.length; i++) {
                                       user[i] = value;
                                       value
-                                          ? listInvite
-                                              .add(state.listStudent[i].id)
+                                          ? listInvite.add(state.listStudent[i])
                                           : listInvite = [];
                                     }
 
@@ -240,7 +240,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                                                 if (value) {
                                                   setState(() {
                                                     listInvite.add(state
-                                                        .listStudent[index].id);
+                                                        .listStudent[index]);
                                                   });
                                                 } else {
                                                   setState(() {
