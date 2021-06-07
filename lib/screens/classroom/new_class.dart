@@ -523,10 +523,15 @@ class _NewClassState extends State<NewClass> {
                               IconButton(
                                   onPressed: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                InviteStudentScreen()));
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InviteStudentScreen()))
+                                        .then((value) {
+                                      if (value != null) {
+                                        print(value);
+                                      }
+                                    });
                                   },
                                   icon: Icon(
                                     Icons.add_circle_rounded,
@@ -538,70 +543,68 @@ class _NewClassState extends State<NewClass> {
                         Container(
                           width: size.width,
                           height: 500,
-                          child: Expanded(
-                            child: ListView.builder(
-                              itemCount: user.length,
-                              physics: BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(3),
-                                      color: index.isEven
-                                          ? ColorApp.lightBlue.withOpacity(.05)
-                                          : ColorApp.lightGrey.withOpacity(.2)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Transform.scale(
-                                            scale: 0.8,
-                                            child: Checkbox(
-                                              value: user[index]['isComplete'],
-                                              activeColor: ColorApp.mediumBlue,
-                                              checkColor: ColorApp.lightGrey,
-                                              shape: CircleBorder(),
-                                              onChanged: (value) {
+                          child: ListView.builder(
+                            itemCount: user.length,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(bottom: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3),
+                                    color: index.isEven
+                                        ? ColorApp.lightBlue.withOpacity(.05)
+                                        : ColorApp.lightGrey.withOpacity(.2)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Transform.scale(
+                                          scale: 0.8,
+                                          child: Checkbox(
+                                            value: user[index]['isComplete'],
+                                            activeColor: ColorApp.mediumBlue,
+                                            checkColor: ColorApp.lightGrey,
+                                            shape: CircleBorder(),
+                                            onChanged: (value) {
+                                              setState(() {
                                                 setState(() {
-                                                  setState(() {
-                                                    user[index]['isComplete'] =
-                                                        value;
-                                                  });
+                                                  user[index]['isComplete'] =
+                                                      value;
                                                 });
-                                              },
-                                            ),
+                                              });
+                                            },
                                           ),
+                                        ),
+                                        Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                              fontSize: 9,
+                                              color: user[index]['isComplete']
+                                                  ? Colors.transparent
+                                                  : ColorApp.blue),
+                                        )
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Khánh Trần'),
                                           Text(
-                                            (index + 1).toString(),
-                                            style: TextStyle(
-                                                fontSize: 9,
-                                                color: user[index]['isComplete']
-                                                    ? Colors.transparent
-                                                    : ColorApp.blue),
-                                          )
+                                            user[index]['title'] + '   ',
+                                          ),
                                         ],
                                       ),
-                                      Expanded(
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('Khánh Trần'),
-                                            Text(
-                                              user[index]['title'] + '   ',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         )
                       ],

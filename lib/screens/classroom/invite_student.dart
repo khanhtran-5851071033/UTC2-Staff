@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class InviteStudentScreen extends StatefulWidget {
@@ -7,84 +10,34 @@ class InviteStudentScreen extends StatefulWidget {
 }
 
 class _InviteStudentScreenState extends State<InviteStudentScreen> {
-  List user = [
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': true
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': true
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      'title': '5851071033',
-      'isComplete': false
-    },
-    {
-      'avatar':
-          'https://images.unsplash.com/photo-1622060458125-8c9ae7d5f84d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
-      'title': '5851071033',
-      'isComplete': false
-    },
-  ];
+  List user = [];
   bool isAll = false;
-  String generation = "Chính quy";
-  String course;
-  String nameClass;
+  String generation = "Tất cả";
+  String course = "Tất cả";
+  String nameClass = "Tất cả";
+  StudentBloc studentBloc;
+  List<String> listInvite = [];
+  List<String> listHeDaoTao = [
+    'Tất cả',
+    'Chính quy',
+    'Vừa học vừa làm',
+    'Cao học'
+  ];
+  int indexHe = 0;
+  List listKhoa = [
+    ['Tất cả', 'Khoá 58', 'Kh 59', 'Vừa học vừa làm', 'Cao Học'],
+    ['Tất cả', 'Khoá 58', 'Khoá 59'],
+    ['Tất cả', 'Vừa học vừa làm'],
+    ['Tất cả', 'Cao Học'],
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    studentBloc = BlocProvider.of<StudentBloc>(context);
+    studentBloc.add(GetListStudentEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -109,7 +62,9 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
           ),
           actions: [
             TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Get.back(result: listInvite);
+                },
                 icon: Icon(
                   Icons.add_circle,
                   size: 15,
@@ -146,151 +101,213 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                     Filter(
                       title: 'Hệ đào tạo',
                       value: generation,
-                      item: ['All', 'Chính quy', 'Vừa học Vừa làm', 'Cao học'],
+                      item: listHeDaoTao,
                       function: (val) {
                         setState(() {
                           generation = val;
+                          course = 'Tất cả';
+                          indexHe = listHeDaoTao.indexOf(val);
                         });
+                        print(generation);
+                        studentBloc.add(FilterListStudentEvent(
+                            course, nameClass, generation));
                       },
                     ),
                     Filter(
                       title: 'Khóa',
                       value: course,
-                      item: ['Khóa k58', 'Khóa k59', 'Khóa 60', 'Khóa 61'],
+                      item: listKhoa[indexHe],
                       function: (val) {
                         setState(() {
                           course = val;
                         });
+                        print(course);
+                        studentBloc.add(FilterListStudentEvent(
+                            course, nameClass, generation));
                       },
                     ),
                     Filter(
                       title: 'Lớp',
                       value: nameClass,
-                      item: ['All', 'Chính quy', 'Vừa học Vừa làm', 'Cao học'],
+                      item: [
+                        'Tất cả',
+                        'CQ.58.CNTT',
+                        'CQ.59.LOG.1',
+                      ],
                       function: (val) {
                         setState(() {
                           nameClass = val;
                         });
+                        studentBloc.add(FilterListStudentEvent(
+                            course, nameClass, generation));
                       },
                     ),
                   ],
                 )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Transform.scale(
-                  scale: 0.8,
-                  child: Checkbox(
-                    value: isAll,
-                    shape: CircleBorder(),
-                    activeColor: ColorApp.mediumBlue,
-                    checkColor: ColorApp.lightGrey,
-                    onChanged: (value) {
-                      setState(() {
-                        for (int i = 0; i < user.length; i++) {
-                          user[i]['isComplete'] = value;
-                        }
-                        isAll = value;
-                      });
-                    },
-                  ),
-                ),
-                Text('Tất cả (' + user.length.toString() + ")"),
-              ],
-            ),
             Expanded(
-              child: Container(
-                width: size.width,
-                padding: EdgeInsets.all(size.width * 0.03),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorApp.blue.withOpacity(0.05),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: Offset(0, 1), // changes position of shadow
-                      ),
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: ListView.builder(
-                  itemCount: user.length,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          color: index.isEven
-                              ? ColorApp.lightBlue.withOpacity(.05)
-                              : ColorApp.lightGrey.withOpacity(.2)),
-                      child: Row(
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Transform.scale(
-                                scale: 0.8,
-                                child: Checkbox(
-                                  value: user[index]['isComplete'],
-                                  activeColor: ColorApp.mediumBlue,
-                                  checkColor: ColorApp.lightGrey,
-                                  shape: CircleBorder(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      setState(() {
-                                        user[index]['isComplete'] = value;
-                                      });
-                                    });
-                                  },
-                                ),
+              child: BlocConsumer<StudentBloc, StudentState>(
+                listener: (context, state) {
+                  if (state is LoadedStudentState) {
+                    setState(() {
+                      user = [];
+                      for (int i = 0; i < state.listStudent.length; i++) {
+                        user.add(false);
+                      }
+                    });
+                  }
+                },
+                builder: (context, state) {
+                  if (state is LoadedStudentState) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Transform.scale(
+                              scale: 0.8,
+                              child: Checkbox(
+                                value: isAll,
+                                shape: CircleBorder(),
+                                activeColor: ColorApp.mediumBlue,
+                                checkColor: ColorApp.lightGrey,
+                                onChanged: (value) {
+                                  setState(() {
+                                    listInvite = [];
+
+                                    for (int i = 0; i < user.length; i++) {
+                                      user[i] = value;
+                                      value
+                                          ? listInvite
+                                              .add(state.listStudent[i].id)
+                                          : listInvite = [];
+                                    }
+
+                                    isAll = value;
+                                  });
+                                  print(listInvite);
+                                },
                               ),
-                              Text(
-                                (index + 1).toString(),
-                                style: TextStyle(
-                                    fontSize: 9,
-                                    color: user[index]['isComplete']
-                                        ? Colors.transparent
-                                        : ColorApp.blue),
-                              )
-                            ],
-                          ),
-                          Container(
-                            width: 35,
+                            ),
+                            Text('Tất cả (' +
+                                state.listStudent.length.toString() +
+                                ")"),
+                          ],
+                        ),
+                        Expanded(
+                          child: Container(
+                            width: size.width,
+                            padding: EdgeInsets.all(size.width * 0.03),
                             decoration: BoxDecoration(
-                                color: ColorApp.lightGrey,
-                                shape: BoxShape.circle),
-                            padding: EdgeInsets.all(2),
-                            child: CircleAvatar(
-                              radius: 20.0,
-                              backgroundImage:
-                                  NetworkImage(user[index]['avatar']),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ColorApp.blue.withOpacity(0.05),
+                                    spreadRadius: 1,
+                                    blurRadius: 4,
+                                    offset: Offset(
+                                        0, 1), // changes position of shadow
+                                  ),
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ListView.builder(
+                              itemCount: state.listStudent.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3),
+                                      color: index.isEven
+                                          ? ColorApp.lightBlue.withOpacity(.05)
+                                          : ColorApp.lightGrey.withOpacity(.2)),
+                                  child: Row(
+                                    children: [
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Transform.scale(
+                                            scale: 0.8,
+                                            child: Checkbox(
+                                              value: user[index],
+                                              activeColor: ColorApp.mediumBlue,
+                                              checkColor: ColorApp.lightGrey,
+                                              shape: CircleBorder(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  isAll = false;
+                                                  user[index] = value;
+                                                });
+                                                if (value) {
+                                                  setState(() {
+                                                    listInvite.add(state
+                                                        .listStudent[index].id);
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    listInvite.remove(state
+                                                        .listStudent[index].id);
+                                                  });
+                                                }
+                                                print(listInvite);
+                                                print(user);
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            (index + 1).toString(),
+                                            style: TextStyle(
+                                                fontSize: 9,
+                                                color: user[index]
+                                                    ? Colors.transparent
+                                                    : ColorApp.blue),
+                                          )
+                                        ],
+                                      ),
+                                      Container(
+                                        width: 35,
+                                        decoration: BoxDecoration(
+                                            color: ColorApp.lightGrey,
+                                            shape: BoxShape.circle),
+                                        padding: EdgeInsets.all(2),
+                                        child: CircleAvatar(
+                                          radius: 20.0,
+                                          backgroundImage: NetworkImage(
+                                              state.listStudent[index].avatar),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(state.listStudent[index].name),
+                                            Text(
+                                              state.listStudent[index].id,
+                                              style: TextStyle(
+                                                  color: ColorApp.black
+                                                      .withOpacity(.8),
+                                                  fontSize: 16,
+                                                  wordSpacing: 1.2,
+                                                  letterSpacing: 0.2),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Khánh Trần'),
-                                Text(
-                                  user[index]['title'],
-                                  style: TextStyle(
-                                      color: ColorApp.black.withOpacity(.8),
-                                      fontSize: 16,
-                                      wordSpacing: 1.2,
-                                      letterSpacing: 0.2),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
-                  },
-                ),
+                  } else
+                    return Container();
+                },
               ),
             ),
           ],

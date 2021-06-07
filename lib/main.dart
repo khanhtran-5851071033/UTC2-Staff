@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -84,9 +85,8 @@ class _HomePageState extends State<HomePage> {
       }
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  
       print('Có điểm danh hông ????????????' + message.data['isAtten']);
-      message.data['isAtten']=='false'
+      message.data['isAtten'] == 'false'
           ? MyLocalNotification.showNotification(
               notifications,
               message.data['idChannel'],
@@ -126,6 +126,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<PostBloc>(create: (context) => PostBloc()),
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
         BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
+        BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
