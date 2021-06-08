@@ -82,33 +82,6 @@ class ClassDrawer extends StatelessWidget {
               ),
             ),
           ),
-          // ListTile(
-          //   onTap: () {
-          //     Navigator.of(context).pop();
-          //     Navigator.of(context).pop();
-          //   },
-          //   leading: Container(
-          //       width: 30,
-          //       child: Icon(
-          //         Icons.fact_check_rounded,
-          //         color: ColorApp.black.withOpacity(.8),
-          //       )),
-          //   title: Container(
-          //     padding: EdgeInsets.symmetric(vertical: 15),
-          //     decoration: BoxDecoration(
-          //         border: Border(
-          //             bottom: BorderSide(color: ColorApp.black, width: .3))),
-          //     child: Text(
-          //       'Điểm danh',
-          //       style: TextStyle(
-          //           color: ColorApp.black.withOpacity(.9),
-          //           fontSize: size.width * 0.042,
-          //           wordSpacing: 1.2,
-          //           fontWeight: FontWeight.w500,
-          //           letterSpacing: 0.2),
-          //     ),
-          //   ),
-          // ),
           ListTile(
             onTap: () {
               Navigator.of(context).pop();
@@ -171,7 +144,7 @@ class ClassDrawer extends StatelessWidget {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     ));

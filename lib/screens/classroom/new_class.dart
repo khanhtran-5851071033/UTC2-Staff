@@ -124,11 +124,11 @@ class _NewClassState extends State<NewClass> {
                       'Lớp mới ' + nameClass,
                       'Tham gia lớp ' + idClass,
                       {
-                        "idNoti":1,
+                        "idNoti": 1,
                         "msg": idClass,
                         "idChannel": idClass,
                         "className": nameClass,
-                        "classDescription": '',
+                        "classDescription": description,
                       },
                       idClass);
                   Get.back();
@@ -482,40 +482,46 @@ class _NewClassState extends State<NewClass> {
                             ],
                           ),
                         ),
-                        Container(
-                          width: size.width,
-                          height: 500,
-                          child: ListView.builder(
-                            itemCount: listInvite.length,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(3),
-                                    color: index.isEven
-                                        ? ColorApp.lightBlue.withOpacity(.05)
-                                        : ColorApp.lightGrey.withOpacity(.2)),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(listInvite[index].name),
-                                    Text(
-                                      listInvite[index].id + '   ',
-                                    ),
-                                  ],
+                        listInvite != null
+                            ? Container(
+                                width: size.width,
+                                height: 500,
+                                child: ListView.builder(
+                                  itemCount: listInvite.length,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.only(bottom: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                          color: index.isEven
+                                              ? ColorApp.lightBlue
+                                                  .withOpacity(.05)
+                                              : ColorApp.lightGrey
+                                                  .withOpacity(.2)),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(listInvite[index].name),
+                                          Text(
+                                            listInvite[index].id + '   ',
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        )
+                              )
+                            : Container(),
                       ],
                     ),
-                  ),
+                  )
                 ],
               )),
         ),

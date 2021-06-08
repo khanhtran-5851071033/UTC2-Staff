@@ -71,71 +71,57 @@ class _NotifyPageState extends State<NotifyPage>
           physics: BouncingScrollPhysics(),
           children: [
             Container(
-              height: size.height,
-              padding: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      stops: [0.2, 0.9],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.white, ColorApp.lightGrey])),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      color: ColorApp.blue,
-                      displacement: 40,
-                      onRefresh: () {
-                        print('adad');
-                      },
-                      child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: size.width,
-                              height: size.height * 0.1,
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: TextButton(
-                                onPressed: () {
-                                  _showBottomSheet(
-                                      context,
-                                      size,
-                                      'Lễ tốt nghiệp',
-                                      'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021');
-                                },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                        flex: 3,
-                                        child: leading(size, '11-04-2021')),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                      flex: 7,
-                                      child: title(
-                                          'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021'),
-                                    ),
-                                  ],
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+              color: Colors.white,
+              child: Expanded(
+                child: RefreshIndicator(
+                  color: ColorApp.blue,
+                  displacement: 40,
+                  onRefresh: () {},
+                  child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: size.width,
+                          margin: EdgeInsets.symmetric(vertical: 7),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                  stops: [0.2, 0.9],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.white, ColorApp.lightGrey])),
+                          child: TextButton(
+                            onPressed: () {
+                              _showBottomSheet(context, size, 'Lễ tốt nghiệp',
+                                  'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021');
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                    flex: 3,
+                                    child: leading(size, '11-04-2021')),
+                                SizedBox(
+                                  width: 10,
                                 ),
-                              ),
-                            );
-                          }),
-                    ),
-                  ),
-                ],
+                                Flexible(
+                                  flex: 7,
+                                  child: title(
+                                      'Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021Lễ trao bằng tốt nghiệp Đại học tháng 4 năm 2021'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
               ),
             ),
             // Container(),
-            Container(
-              child: Text('Sự kiện'),
-            ),
-            Container(
-              child: Text('Lớp học'),
-            ),
+            Event(size: size),
+           NotifyApp(size: size)
           ],
         ),
       ),
@@ -215,20 +201,6 @@ class _NotifyPageState extends State<NotifyPage>
                             },
                           ),
                         ),
-                        // FlatButton(
-                        //   minWidth: size.width,
-                        //   height: size.height * 0.08,
-                        //   color: Color(0xff1976D3),
-                        //   onPressed: () {
-                        //     Navigator.pop(context);
-                        //   },
-                        //   child: Text(
-                        //     'ĐÓNG',
-                        //     style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontSize: size.width * 0.05),
-                        //   ),
-                        // )
                       ],
                     ),
                   );
@@ -242,12 +214,120 @@ class _NotifyPageState extends State<NotifyPage>
   }
 }
 
+class NotifyApp extends StatelessWidget {
+  const NotifyApp({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+      child: Expanded(
+        child: RefreshIndicator(
+          onRefresh: () {},
+          child: ListView.builder(
+       physics: BouncingScrollPhysics(),
+       itemCount: 8,
+       itemBuilder: (context, index) {
+         return Container(
+           margin: EdgeInsets.symmetric(vertical: 7),
+           width: size.width,
+           decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(10),
+               gradient: LinearGradient(
+                   begin: Alignment.topLeft,
+                   end: Alignment.bottomRight,
+                   colors: [Colors.white, ColorApp.lightGrey])),
+           child: Row(
+             children: [
+               Image.asset(
+                 'assets/images/teaching.png',
+                 width: 100,
+               ),
+               Expanded(
+                 child: Text(
+                   'Hội nghị công bố quyết định bổ nhiHội nghị công bố quyết định bổ nhiệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025 ệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025Hội nghị công bố quyết định bổ nhiệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025  ',
+                   softWrap: true,
+                   textAlign: TextAlign.start,
+                   maxLines: 3,
+                   overflow: TextOverflow.ellipsis,
+                   style: TextStyle(fontSize: 16),
+                 ),
+               )
+             ],
+           ),
+         );
+       }),
+        ),
+      ),
+    );
+  }
+}
+
+class Event extends StatelessWidget {
+  const Event({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+      child: Expanded(
+        child: RefreshIndicator(
+          onRefresh: () {},
+          child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 7),
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.white, ColorApp.lightGrey])),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/teaching.png',
+                        width: 100,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Hội nghị công bố quyết định bổ nhiHội nghị công bố quyết định bổ nhiệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025 ệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025Hội nghị công bố quyết định bổ nhiệm Phó Giám đốc Phân hiệu nhiệm kỳ 2020 - 2025  ',
+                          softWrap: true,
+                          textAlign: TextAlign.start,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }),
+        ),
+      ),
+    );
+  }
+}
+
 Widget title(String title) {
   return Container(
     child: Text(
       title,
       maxLines: 3,
-      style: TextStyle(fontSize: 19, color: ColorApp.black),
+      style: TextStyle(fontSize: 16, color: ColorApp.black),
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     ),
@@ -256,11 +336,12 @@ Widget title(String title) {
 
 Widget leading(Size size, String date) {
   return Container(
+    padding: EdgeInsets.symmetric(vertical: 5),
     alignment: Alignment.center,
     // width: size.width * 0.22,
     decoration: BoxDecoration(
         border: Border(
-          left: BorderSide(width: 5.0, color: ColorApp.red),
+          left: BorderSide(width: 3.0, color: ColorApp.red),
         ),
         gradient: LinearGradient(
             stops: [0.2, 0.9],

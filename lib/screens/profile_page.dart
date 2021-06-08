@@ -285,9 +285,12 @@ class _ProFilePageState extends State<ProFilePage> {
                           child: _avatar(_image, size, widget.teacher.avatar))),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 _name(widget.teacher.name, size),
+                SizedBox(
+                  height: 4,
+                ),
                 _email(widget.teacher.email, size),
               ],
             ),
@@ -350,16 +353,14 @@ Widget _email(String email, Size size) {
   return Text(email,
       style: TextStyle(
           color: ColorApp.lightBlue,
-          fontSize: size.width * 0.05,
+          fontSize: 17,
           fontWeight: FontWeight.normal));
 }
 
 Widget _name(String name, Size size) {
   return Text(name,
       style: TextStyle(
-          color: ColorApp.black,
-          fontSize: size.width * 0.05,
-          fontWeight: FontWeight.w600));
+          color: ColorApp.black, fontSize: 17, fontWeight: FontWeight.w600));
 }
 
 Widget _avatar(File path, Size size, String imageLink) {
@@ -367,8 +368,9 @@ Widget _avatar(File path, Size size, String imageLink) {
     alignment: Alignment.center,
     children: [
       Container(
-        width: size.width * 0.26,
-        height: size.width * 0.26,
+        margin: EdgeInsets.only(top: 30),
+        width: 90,
+        height: 90,
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,

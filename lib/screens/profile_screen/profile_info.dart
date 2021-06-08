@@ -47,7 +47,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+        // padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -62,23 +62,36 @@ class _ProfileInfoState extends State<ProfileInfo> {
             SizedBox(
               height: 20,
             ),
-            _name(widget.teacher.name, size),
-            SizedBox(
-              height: 7,
+            Padding(
+              padding: EdgeInsets.all(size.width * 0.03),
+              child: Column(
+                children: [
+                  _name(widget.teacher.name, size),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  info('Ngày sinh : ', '00/00/2021', size),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  info('Mã : ', widget.teacher.id, size),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  info('Chức vụ: ', 'Giảng viên', size),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  _email(widget.teacher.email, size),
+                ],
+              ),
             ),
-            info('Ngày sinh : ', '00/00/2021', size),
-            SizedBox(
-              height: 7,
-            ),
-            info('Mã : ', widget.teacher.id, size),
-            SizedBox(
-              height: 7,
-            ),
-            info('Chức vụ: ', 'Giảng viên', size),
-            SizedBox(
-              height: 7,
-            ),
-            _email(widget.teacher.email, size),
+            Spacer(),
+            Image.asset(
+              'assets/images/path@2x.png',
+              width: size.width,
+              fit: BoxFit.fill,
+            )
           ],
         ),
       ),
@@ -90,11 +103,15 @@ Widget info(String info, String day, Size size) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(info),
+      Text(info,
+          style: TextStyle(
+              color: ColorApp.black,
+              fontSize: 15,
+              fontWeight: FontWeight.normal)),
       Text(day,
           style: TextStyle(
               color: ColorApp.black,
-              fontSize: size.width * 0.05,
+              fontSize: 16,
               fontWeight: FontWeight.normal)),
     ],
   );
@@ -108,7 +125,7 @@ Widget _email(String email, Size size) {
       Text(email,
           style: TextStyle(
               color: ColorApp.lightBlue,
-              fontSize: size.width * 0.05,
+              fontSize: 16,
               fontWeight: FontWeight.normal)),
     ],
   );

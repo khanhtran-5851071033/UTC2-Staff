@@ -149,135 +149,139 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: size.width,
-          height: size.height,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.white, ColorApp.lightGrey])),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomAvatarGlow(
-                glowColor: Colors.blue,
-                endRadius: 70.0,
-                duration: Duration(milliseconds: 1000),
-                repeat: true,
-                showTwoGlows: true,
-                repeatPauseDuration: Duration(milliseconds: 100),
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  width: 120,
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundColor: ColorApp.lightGrey,
-                    backgroundImage: NetworkImage(widget.teacher.avatar != null
-                        ? widget.teacher.avatar
-                        : "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.white, ColorApp.lightGrey])),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomAvatarGlow(
+              glowColor: Colors.blue,
+              endRadius: 70.0,
+              duration: Duration(milliseconds: 1000),
+              repeat: true,
+              showTwoGlows: true,
+              repeatPauseDuration: Duration(milliseconds: 100),
+              child: Container(
+                padding: EdgeInsets.all(4),
+                width: 120,
+                child: CircleAvatar(
+                  radius: 100,
+                  backgroundColor: ColorApp.lightGrey,
+                  backgroundImage: NetworkImage(widget.teacher.avatar != null
+                      ? widget.teacher.avatar
+                      : "https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png"),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Nhập mã điểm danh',
+              style: TextStyle(fontSize: size.width * 0.05),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
+              child: TextFormField(
+                controller: _controller,
+                decoration: InputDecoration(
+                    hintText: 'Mã điểm danh',
+                    errorText: isErro ? 'Vui lòng nhập mã' : null),
+                autocorrect: true,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            isLoading
+                ? CircularProgressIndicator()
+                : Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.06,
+                        vertical: results.length > 0 ? size.width * 0.03 : 0),
+                    child: Text(results.length > 0
+                        ? results[0].addressLine +
+                            '\n${location.latitude}      //    ${location.longitude}'
+                        : ''),
                   ),
-                ),
+            Center(
+              child: ElevatedButton(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.2, vertical: 10),
+                    child: Text("Điểm danh",
+                        style: TextStyle(
+                            fontSize: size.width * 0.045,
+                            letterSpacing: 1,
+                            wordSpacing: 1,
+                            fontWeight: FontWeight.normal)),
+                  ),
+                  style: ButtonStyle(
+                      tapTargetSize: MaterialTapTargetSize.padded,
+                      shadowColor:
+                          MaterialStateProperty.all<Color>(Colors.lightBlue),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(color: Colors.transparent)))),
+                  onPressed: () {
+                    if (_controller.text.isNotEmpty) {
+                      search(_controller.text);
+                      setState(() {
+                        isErro = false;
+                      });
+                      _controller.text = '';
+                    } else {
+                      setState(() {
+                        isErro = true;
+                      });
+                    }
+                  }),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              'Hoặc quét mã Code',
+              style: TextStyle(fontSize: size.width * 0.042),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            MaterialButton(
+              onPressed: () {
+                // _scan();
+                _scan();
+              },
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: Icon(
+                Icons.qr_code_scanner_outlined,
+                size: 24,
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Nhập mã điểm danh',
-                style: TextStyle(fontSize: size.width * 0.05),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
-                child: TextFormField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                      hintText: 'Mã điểm danh',
-                      errorText: isErro ? 'Vui lòng nhập mã' : null),
-                  autocorrect: true,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              isLoading
-                  ? CircularProgressIndicator()
-                  : Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.06,
-                          vertical: results.length > 0 ? size.width * 0.03 : 0),
-                      child: Text(results.length > 0
-                          ? results[0].addressLine +
-                              '\n${location.latitude}      //    ${location.longitude}'
-                          : ''),
-                    ),
-              Center(
-                child: ElevatedButton(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.2, vertical: 10),
-                      child: Text("Điểm danh",
-                          style: TextStyle(
-                              fontSize: size.width * 0.045,
-                              letterSpacing: 1,
-                              wordSpacing: 1,
-                              fontWeight: FontWeight.normal)),
-                    ),
-                    style: ButtonStyle(
-                        tapTargetSize: MaterialTapTargetSize.padded,
-                        shadowColor:
-                            MaterialStateProperty.all<Color>(Colors.lightBlue),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                        shape: MaterialStateProperty
-                            .all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: Colors.transparent)))),
-                    onPressed: () {
-                      if (_controller.text.isNotEmpty) {
-                        search(_controller.text);
-                        setState(() {
-                          isErro = false;
-                        });
-                        _controller.text = '';
-                      } else {
-                        setState(() {
-                          isErro = true;
-                        });
-                      }
-                    }),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Hoặc quét mã Code',
-                style: TextStyle(fontSize: size.width * 0.042),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              MaterialButton(
-                onPressed: () {
-                  // _scan();
-                  _scan();
-                },
-                color: Colors.blue,
-                textColor: Colors.white,
-                child: Icon(
-                  Icons.qr_code_scanner_outlined,
-                  size: 24,
-                ),
-                padding: EdgeInsets.all(16),
-                shape: CircleBorder(),
-              )
-            ],
-          ),
+              padding: EdgeInsets.all(16),
+              shape: CircleBorder(),
+            ),
+            Spacer(),
+            Image.asset(
+              'assets/images/path@2x.png',
+              width: size.width,
+              fit: BoxFit.fill,
+            )
+          ],
         ),
       ),
     );

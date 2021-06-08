@@ -175,6 +175,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
         child: Container(
       decoration: BoxDecoration(
@@ -435,6 +436,11 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
               },
             ),
           ),
+          Image.asset(
+            'assets/images/path@2x.png',
+            width: size.width,
+            fit: BoxFit.fill,
+          )
         ],
       ),
     ));

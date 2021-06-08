@@ -247,9 +247,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
           child: Container(
             color: Color.fromRGBO(0, 0, 0, 0.001),
             child: DraggableScrollableSheet(
-              initialChildSize: 0.85,
+              initialChildSize: 0.9,
               minChildSize: 0.2,
-              maxChildSize: 0.9,
+              maxChildSize: 0.95,
               builder: (_, controller) {
                 return InfoDetailClass(
                   controller: controller,

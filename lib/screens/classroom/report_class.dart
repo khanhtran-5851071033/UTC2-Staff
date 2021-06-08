@@ -40,37 +40,55 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
           ),
         ),
         body: Container(
-          padding: EdgeInsets.all(size.width * 0.01),
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [Colors.white, ColorApp.lightGrey])),
-          child: GridView.count(
-            physics: BouncingScrollPhysics(),
-            crossAxisCount: 2,
-            children: List.generate(report.length, (index) {
-              return Center(
-                  child: Item(
-                title: report[index]['title'],
-                icon: report[index]['icon'],
-                function: () async {
-                  if (index == 0) {
-                    final pdfFile = await PdfParagraphApi.generate();
-                    PdfApi.openFile(pdfFile);
-                  }
-                  if (index == 1) {
-                    print('1');
-                  }
-                  if (index == 2) {
-                    print('2');
-                  }
-                  if (index == 3) {
-                    print('3');
-                  }
-                },
-              ));
-            }),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(size.width * 0.01),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.white, ColorApp.lightGrey])),
+                  child: GridView.count(
+                    physics: BouncingScrollPhysics(),
+                    crossAxisCount: 2,
+                    children: List.generate(report.length, (index) {
+                      return Center(
+                          child: Item(
+                        title: report[index]['title'],
+                        icon: report[index]['icon'],
+                        function: () async {
+                          if (index == 0) {
+                            final pdfFile = await PdfParagraphApi.generate();
+                            PdfApi.openFile(pdfFile);
+                          }
+                          if (index == 1) {
+                            print('1');
+                          }
+                          if (index == 2) {
+                            print('2');
+                          }
+                          if (index == 3) {
+                            print('3');
+                          }
+                        },
+                      ));
+                    }),
+                  ),
+                ),
+              ),
+              Image.asset(
+                'assets/images/path@2x.png',
+                width: size.width,
+                fit: BoxFit.fill,
+              )
+            ],
           ),
         ));
   }
