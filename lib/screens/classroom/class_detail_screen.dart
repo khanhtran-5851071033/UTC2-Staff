@@ -9,6 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
+import 'package:utc2_staff/screens/classroom/new_comment.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
@@ -164,9 +165,15 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                   Offset(1, 1), // changes position of shadow
                             ),
                           ],
+                          gradient: LinearGradient(
+                              stops: [0.2, 0.9],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.white, ColorApp.lightGrey]),
                           // color: Colors.green,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: ColorApp.lightGrey)),
+                          border: Border.all(
+                              color: ColorApp.lightGrey, width: 0.3)),
                       margin: EdgeInsets.only(top: 10),
                       child: RefreshIndicator(
                         onRefresh: () async {
@@ -477,7 +484,7 @@ class ItemNoti extends StatelessWidget {
                   style: TextStyle(color: ColorApp.black, fontSize: 16),
                 ),
                 SizedBox(
-                  height: 5,
+                  height: content != null ? 5 : 0,
                 ),
                 content != null
                     ? Text(
@@ -553,7 +560,7 @@ class ItemNoti extends StatelessWidget {
           ),
           Container(
               width: size.width,
-              padding: EdgeInsets.all(size.width * 0.03),
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -562,16 +569,43 @@ class ItemNoti extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.05),
+                      color: ColorApp.lightGrey.withOpacity(0.1),
                       spreadRadius: 3,
                       blurRadius: 5,
                       offset: Offset(0, 3), // changes position of shadow
                     ),
                   ],
                   border: Border.all(color: ColorApp.lightGrey, width: 1)),
-              child: Text(
-                'Thêm nhận xét lớp học',
-                style: TextStyle(color: Colors.grey),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Load comment đầu tiên Load comment đầu tiên Load comment đầu tiên Load comment đầu tiêns',
+                          softWrap: true,
+                          textAlign: TextAlign.start,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewCommentClass()));
+                    },
+                    child: Text(
+                      'Thêm nhận xét của lớp học',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ],
               ))
         ],
       ),

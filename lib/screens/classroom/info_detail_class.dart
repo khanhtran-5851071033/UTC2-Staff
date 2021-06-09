@@ -73,11 +73,9 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
   bool isSignature = false;
   Uint8List data;
   final SignatureController _controller = SignatureController(
-    penStrokeWidth: 1,
+    penStrokeWidth: 1.2,
     penColor: ColorApp.black,
     exportBackgroundColor: Colors.transparent,
-    onDrawStart: () => print('onDrawStart called!'),
-    onDrawEnd: () => print('onDrawEnd called!'),
   );
   showAlertDialog(BuildContext context) {
     // set up the buttons

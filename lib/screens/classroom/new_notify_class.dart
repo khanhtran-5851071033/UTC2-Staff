@@ -73,7 +73,7 @@ class _NewNotifyState extends State<NewNotify> {
                     _controller.text.trim(),
                     content,
                     {
-                      'idNoti': 2,
+                      'idNoti': 1,
                       "isAtten": expaned,
                       "msg": idAtent,
                       "idChannel": widget.idClass,
@@ -444,7 +444,6 @@ class _NewNotifyState extends State<NewNotify> {
                             onPressed: () {
                               setState(() {
                                 isQuiz ? isQuiz = false : isQuiz = true;
-                                if (isQuiz) idAtent = generateRandomString(5);
                               });
                             },
                             icon: Icon(
@@ -526,9 +525,12 @@ class _ListQuizState extends State<ListQuiz> {
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
-                    color: ColorApp.lightGrey.withOpacity(.5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          stops: [0.08, 1],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.white, ColorApp.lightGrey])),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,

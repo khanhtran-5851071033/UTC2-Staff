@@ -65,7 +65,7 @@ class _ActivityPageState extends State<ActivityPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text(name),
-      content: Text("Bạn có muốn rời khỏi lớp học này ?"),
+      content: Text("Bạn có muốn kết thúc lớp học này ?"),
       actions: [
         continueButton,
         cancelButton,
