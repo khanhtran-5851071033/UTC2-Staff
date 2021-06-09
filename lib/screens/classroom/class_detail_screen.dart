@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/info_detail_class.dart';

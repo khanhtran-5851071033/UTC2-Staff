@@ -1,13 +1,13 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:utc2_staff/screens/classroom/invite_student.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/push_noti_firebase.dart';
-
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -30,29 +30,25 @@ class _NewClassState extends State<NewClass> {
   final _formKey = GlobalKey<FormState>();
 
   GlobalKey globalKey = new GlobalKey();
-  // String _dataString = "AziTask.com";
+
 
   Future<void> _captureAndSharePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage();
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
-      ImageGallerySaver.saveImage(pngBytes,
-          name: DateTime.now().toString(), quality: 100);
-      Fluttertoast.showToast(
-          msg: "Đã lưu vào thư viện",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: ColorApp.mediumBlue,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } catch (e) {
-      print(e.toString());
-    }
+    RenderRepaintBoundary boundary =
+        globalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage();
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    ImageGallerySaver.saveImage(pngBytes,
+        name: DateTime.now().toString(), quality: 100);
+
+    // Fluttertoast.showToast(
+    //     msg: "Đã lưu vào thư viện",
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: ColorApp.mediumBlue,
+    //     textColor: Colors.white,
+    //     fontSize: 16.0);
   }
 
   Future<void> _shareImage() async {
@@ -60,9 +56,12 @@ class _NewClassState extends State<NewClass> {
       RenderRepaintBoundary boundary =
           globalKey.currentContext.findRenderObject();
       ui.Image image = await boundary.toImage();
+      final directory = (await getExternalStorageDirectory()).path;
       ByteData byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
+      File imgFile = new File('$directory/$DateTime' + '.png');
+      imgFile.writeAsBytes(pngBytes);
       // await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
       //     text: 'QR của lớp học.');
     } catch (e) {
@@ -121,7 +120,7 @@ class _NewClassState extends State<NewClass> {
 
                   await FirebaseMessaging.instance.subscribeToTopic(idClass);
                   PushNotiFireBaseAPI.pushNotiTopic(
-                     nameClass,
+                      nameClass,
                       idClass,
                       {
                         "idNoti": 'newClass',
@@ -129,7 +128,7 @@ class _NewClassState extends State<NewClass> {
                         "idChannel": idClass,
                         "className": nameClass,
                         "classDescription": description,
-                        "nameTeacher":widget.teacher.name
+                        "nameTeacher": widget.teacher.name
                       },
                       idClass);
                   Get.back();
@@ -310,8 +309,8 @@ class _NewClassState extends State<NewClass> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(right: 16.0),
-                                        child: GestureDetector(
-                                          onTap: () {
+                                        child: TextButton(
+                                          onPressed: () {
                                             _captureAndSharePng();
                                           },
                                           child: Text(
@@ -321,8 +320,8 @@ class _NewClassState extends State<NewClass> {
                                           ),
                                         ),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
+                                      TextButton(
+                                        onPressed: () {
                                           _shareImage();
                                         },
                                         child: Text(

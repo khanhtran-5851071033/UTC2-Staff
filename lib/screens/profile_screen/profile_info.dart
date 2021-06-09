@@ -19,7 +19,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
   @override
   void initState() {
     linkImage = widget.teacher.avatar;
-    // TODO: implement initState
     super.initState();
   }
 

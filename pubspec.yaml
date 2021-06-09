@@ -69,9 +69,7 @@ dependencies:
   syncfusion_flutter_charts: ^19.1.64
   fl_chart: ^0.36.1
   qr_flutter: ^4.0.0
-  image_gallery_saver: ^1.6.9
-  flutter_share: ^2.0.0
-  # esys_flutter_share: ^1.0.2
+  image_gallery_saver: ^1.6.8
   pdf: ^3.3.0
   path_provider: ^2.0.1
   open_file: ^3.2.1

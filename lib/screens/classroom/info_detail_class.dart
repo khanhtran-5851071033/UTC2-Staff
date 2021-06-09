@@ -167,7 +167,6 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 

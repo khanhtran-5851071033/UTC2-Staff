@@ -56,8 +56,9 @@ class _ActivityPageState extends State<ActivityPage> {
     );
     Widget continueButton = TextButton(
       child: Text("Kết thúc"),
-      onPressed: () {
+      onPressed: () async {
         Navigator.pop(context);
+        await FirebaseMessaging.instance.unsubscribeFromTopic(id);
         classDatabase.deleteClass(id);
         classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
       },
