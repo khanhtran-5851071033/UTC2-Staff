@@ -121,14 +121,15 @@ class _NewClassState extends State<NewClass> {
 
                   await FirebaseMessaging.instance.subscribeToTopic(idClass);
                   PushNotiFireBaseAPI.pushNotiTopic(
-                      'Lớp mới ' + nameClass,
-                      'Tham gia lớp ' + idClass,
+                     nameClass,
+                      idClass,
                       {
-                        "idNoti": 1,
+                        "idNoti": 'newClass',
                         "msg": idClass,
                         "idChannel": idClass,
                         "className": nameClass,
                         "classDescription": description,
+                        "nameTeacher":widget.teacher.name
                       },
                       idClass);
                   Get.back();

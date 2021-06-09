@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -73,7 +74,7 @@ class _NewNotifyState extends State<NewNotify> {
                     _controller.text.trim(),
                     content,
                     {
-                      'idNoti': 1,
+                      'idNoti': 'newNoti',
                       "isAtten": expaned,
                       "msg": idAtent,
                       "idChannel": widget.idClass,
