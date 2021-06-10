@@ -49,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           prefs.setString('userEmail', login.email);
           bool isRegister = await TeacherDatabase.isRegister(login.email);
           if (isRegister) {
-            print('update');
+         
             var student = await TeacherDatabase.getTeacherData(login.email);
 
             Map<String, String> data = {

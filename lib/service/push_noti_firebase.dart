@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 class PushNotiFireBaseAPI {
   static Future<http.Response> pushNotiTopic(String title, String body,
       Map<String, dynamic> data, String topic) async {
-    print('idClass $topic');
     final response =
         await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
             headers: <String, String>{

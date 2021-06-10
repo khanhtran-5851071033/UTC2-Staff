@@ -146,11 +146,8 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
               if (date.day == today.day &&
                   date.month == today.month &&
                   date.year == today.year) {
-                print(true);
-                print(date);
-                print(today);
+               
                 if (sh > today.hour) {
-                  print(1);
                   MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
                       notifications,
                       wd,
@@ -164,7 +161,7 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
                       maLich);
                 } else if (sh == today.hour) {
                   if (sm > today.minute) {
-                    print(2);
+                   
                     MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
                         notifications,
                         wd,

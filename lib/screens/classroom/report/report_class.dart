@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:utc2_staff/service/pdf/pdf_api.dart';
-import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
+import 'package:utc2_staff/screens/classroom/report/report_attenden_class.dart';
+import 'package:utc2_staff/screens/classroom/report/report_info_class.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
+
 import 'package:utc2_staff/utils/utils.dart';
 
 class ReportClassScreen extends StatefulWidget {
+  final Teacher teacher;
+  final Class classUtc;
+
+  ReportClassScreen({this.teacher, this.classUtc});
   @override
   _ReportClassScreenState createState() => _ReportClassScreenState();
 }
@@ -63,16 +70,27 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                           child: Item(
                         title: report[index]['title'],
                         icon: report[index]['icon'],
-                        function: () async {
+                        function: () {
                           if (index == 0) {
-                            final pdfFile = await PdfParagraphApi.generate();
-                            PdfApi.openFile(pdfFile);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReportInfoClass(
+                                          teacher: widget.teacher,
+                                          classUtc: widget.classUtc,
+                                        )));
                           }
                           if (index == 1) {
                             print('1');
                           }
                           if (index == 2) {
-                            print('2');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReportAttendenClass(
+                                          teacher: widget.teacher,
+                                          classUtc: widget.classUtc,
+                                        )));
                           }
                           if (index == 3) {
                             print('3');

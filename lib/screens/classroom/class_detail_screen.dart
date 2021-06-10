@@ -10,7 +10,7 @@ import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
 import 'package:utc2_staff/screens/classroom/new_comment.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
-import 'package:utc2_staff/screens/classroom/report_class.dart';
+import 'package:utc2_staff/screens/classroom/report/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
@@ -94,8 +94,13 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         actions: [
           TextButton.icon(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReportClassScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ReportClassScreen(
+                            teacher: teacher,
+                            classUtc: _class,
+                          )));
             },
             icon: Image.asset(
               'assets/icons/pdf.png',
@@ -188,7 +193,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                 DateTime parseDate =
                                     new DateFormat("yyyy-MM-dd HH:mm:ss")
                                         .parse(e.date);
-                                print(parseDate);
+
                                 return ItemNoti(
                                   avatar: e.avatar,
                                   userName: e.name,
@@ -211,6 +216,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                           DateFormat("yyyy-MM-dd HH:mm:ss")
                                               .parse(e.timeAtten))
                                       : null,
+                                  numberComment: index,
                                 );
                               }),
                         ),
@@ -257,11 +263,62 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
               minChildSize: 0.2,
               maxChildSize: 0.95,
               builder: (_, controller) {
-                return InfoDetailClass(
-                  controller: controller,
-                  teacher: teacher,
-                  classUtc: _class,
-                );
+                return Container(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(20.0),
+                      topRight: const Radius.circular(20.0),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Center(
+                          child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: ColorApp.grey,
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(3),
+                            topRight: const Radius.circular(3),
+                          ),
+                        ),
+                        height: 3,
+                        width: 50,
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Center(
+                          child: Text(
+                            'Thông tin lớp',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        thickness: 0.5,
+                        height: 5,
+                      ),
+                      Expanded(
+                        child: InfoDetailClass(
+                          teacher: teacher,
+                          classUtc: _class,
+                          controller: controller,
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/images/path@2x.png',
+                        width: size.width,
+                        fit: BoxFit.fill,
+                      )
+                    ],
+                  ),
+                ));
               },
             ),
           ),
@@ -375,6 +432,7 @@ class ItemNoti extends StatelessWidget {
   final Function function;
   final String idAttendend;
   final String timeAttendend;
+  final int numberComment;
   ItemNoti(
       {this.avatar,
       this.userName,
@@ -384,7 +442,8 @@ class ItemNoti extends StatelessWidget {
       this.numberFile,
       this.function,
       this.idAttendend,
-      this.timeAttendend});
+      this.timeAttendend,
+      this.numberComment});
 
   @override
   Widget build(BuildContext context) {
@@ -559,7 +618,6 @@ class ItemNoti extends StatelessWidget {
           ),
           Container(
               width: size.width,
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -575,36 +633,19 @@ class ItemNoti extends StatelessWidget {
                     ),
                   ],
                   border: Border.all(color: ColorApp.lightGrey, width: 1)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Load comment đầu tiên Load comment đầu tiên Load comment đầu tiên Load comment đầu tiêns',
-                          softWrap: true,
-                          textAlign: TextAlign.start,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NewCommentClass()));
-                    },
-                    child: Text(
-                      'Thêm nhận xét của lớp học',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ],
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewCommentClass()));
+                },
+                child: Text(
+                  numberComment != null
+                      ? numberComment.toString() + ' nhận xét của lớp học'
+                      : 'Thêm nhận xét của lớp học',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ))
         ],
       ),

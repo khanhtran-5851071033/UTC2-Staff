@@ -173,273 +173,231 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-        child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(20.0),
-          topRight: const Radius.circular(20.0),
-        ),
-      ),
-      child: Column(
-        children: [
-          Center(
-              child: Container(
-            margin: EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: ColorApp.grey,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(3),
-                topRight: const Radius.circular(3),
-              ),
-            ),
-            height: 3,
-            width: 50,
-          )),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              child: Text(
-                'Thông tin lớp',
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-          Divider(
-            thickness: 0.5,
-            height: 5,
-          ),
-          Expanded(
-            child: ListView.builder(
-              controller: widget.controller,
-              itemCount: 1,
-              itemBuilder: (_, index) {
-                return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    // child:
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(4),
-                              child: CircleAvatar(
-                                backgroundColor: ColorApp.lightGrey,
-                                backgroundImage: CachedNetworkImageProvider(
-                                    widget.teacher.avatar),
-                              ),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            controller: widget.controller,
+            itemCount: 1,
+            itemBuilder: (_, index) {
+              return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  // child:
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            child: CircleAvatar(
+                              backgroundColor: ColorApp.lightGrey,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  widget.teacher.avatar),
                             ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.teacher.name != null
-                                      ? 'Giảng viên phụ trách : ' +
-                                          widget.teacher.name
-                                      : '',
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.teacher.email != null
-                                      ? 'Email giảng viên : ' +
-                                          widget.teacher.email
-                                      : '',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.classUtc.name != null
-                                      ? 'Tên lớp : ' + widget.classUtc.name
-                                      : '',
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.classUtc.id != null
-                                      ? 'Mã lớp : ' + widget.classUtc.id
-                                      : '',
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.classUtc.note != null
-                                      ? 'Mô tả : ' + widget.classUtc.note
-                                      : '',
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.classUtc.date != null
-                                      ? 'Ngày tạo : ' +
-                                          DateFormat('HH:mm - dd-MM-yyyy')
-                                              .format(DateFormat(
-                                                      "yyyy-MM-dd HH:mm:ss")
-                                                  .parse(widget.classUtc.date))
-                                      : '',
-                                ),
-                              ],
-                            ),
-                            //qr
-                            Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorApp.blue.withOpacity(0.09),
-                                    spreadRadius: 3,
-                                    blurRadius: 5,
-                                    offset: Offset(
-                                        2, 3), // changes position of shadow
-                                  ),
-                                ],
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                // border:
-                                //     Border.all(color: ColorApp.lightGrey)
-                              ),
-                              child: QrImage(
-                                data: widget.classUtc.id,
-                                embeddedImage:
-                                    AssetImage('assets/images/logoUTC.png'),
-                                version: QrVersions.auto,
-                                size: 100,
-                                gapless: false,
-                                embeddedImageStyle: QrEmbeddedImageStyle(
-                                  size: Size(15, 15),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child: Text(
-                            'Danh sách lớp',
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        headerTable(),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(width: 2))),
-                          child: ListView.builder(
-                              itemCount: 30,
-                              itemBuilder: (context, index) {
-                                return rowTable((index + 1), 'Trần Quốc Khánh',
-                                    "5851071033", "CNTT.k58");
-                              }),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Spacer(),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Hồ Chí Minh, ngày ' +
-                                      DateTime.now().day.toString() +
-                                      ' tháng ' +
-                                      DateTime.now().month.toString() +
-                                      ' năm ' +
-                                      DateTime.now().year.toString(),
-                                ),
-                                TextButton.icon(
-                                    onPressed: () {
-                                      showAlertDialog(context);
-                                    },
-                                    icon: Icon(
-                                      Icons.edit,
-                                      size: 13,
-                                    ),
-                                    label: Text("Ký tên")),
-                                Container(
-                                  height: 50,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Opacity(
-                                          opacity: 0.08,
-                                          child: Image.asset(
-                                              'assets/images/logoUTC.png')),
-                                      AnimatedCrossFade(
-                                          firstChild: data != null
-                                              ? Image.memory(
-                                                  data,
-                                                )
-                                              : Container(),
-                                          secondChild: Container(),
-                                          crossFadeState: isSignature
-                                              ? CrossFadeState.showFirst
-                                              : CrossFadeState.showSecond,
-                                          duration:
-                                              Duration(milliseconds: 300)),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  widget.teacher.name,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.teacher.name != null
+                                    ? 'Giảng viên phụ trách : ' +
+                                        widget.teacher.name
+                                    : '',
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.teacher.email != null
+                                    ? 'Email giảng viên : ' +
+                                        widget.teacher.email
+                                    : '',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.classUtc.name != null
+                                    ? 'Tên lớp : ' + widget.classUtc.name
+                                    : '',
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.classUtc.id != null
+                                    ? 'Mã lớp : ' + widget.classUtc.id
+                                    : '',
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.classUtc.note != null
+                                    ? 'Mô tả : ' + widget.classUtc.note
+                                    : '',
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.classUtc.date != null
+                                    ? 'Ngày tạo : ' +
+                                        DateFormat('HH:mm - dd-MM-yyyy').format(
+                                            DateFormat("yyyy-MM-dd HH:mm:ss")
+                                                .parse(widget.classUtc.date))
+                                    : '',
+                              ),
+                            ],
+                          ),
+                          //qr
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorApp.blue.withOpacity(0.09),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      2, 3), // changes position of shadow
                                 ),
                               ],
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              // border:
+                              //     Border.all(color: ColorApp.lightGrey)
                             ),
-                          ],
+                            child: QrImage(
+                              data: widget.classUtc.id,
+                              embeddedImage:
+                                  AssetImage('assets/images/logoUTC.png'),
+                              version: QrVersions.auto,
+                              size: 100,
+                              gapless: false,
+                              embeddedImageStyle: QrEmbeddedImageStyle(
+                                size: Size(15, 15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Center(
+                        child: Text(
+                          'Danh sách lớp',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
                         ),
-                      ],
-                    ));
-              },
-            ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      headerTable(),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 2))),
+                        child: ListView.builder(
+                            itemCount: 30,
+                            itemBuilder: (context, index) {
+                              return rowTable((index + 1), 'Trần Quốc Khánh',
+                                  "5851071033", "CNTT.k58");
+                            }),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Spacer(),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Hồ Chí Minh, ngày ' +
+                                    DateTime.now().day.toString() +
+                                    ' tháng ' +
+                                    DateTime.now().month.toString() +
+                                    ' năm ' +
+                                    DateTime.now().year.toString(),
+                              ),
+                              TextButton.icon(
+                                  onPressed: () {
+                                    showAlertDialog(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 13,
+                                  ),
+                                  label: Text("Ký tên")),
+                              Container(
+                                height: 50,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Opacity(
+                                        opacity: 0.08,
+                                        child: Image.asset(
+                                            'assets/images/logoUTC.png')),
+                                    AnimatedCrossFade(
+                                        firstChild: data != null
+                                            ? Image.memory(
+                                                data,
+                                              )
+                                            : Container(),
+                                        secondChild: Container(),
+                                        crossFadeState: isSignature
+                                            ? CrossFadeState.showFirst
+                                            : CrossFadeState.showSecond,
+                                        duration: Duration(milliseconds: 300)),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.teacher.name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ));
+            },
           ),
-          Image.asset(
-            'assets/images/path@2x.png',
-            width: size.width,
-            fit: BoxFit.fill,
-          )
-        ],
-      ),
-    ));
+        ),
+        Image.asset(
+          'assets/images/path@2x.png',
+          width: size.width,
+          fit: BoxFit.fill,
+        )
+      ],
+    );
   }
 }

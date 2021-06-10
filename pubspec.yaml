@@ -75,8 +75,8 @@ dependencies:
   open_file: ^3.2.1
   flutter_local_notifications: ^6.0.0
   flutter_native_timezone: ^1.0.10
-  syncfusion_flutter_signaturepad: ^19.1.66-beta
   signature: ^4.1.1
+  url_launcher: ^6.0.6
   
 
  

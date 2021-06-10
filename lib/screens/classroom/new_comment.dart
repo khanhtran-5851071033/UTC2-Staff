@@ -76,7 +76,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
           onRefresh: () {},
           child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: 5,
+              itemCount: 3,
               itemBuilder: (context, index) {
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 7),
@@ -93,6 +93,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               padding: EdgeInsets.all(4),
@@ -132,9 +133,9 @@ class _NewCommentClassState extends State<NewCommentClass> {
                                     height: 5,
                                   ),
                                   Text(
-                                    'Điểm danhhttps://lh3.googleusercontent.com/a/AATXAJz3f95XAgjw2BkmaR53xLtc4wV8Q2dOY-5JXKrd=s96-c',
+                                    'ttps://lh3.googleusercontent.com/a/AATXAJz3f95XAgjw2BkmaR5lh3.googleusercontent.com/a/AATXAJz3f95XAgjw2BkmaR53xLtc4wV8Q2dOY-5JXKrd=s96-c',
                                     softWrap: true,
-                                    maxLines: 2,
+                                    maxLines: 5,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                         color: ColorApp.black, fontSize: 15),

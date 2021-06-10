@@ -190,7 +190,7 @@ class MyLocalNotification {
             styleInformation: bigPictureStyleInformation);
     final NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-    await notifications.show(0,nameTeacher +' - '+chanelName,
+    await notifications.show(0, nameTeacher + ' - ' + chanelName,
         title + '  -   Mã lớp: ' + idQR, platformChannelSpecifics);
   }
 

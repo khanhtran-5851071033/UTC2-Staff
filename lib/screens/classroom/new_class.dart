@@ -31,7 +31,6 @@ class _NewClassState extends State<NewClass> {
 
   GlobalKey globalKey = new GlobalKey();
 
-
   Future<void> _captureAndSharePng() async {
     RenderRepaintBoundary boundary =
         globalKey.currentContext.findRenderObject();
@@ -113,10 +112,20 @@ class _NewClassState extends State<NewClass> {
                     'date': DateTime.now().toString()
                   };
                   classdb.createClass(dataClass, idClass);
-                  // for (var e in listInvite) {
-                  //   PushNotiFireBaseAPI.pushNotiToken('Lớp mới ' + nameClass,
-                  //       'Tham gia lớp ' + idClass, {}, e.token);
-                  // }
+                  for (var e in listInvite) {
+                    PushNotiFireBaseAPI.pushNotiToken(
+                        nameClass,
+                        idClass,
+                        {
+                          "idNoti": 'newClass',
+                          "msg": idClass,
+                          "idChannel": idClass,
+                          "className": nameClass,
+                          "classDescription": description,
+                          "nameTeacher": widget.teacher.name
+                        },
+                        e.token);
+                  }
 
                   await FirebaseMessaging.instance.subscribeToTopic(idClass);
                   PushNotiFireBaseAPI.pushNotiTopic(

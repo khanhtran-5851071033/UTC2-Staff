@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudentDatabase {
   Future<void> createStudent(Map<String, String> dataStudent, String id) async {
-    print('create student');
+   
     await FirebaseFirestore.instance
         .collection('Student')
         .doc(id)
@@ -33,13 +33,12 @@ class StudentDatabase {
         .where('email', isEqualTo: email)
         .get();
     list = data.docs.map((e) => Student(e)).toList();
-    print('Get student ' + list[0].email);
+  
     return list[0];
   }
 
   static Future<void> updateStudentData(
       String msv, Map<String, String> data) async {
-    print(msv);
     FirebaseFirestore.instance.collection('Student').doc(msv).update(data);
   }
 

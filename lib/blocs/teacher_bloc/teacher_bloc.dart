@@ -20,9 +20,9 @@ class TeacherBloc extends Bloc<TeacherEvent, TeacherState> {
         yield TeacherLoading();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var userEmail = prefs.getString('userEmail');
-        print('Prefs ' + userEmail.toString());
+      
         Teacher teacher = await TeacherDatabase.getTeacherData(userEmail);
-        print('teacher ' + teacher.email);
+       
         if (teacher != null) {
           yield TeacherLoaded(teacher);
         } else {

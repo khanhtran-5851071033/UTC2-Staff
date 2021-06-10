@@ -19,7 +19,6 @@ import 'service/firestore/teacher_database.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
 }
 
 void main() async {
@@ -86,7 +85,7 @@ class _HomePageState extends State<HomePage> {
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.data['idNoti'] == 'newNoti' && message.data['isAtten'] == 'false') {
-        print('Thông báo new Notity--------------------------------------');
+      ////  print('Thông báo new Notity--------------------------------------');
         MyLocalNotification.showNotification(
           notifications,
           message.data['idChannel'],
@@ -108,7 +107,7 @@ class _HomePageState extends State<HomePage> {
           message.data['timeAtten'],
         );
       } else {
-        print('Thông báo NEW CLASS-------------------------------------');
+       // print('Thông báo NEW CLASS-------------------------------------');
         MyLocalNotification.showNotificationNewClass(
           notifications,
           message.data['nameTeacher'],
@@ -123,17 +122,13 @@ class _HomePageState extends State<HomePage> {
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('>>>>>>>>>>A new onMessageOpenedApp event');
+     
       Get.to(HomeScreen());
     });
-  //   FirebaseMessaging.instance.unsubscribeFromTopic('fcm_test');
-  //  // FirebaseMessaging.instance.subscribeToTopic('nen_nen');
-  //   // login();
+     FirebaseMessaging.instance.subscribeToTopic('fcm_test');
 
     getTokenFCM();
   }
-
-  // Future login() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +156,7 @@ class _HomePageState extends State<HomePage> {
   getTokenFCM() async {
     try {
       FirebaseMessaging.instance.getToken().then((token) async {
-        print('token : ' + token);
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('token', token);
         if (prefs.getString('userEmail') != null) {
           setState(() {
             body = HomeScreen();

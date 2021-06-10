@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PostDatabase {
   Future<void> createPost(
       Map<String, String> dataPost, String idClass, String idPost) async {
-    print(idClass);
+   
     await FirebaseFirestore.instance
         .collection('Class')
         .doc(idClass)
