@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:utc2_staff/screens/classroom/report/info_atten.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -75,7 +76,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
               flex: 3,
               child: TextButton.icon(
                 onPressed: () {
-                  showAlertDialog(context);
+                  _showBottomSheet(context, widget.classUtc, widget.teacher);
                 },
                 label: Text('Chi tiết'),
                 icon: Icon(
@@ -91,154 +92,72 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
 
   String time = '09-07-2021';
   String attenden = 'Tất cả';
-
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: Text("Thoát"),
-      style: ButtonStyle(
-          tapTargetSize: MaterialTapTargetSize.padded,
-          shadowColor: MaterialStateProperty.all<Color>(Colors.lightBlue),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.blue)))),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = TextButton.icon(
-      icon: Icon(
-        Icons.check,
-        size: 13,
-      ),
-      label: Text("Xác nhận"),
-      style: ButtonStyle(
-          tapTargetSize: MaterialTapTargetSize.padded,
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue),
-          shadowColor: MaterialStateProperty.all<Color>(Colors.lightBlue),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: ColorApp.lightGrey, width: 2)))),
-      onPressed: () async {},
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      insetPadding: EdgeInsets.zero,
-      contentPadding: EdgeInsets.zero,
-      title: Center(child: Text('Chi tiết điểm danh')),
-      content: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.white, ColorApp.lightGrey])),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(4),
-                  child: CircleAvatar(
-                    backgroundColor: ColorApp.lightGrey,
-                    backgroundImage: CachedNetworkImageProvider(
-                        'https://lh3.googleusercontent.com/a/AATXAJz3f95XAgjw2BkmaR53xLtc4wV8Q2dOY-5JXKrd=s96-c'),
+  _showBottomSheet(BuildContext context, Class _class, Teacher teacher) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            color: Color.fromRGBO(0, 0, 0, 0.001),
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.5,
+              minChildSize: 0.2,
+              maxChildSize: 0.95,
+              builder: (_, controller) {
+                return Container(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(20.0),
+                      topRight: const Radius.circular(20.0),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Trần Quốc Khánh',
-                        style: TextStyle(
-                            color: ColorApp.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                      Center(
+                          child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: ColorApp.grey,
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(3),
+                            topRight: const Radius.circular(3),
+                          ),
+                        ),
+                        height: 3,
+                        width: 50,
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Center(
+                          child: Text(
+                            'Chi tiết điểm danh',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
                       ),
-                      Text(
-                        '5851071033',
-                        softWrap: true,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(color: ColorApp.black, fontSize: 15),
+                      Divider(
+                        thickness: 0.5,
+                        height: 5,
                       ),
+                      Expanded(
+                          child: InfoAteen(
+                              widget.teacher, widget.classUtc, controller)),
                     ],
                   ),
-                ),
-              ],
+                ));
+              },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('Hạn điểm danh : '), Text('10:50 - 21-07-2021')],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Có mặt lúc : ',
-                ),
-                Text('10:50')
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Vị trí : ',
-                ),
-                Expanded(
-                    child: Text(
-                        'dsadsadsadsaddddddddddddddddddddđxxxxxxxxxxxxxxxxxxsadsadsadda'))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Tọa độ : ',
-                ),
-                Expanded(child: Text('106.665565,10.66866'))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Trạng thái : ',
-                ),
-                Expanded(child: Text('Thành công'))
-              ],
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        continueButton,
-        cancelButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
+          ),
+        );
       },
     );
   }

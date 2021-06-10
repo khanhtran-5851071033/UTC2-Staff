@@ -311,11 +311,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           controller: controller,
                         ),
                       ),
-                      Image.asset(
-                        'assets/images/path@2x.png',
-                        width: size.width,
-                        fit: BoxFit.fill,
-                      )
                     ],
                   ),
                 ));
