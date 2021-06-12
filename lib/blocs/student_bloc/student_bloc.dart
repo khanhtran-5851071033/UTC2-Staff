@@ -10,11 +10,29 @@ part 'student_state.dart';
 class StudentBloc extends Bloc<StudentEvent, StudentState> {
   StudentBloc() : super(StudentInitial());
   List<Student> listStudent = [];
+  List<StudentOff> listStudentOff = [];
   @override
   Stream<StudentState> mapEventToState(
     StudentEvent event,
   ) async* {
     switch (event.runtimeType) {
+      case GetListStudentOfClassEvent:
+        yield LoadingStudentState();
+        listStudentOff =
+            await StudentDatabase.getListStudentsOfClass(event.props[0]);
+
+        if (listStudentOff.isNotEmpty) {
+          listStudent = await StudentDatabase.getListStudentsData();
+          List<Student> newLit = [];
+          Student a;
+          for (var e in listStudentOff) {
+            a = listStudent.where((i) => i.id == e.id).toList().first;
+            newLit.add(a);
+          }
+          yield LoadedStudentState(newLit);
+        } else
+          yield LoadErrorStudentState('Chưa có sinh viên nào tham gia vào lớp');
+        break;
       case GetListStudentEvent:
         yield LoadingStudentState();
         listStudent = await StudentDatabase.getListStudentsData();
@@ -22,7 +40,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         if (listStudent.isNotEmpty)
           yield LoadedStudentState(listStudent);
         else
-          yield LoadErrorStudentState();
+          yield LoadErrorStudentState('Chưa có sinh viên nào tham gia vào App');
         break;
       case FilterListStudentEvent:
         yield LoadingStudentState();
@@ -98,7 +116,8 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
           }
           yield LoadedStudentState(newList);
         } catch (e) {
-          yield LoadErrorStudentState();
+          yield LoadErrorStudentState(
+              'Chưa có sinh viên nào có kết quả phù hợp');
         }
         break;
       default:

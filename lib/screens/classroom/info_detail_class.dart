@@ -2,9 +2,12 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:signature/signature.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -44,9 +47,9 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(flex: 1, child: textHeader('STT')),
-          Expanded(flex: 5, child: textHeader('Họ và tên')),
+          Expanded(flex: 4, child: textHeader('Họ và tên')),
           Expanded(flex: 3, child: textHeader('Mã sinh viên')),
-          Expanded(flex: 2, child: textHeader('Lớp')),
+          Expanded(flex: 3, child: textHeader('Lớp')),
         ],
       ),
     );
@@ -62,9 +65,9 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(flex: 1, child: textRow(stt.toString())),
-          Expanded(flex: 5, child: textRow(name)),
+          Expanded(flex: 4, child: textRow(name)),
           Expanded(flex: 3, child: textRow(msv)),
-          Expanded(flex: 2, child: textRow(className)),
+          Expanded(flex: 3, child: textRow(className)),
         ],
       ),
     );
@@ -162,6 +165,14 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
         return alert;
       },
     );
+  }
+
+  StudentBloc studentBloc = new StudentBloc();
+  @override
+  void initState() {
+    studentBloc = BlocProvider.of<StudentBloc>(context);
+    studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id));
+    super.initState();
   }
 
   @override
@@ -316,16 +327,45 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                       SizedBox(
                         height: 5,
                       ),
-                      Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                            border: Border(bottom: BorderSide(width: 2))),
-                        child: ListView.builder(
-                            itemCount: 30,
-                            itemBuilder: (context, index) {
-                              return rowTable((index + 1), 'Trần Quốc Khánh',
-                                  "5851071033", "CNTT.k58");
-                            }),
+                      BlocBuilder<StudentBloc, StudentState>(
+                        builder: (context, state) {
+                          if (state is StudentInitial) {
+                            return SpinKitChasingDots(
+                              color: ColorApp.lightBlue,
+                            );
+                          } else if (state is LoadingStudentState) {
+                            return SpinKitChasingDots(
+                              color: ColorApp.lightBlue,
+                            );
+                          } else if (state is LoadedStudentState) {
+                            return Container(
+                              height: 300,
+                              decoration: BoxDecoration(
+                                  border: Border(bottom: BorderSide(width: 2))),
+                              child: ListView.builder(
+                                  itemCount: state.listStudent.length,
+                                  itemBuilder: (context, index) {
+                                    return rowTable(
+                                      (index + 1),
+                                      state.listStudent[index].name,
+                                      state.listStudent[index].id,
+                                      state.listStudent[index].lop,
+                                    );
+                                  }),
+                            );
+                          } else if (state is LoadErrorStudentState) {
+                            return Center(
+                                child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                state.error,
+                                style: TextStyle(
+                                    fontSize: 20, color: ColorApp.red),
+                              ),
+                            ));
+                          } else
+                            return Container();
+                        },
                       ),
                       SizedBox(
                         height: 10,

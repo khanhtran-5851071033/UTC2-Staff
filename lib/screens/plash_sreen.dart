@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:utc2_staff/screens/login/login_form.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
-class LoginScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -66,7 +66,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  LoginForm(),
                   Image.asset(
                     "assets/images/path@2x.png",
                     width: size.width,

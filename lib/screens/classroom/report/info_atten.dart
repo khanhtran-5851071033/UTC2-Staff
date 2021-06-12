@@ -7,12 +7,19 @@ import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
-class InfoAteen extends StatelessWidget {
+class InfoAteen extends StatefulWidget {
   final Teacher teacher;
   final Class classUtc;
   final ScrollController controller;
   InfoAteen(this.teacher, this.classUtc, this.controller);
+
+  @override
+  _InfoAteenState createState() => _InfoAteenState();
+}
+
+class _InfoAteenState extends State<InfoAteen> {
   bool isCheck = true;
+
   Future<void> _launchInWebViewWithJavaScript(String url) async {
     if (await canLaunch(url)) {
       await launch(
@@ -32,7 +39,7 @@ class InfoAteen extends StatelessWidget {
     return Column(children: [
       Expanded(
           child: ListView.builder(
-              controller: controller,
+              controller: widget.controller,
               itemCount: 1,
               itemBuilder: (_, index) {
                 return Container(
@@ -48,20 +55,20 @@ class InfoAteen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  classUtc.id != null
-                                      ? 'Mã điểm danh : ' + classUtc.id
+                                  widget.classUtc.id != null
+                                      ? 'Mã điểm danh : ' + widget.classUtc.id
                                       : '',
                                 ),
                                 SizedBox(
                                   height: 5,
                                 ),
                                 Text(
-                                  classUtc.date != null
+                                  widget.classUtc.date != null
                                       ? 'Hạn : ' +
                                           DateFormat('HH:mm - dd-MM-yyyy')
                                               .format(DateFormat(
                                                       "yyyy-MM-dd HH:mm:ss")
-                                                  .parse(classUtc.date))
+                                                  .parse(widget.classUtc.date))
                                       : '',
                                 ),
                                 SizedBox(
@@ -87,7 +94,7 @@ class InfoAteen extends StatelessWidget {
                                 //     Border.all(color: ColorApp.lightGrey)
                               ),
                               child: QrImage(
-                                data: classUtc.id,
+                                data: widget.classUtc.id,
                                 embeddedImage:
                                     AssetImage('assets/images/logoUTC.png'),
                                 version: QrVersions.auto,
@@ -136,7 +143,7 @@ class InfoAteen extends StatelessWidget {
                                       backgroundColor: ColorApp.lightGrey,
                                       backgroundImage:
                                           CachedNetworkImageProvider(
-                                              teacher.avatar),
+                                              widget.teacher.avatar),
                                     ),
                                   ),
                                   SizedBox(
@@ -147,16 +154,18 @@ class InfoAteen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        teacher.name != null
-                                            ? 'Sinh viên : ' + teacher.name
+                                        widget.teacher.name != null
+                                            ? 'Sinh viên : ' +
+                                                widget.teacher.name
                                             : '',
                                       ),
                                       SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        teacher.id != null
-                                            ? 'Mã sinh viên : ' + teacher.id
+                                        widget.teacher.id != null
+                                            ? 'Mã sinh viên : ' +
+                                                widget.teacher.id
                                             : '',
                                       ),
                                     ],
@@ -179,13 +188,14 @@ class InfoAteen extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          classUtc.date != null
+                                          widget.classUtc.date != null
                                               ? 'Có mặt lúc : ' +
                                                   DateFormat(
                                                           'HH:mm - dd-MM-yyyy')
                                                       .format(DateFormat(
                                                               "yyyy-MM-dd HH:mm:ss")
-                                                          .parse(classUtc.date))
+                                                          .parse(widget
+                                                              .classUtc.date))
                                               : '',
                                         ),
                                         Icon(
@@ -205,8 +215,8 @@ class InfoAteen extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          classUtc.id != null
-                                              ? 'Vị trí : ' + classUtc.id
+                                          widget.classUtc.id != null
+                                              ? 'Vị trí : ' + widget.classUtc.id
                                               : '',
                                         ),
                                         Icon(

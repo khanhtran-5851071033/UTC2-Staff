@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/screens/classroom/report/report_attenden_class.dart';
 import 'package:utc2_staff/screens/classroom/report/report_info_class.dart';
+import 'package:utc2_staff/screens/plash_sreen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 
@@ -81,7 +82,10 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                                         )));
                           }
                           if (index == 1) {
-                            print('1');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SplashScreen()));
                           }
                           if (index == 2) {
                             Navigator.push(

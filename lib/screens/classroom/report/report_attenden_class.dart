@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/screens/classroom/report/info_atten.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';

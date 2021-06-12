@@ -1,3 +1,4 @@
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
       'link': 'http://vanthu.utc2.edu.vn:85/HanhChinhCong/'
     },
   ];
+  Future<void> _launchInWebViewWithJavaScript(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   )),
                   child: ListTile(
                     onTap: () {
+                      _launchInWebViewWithJavaScript(service[index]['link']);
                       Navigator.of(context).pop();
                       widget.linkWeb(service[index]['link']);
                     },

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudentDatabase {
   Future<void> createStudent(Map<String, String> dataStudent, String id) async {
-   
     await FirebaseFirestore.instance
         .collection('Student')
         .doc(id)
@@ -33,9 +32,20 @@ class StudentDatabase {
         .where('email', isEqualTo: email)
         .get();
     list = data.docs.map((e) => Student(e)).toList();
-  
+
     return list[0];
   }
+  static Future<Student> getStudent(String id) async {
+    List<Student> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Student')
+        .where('id', isEqualTo: id)
+        .get();
+    list = data.docs.map((e) => Student(e)).toList();
+
+    return list[0];
+  }
+
 
   static Future<void> updateStudentData(
       String msv, Map<String, String> data) async {
@@ -47,6 +57,25 @@ class StudentDatabase {
     var data = await FirebaseFirestore.instance.collection('Student').get();
     list = data.docs.map((e) => Student(e)).toList();
     return list;
+  }
+
+  static getListStudentsOfClass(String idClass) async {
+    List<StudentOff> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Class')
+        .doc(idClass)
+        .collection('Student')
+        .get();
+
+    list = data.docs.map((e) => StudentOff(e)).toList();
+    return list;
+  }
+}
+
+class StudentOff {
+  String id;
+  StudentOff(QueryDocumentSnapshot<Map<String, dynamic>> json) {
+    this.id = json['id'];
   }
 }
 

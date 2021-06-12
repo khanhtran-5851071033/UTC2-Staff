@@ -37,10 +37,10 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       child: Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: EdgeInsets.only(bottom: 10),
         width: size.width * 0.9,
         child: RawMaterialButton(
-          padding: EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(10.0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           fillColor: ColorApp.black,
@@ -89,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
                     )
             ],
           ),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.lightBlue,
         ),
       );
   }

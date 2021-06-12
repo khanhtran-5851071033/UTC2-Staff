@@ -70,12 +70,6 @@ class _HomePageState extends State<HomePage> {
       _fireBaseMessaging.requestPermission(
           alert: true, badge: true, sound: true, provisional: true);
     }
-
-    // LoginEmailBloc.getInstance().init();
-    // ConnectionStatusSingleton.getInstance()
-    //     .connectionChange
-    //     .listen(_updateConnectivity);
-    // _notificationPlugin = NotificationPlugin();
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage message) {
@@ -126,7 +120,6 @@ class _HomePageState extends State<HomePage> {
       Get.to(HomeScreen());
     });
      FirebaseMessaging.instance.subscribeToTopic('fcm_test');
-
     getTokenFCM();
   }
 
