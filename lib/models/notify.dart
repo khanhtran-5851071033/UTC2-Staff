@@ -1,4 +1,0 @@
-class Notify {
-  String title;
-  
-}
