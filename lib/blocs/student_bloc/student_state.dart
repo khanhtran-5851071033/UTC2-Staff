@@ -16,6 +16,7 @@ class LoadedStudentOffState extends StudentState {
 
   LoadedStudentOffState(this.listStudent);
 }
+
 class LoadedStudentState extends StudentState {
   final List<Student> listStudent;
 
@@ -24,6 +25,5 @@ class LoadedStudentState extends StudentState {
 
 class LoadErrorStudentState extends StudentState {
   final String error;
-
   LoadErrorStudentState(this.error);
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:utc2_staff/screens/classroom/report/report_attenden_class.dart';
 import 'package:utc2_staff/screens/classroom/report/report_info_class.dart';
 import 'package:utc2_staff/screens/plash_sreen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 
 import 'package:utc2_staff/utils/utils.dart';
@@ -10,8 +12,9 @@ import 'package:utc2_staff/utils/utils.dart';
 class ReportClassScreen extends StatefulWidget {
   final Teacher teacher;
   final Class classUtc;
+  final List<Post> listPost;
 
-  ReportClassScreen({this.teacher, this.classUtc});
+  ReportClassScreen({this.teacher, this.classUtc, this.listPost});
   @override
   _ReportClassScreenState createState() => _ReportClassScreenState();
 }
@@ -23,6 +26,14 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
     {'title': 'Điểm danh', 'icon': 'assets/icons/check.png'},
     {'title': 'Điểm bài Test', 'icon': 'assets/icons/test.png'},
   ];
+  List<Post> listPost = [];
+
+  @override
+  void initState() {
+    listPost =
+        widget.listPost.where((element) => element.idAtten != null).toList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +105,7 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                                     builder: (context) => ReportAttendenClass(
                                           teacher: widget.teacher,
                                           classUtc: widget.classUtc,
+                                          listPost: listPost,
                                         )));
                           }
                           if (index == 3) {

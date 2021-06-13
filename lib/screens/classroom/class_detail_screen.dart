@@ -39,6 +39,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   String deleteOrPin;
   Class _class;
   Teacher teacher;
+  List<Post> listPost = [];
   @override
   void initState() {
     super.initState();
@@ -100,6 +101,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                       builder: (context) => ReportClassScreen(
                             teacher: teacher,
                             classUtc: _class,
+                            listPost: listPost,
                           )));
             },
             icon: Image.asset(
@@ -157,6 +159,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
               child: BlocBuilder<PostBloc, PostState>(
                 builder: (context, state) {
                   if (state is LoadedPost) {
+                    listPost = state.list;
                     return Container(
                       // padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
                       decoration: BoxDecoration(

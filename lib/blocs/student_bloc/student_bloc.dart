@@ -16,6 +16,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     StudentEvent event,
   ) async* {
     switch (event.runtimeType) {
+     
       case GetListStudentOfClassEvent:
         yield LoadingStudentState();
         listStudentOff =

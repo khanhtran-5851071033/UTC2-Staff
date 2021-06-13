@@ -1,14 +1,26 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+import 'package:utc2_staff/blocs/atttend_student_bloc/attend_bloc.dart';
+import 'package:utc2_staff/blocs/atttend_student_bloc/attend_event.dart';
+import 'package:utc2_staff/blocs/atttend_student_bloc/attend_state.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/classroom/report/info_atten.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/post_database.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class ReportAttendenClass extends StatefulWidget {
   final Teacher teacher;
   final Class classUtc;
+  final List<Post> listPost;
 
-  ReportAttendenClass({this.teacher, this.classUtc});
+  ReportAttendenClass({this.teacher, this.classUtc, this.listPost});
   @override
   _ReportAttendenClassState createState() => _ReportAttendenClassState();
 }
@@ -42,11 +54,10 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Expanded(flex: 1, child: textHeader('STT')),
+          Expanded(flex: 3, child: textHeader('Điểm danh')),
           Expanded(flex: 4, child: textHeader('Họ và tên')),
           Expanded(flex: 3, child: textHeader('Mã sinh viên')),
           Expanded(flex: 2, child: textHeader('Lớp')),
-          Expanded(flex: 3, child: textHeader('Điểm danh')),
         ],
       ),
     );
@@ -54,44 +65,45 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
 
   Widget rowTable(
     int stt,
-    String name,
-    String msv,
-    String className,
+    Student student,
     bool isCheck,
   ) {
-    return Container(
-      color: stt.isEven
-          ? ColorApp.lightGrey.withOpacity(.2)
-          : Colors.blue.withOpacity(.08),
-      margin: EdgeInsets.only(bottom: 3),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(flex: 1, child: textRow(stt.toString())),
-          Expanded(flex: 4, child: textRow(name)),
-          Expanded(flex: 3, child: textRow(msv)),
-          Expanded(flex: 2, child: textRow(className)),
-          Expanded(
-              flex: 3,
-              child: TextButton.icon(
-                onPressed: () {
-                  _showBottomSheet(context, widget.classUtc, widget.teacher);
-                },
-                label: Text('Chi tiết'),
-                icon: Icon(
-                  isCheck ? Icons.check : Icons.close,
-                  size: 15,
-                  color: isCheck ? Colors.lightGreen : ColorApp.red,
-                ),
-              )),
-        ],
-      ),
-    );
+   
+          return Container(
+            color: stt.isEven
+                ? ColorApp.lightGrey.withOpacity(.2)
+                : Colors.blue.withOpacity(.08),
+            margin: EdgeInsets.only(bottom: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                    flex: 3,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        _showBottomSheet(context, widget.classUtc,
+                            widget.teacher, widget.listPost, student);
+                      },
+                      label: Text('Chi tiết'),
+                      icon: Icon(
+                        isCheck ? Icons.check : Icons.close,
+                        size: 15,
+                        color: isCheck != null ? Colors.lightGreen : ColorApp.red,
+                      ),
+                    )),
+                Expanded(
+                    flex: 4,
+                    child: textRow(stt.toString() + '. ' + student.name)),
+                Expanded(flex: 3, child: textRow(student.id)),
+                Expanded(flex: 2, child: textRow(student.lop)),
+              ],
+            ),
+          );
+        
   }
 
-  String time = '09-07-2021';
-  String attenden = 'Tất cả';
-  _showBottomSheet(BuildContext context, Class _class, Teacher teacher) {
+  _showBottomSheet(BuildContext context, Class _class, Teacher teacher,
+      List<Post> listPost, Student student) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -102,7 +114,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
           child: Container(
             color: Color.fromRGBO(0, 0, 0, 0.001),
             child: DraggableScrollableSheet(
-              initialChildSize: 0.5,
+              initialChildSize: 0.6,
               minChildSize: 0.2,
               maxChildSize: 0.95,
               builder: (_, controller) {
@@ -148,8 +160,8 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                         height: 5,
                       ),
                       Expanded(
-                          child: InfoAteen(
-                              widget.teacher, widget.classUtc, controller)),
+                          child: InfoAteen(widget.teacher, widget.classUtc,
+                              controller, student, listPost))
                     ],
                   ),
                 ));
@@ -159,6 +171,29 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
         );
       },
     );
+  }
+
+  List<String> timeAtten;
+  StudentBloc studentBloc = new StudentBloc();
+  String time = '';
+  String attenden = 'Tất cả';
+  String formatTime(String time) {
+    DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+    return DateFormat("HH:mm - dd/MM/yyyy").format(parseDate);
+  }
+
+  AttendStudentBloc attendStudentBloc = new AttendStudentBloc();
+  @override
+  void initState() {
+    studentBloc = BlocProvider.of<StudentBloc>(context);
+    studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id));
+    if (widget.listPost != null) {
+      timeAtten = widget.listPost.map((e) => formatTime(e.timeAtten)).toList();
+    }
+    if (timeAtten.length == widget.listPost.length) time = timeAtten.first;
+    attendStudentBloc = BlocProvider.of<AttendStudentBloc>(context);
+
+    super.initState();
   }
 
   @override
@@ -207,11 +242,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                   Filter(
                     title: 'Đợt điểm danh',
                     value: time,
-                    item: [
-                      '09-04-2021',
-                      '09-07-2021',
-                      '21-03-2021',
-                    ],
+                    item: timeAtten,
                     function: (val) {
                       setState(() {
                         time = val;
@@ -250,22 +281,45 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Container(
-                                height: size.height * 2 / 3,
-                                decoration: BoxDecoration(
-                                    border:
-                                        Border(bottom: BorderSide(width: 2))),
-                                child: ListView.builder(
-                                    itemCount: 30,
-                                    itemBuilder: (context, index) {
-                                      return rowTable(
-                                        (index + 1),
-                                        'Trần Quốc Khánh',
-                                        "5851071033",
-                                        "CNTT.k58",
-                                        index.isEven,
-                                      );
-                                    }),
+                              BlocBuilder<StudentBloc, StudentState>(
+                                builder: (context, state) {
+                                  if (state is StudentInitial) {
+                                    return SpinKitChasingDots(
+                                      color: ColorApp.lightBlue,
+                                    );
+                                  } else if (state is LoadingStudentState) {
+                                    return SpinKitChasingDots(
+                                      color: ColorApp.lightBlue,
+                                    );
+                                  } else if (state is LoadedStudentState) {
+                                    return Container(
+                                        height: size.height * 2 / 3,
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(width: 2))),
+                                        child: ListView.builder(
+                                            itemCount: state.listStudent.length,
+                                            itemBuilder: (context, index) {
+                                            
+                                              return rowTable(
+                                                  (index + 1),
+                                                  state.listStudent[index],
+                                                  true);
+                                            }));
+                                  } else if (state is LoadErrorStudentState) {
+                                    return Center(
+                                        child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        state.error,
+                                        style: TextStyle(
+                                            fontSize: 20, color: ColorApp.red),
+                                      ),
+                                    ));
+                                  } else
+                                    return Container();
+                                },
                               ),
                             ],
                           ),

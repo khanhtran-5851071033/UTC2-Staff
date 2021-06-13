@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:utc2_staff/blocs/atttend_student_bloc/attend_bloc.dart';
 import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
 import 'service/firestore/teacher_database.dart';
@@ -132,6 +134,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
         BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
         BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
+        BlocProvider<AttendStudentBloc>(create: (context) => AttendStudentBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

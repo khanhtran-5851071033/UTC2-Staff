@@ -35,6 +35,7 @@ class StudentDatabase {
 
     return list[0];
   }
+
   static Future<Student> getStudent(String id) async {
     List<Student> list = [];
     var data = await FirebaseFirestore.instance
@@ -45,7 +46,6 @@ class StudentDatabase {
 
     return list[0];
   }
-
 
   static Future<void> updateStudentData(
       String msv, Map<String, String> data) async {
@@ -69,6 +69,36 @@ class StudentDatabase {
 
     list = data.docs.map((e) => StudentOff(e)).toList();
     return list;
+  }
+
+  static getStudentsOfClassOfAttend(
+      String idClass, String idPost) async {
+    List<StudentAttend> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Class')
+        .doc(idClass)
+        .collection('Post')
+        .doc(idPost)
+        .collection('Student')
+        .get();
+
+    list = data.docs.map((e) => StudentAttend(e)).toList();
+    return list;
+  }
+}
+
+class StudentAttend {
+  String id;
+  String address;
+  String location;
+  String timeAttend;
+  String status;
+  StudentAttend(QueryDocumentSnapshot<Map<String, dynamic>> json) {
+    this.id = json['idStudent'];
+    this.address = json['address'];
+    this.location = json['location'];
+    this.timeAttend = json['time'];
+    this.status = json['status'];
   }
 }
 

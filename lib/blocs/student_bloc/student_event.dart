@@ -13,9 +13,11 @@ class GetListStudentOfClassEvent extends StudentEvent {
   final String idClass;
 
   GetListStudentOfClassEvent(this.idClass);
-   @override
+  @override
   List<Object> get props => [idClass];
 }
+
+
 
 class FilterListStudentEvent extends StudentEvent {
   final String khoa, lop, heDaoTao;
