@@ -71,8 +71,7 @@ class StudentDatabase {
     return list;
   }
 
-  static getStudentsOfClassOfAttend(
-      String idClass, String idPost) async {
+  static getStudentsOfClassOfAttend(String idClass, String idPost) async {
     List<StudentAttend> list = [];
     var data = await FirebaseFirestore.instance
         .collection('Class')
@@ -81,7 +80,7 @@ class StudentDatabase {
         .doc(idPost)
         .collection('Student')
         .get();
-
+    print(data.docs.length);
     list = data.docs.map((e) => StudentAttend(e)).toList();
     return list;
   }

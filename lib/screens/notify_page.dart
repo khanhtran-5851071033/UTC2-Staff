@@ -16,22 +16,10 @@ class _NotifyPageState extends State<NotifyPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  final blocNoti = NotiScraper();
-  String view = '';
-  @override
-  void initState() {
-    super.initState();
-    //  blocNoti.fetchProducts();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    blocNoti.fetchProducts();
-  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 3,
@@ -88,74 +76,7 @@ class _NotifyPageState extends State<NotifyPage>
         body: TabBarView(
           physics: BouncingScrollPhysics(),
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-              color: Colors.white,
-              child: RefreshIndicator(
-                color: ColorApp.blue,
-                displacement: 60,
-                onRefresh: () async {
-                  blocNoti.fetchProducts();
-                },
-                child: StreamBuilder<List<Noti>>(
-                    stream: blocNoti.stream,
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: size.width,
-                                  margin: EdgeInsets.symmetric(vertical: 7),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(
-                                          stops: [0.2, 0.9],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            Colors.white,
-                                            ColorApp.lightGrey
-                                          ])),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      blocNoti.getContent(
-                                          snapshot.data[index].link);
-                                      _showBottomSheet(
-                                        context,
-                                        size,
-                                        snapshot.data[index].tieude,
-                                        snapshot.data[index].thoigian,
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                            flex: 3,
-                                            child: leading(size,
-                                                snapshot.data[index].thoigian)),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          flex: 7,
-                                          child: title(
-                                              snapshot.data[index].tieude),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              })
-                          : SpinKitChasingDots(
-                              color: ColorApp.lightBlue,
-                            );
-                    }),
-              ),
-            ),
+            NotiWeb(),
             // Container(),
             Event(size: size),
             NotifyApp(size: size)
@@ -163,6 +84,24 @@ class _NotifyPageState extends State<NotifyPage>
         ),
       ),
     );
+  }
+}
+
+class NotiWeb extends StatefulWidget {
+  @override
+  _NotiWebState createState() => _NotiWebState();
+}
+
+class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  final blocNoti = NotiScraper();
+  String view = '';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    blocNoti.fetchProducts();
   }
 
   void _showBottomSheet(
@@ -181,7 +120,7 @@ class _NotifyPageState extends State<NotifyPage>
               child: DraggableScrollableSheet(
                 initialChildSize: 0.5,
                 minChildSize: 0.2,
-                maxChildSize: 0.85,
+                maxChildSize: .9,
                 builder: (_, controller) {
                   return Container(
                     decoration: BoxDecoration(
@@ -431,7 +370,6 @@ class _NotifyPageState extends State<NotifyPage>
                                   : SpinKitChasingDots(
                                       color: ColorApp.lightBlue,
                                     );
-                              ;
                             }),
                       ],
                     ),
@@ -442,6 +380,74 @@ class _NotifyPageState extends State<NotifyPage>
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+      color: Colors.white,
+      child: RefreshIndicator(
+        color: ColorApp.blue,
+        displacement: 60,
+        onRefresh: () async {
+         await blocNoti.fetchProducts();
+        },
+        child: StreamBuilder<List<Noti>>(
+            stream: blocNoti.stream,
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: size.width,
+                          margin: EdgeInsets.symmetric(vertical: 7),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                  stops: [0.2, 0.9],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.white, ColorApp.lightGrey])),
+                          child: TextButton(
+                            onPressed: () {
+                              blocNoti.getContent(snapshot.data[index].link);
+                              _showBottomSheet(
+                                context,
+                                size,
+                                snapshot.data[index].tieude,
+                                snapshot.data[index].thoigian,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                    flex: 3,
+                                    child: leading(
+                                        size, snapshot.data[index].thoigian)),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  flex: 7,
+                                  child: title(snapshot.data[index].tieude),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      })
+                  : SpinKitChasingDots(
+                      color: ColorApp.lightBlue,
+                    );
+            }),
+      ),
     );
   }
 }

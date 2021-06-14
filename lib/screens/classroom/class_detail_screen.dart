@@ -198,6 +198,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                         .parse(e.date);
 
                                 return ItemNoti(
+                                  teacher: teacher,
+                                  idClass: _class.id,
+                                  idPost: e.id,
                                   avatar: e.avatar,
                                   userName: e.name,
                                   title: e.title,
@@ -421,6 +424,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
 }
 
 class ItemNoti extends StatelessWidget {
+  final Teacher teacher;
+  final String idClass;
+  final String idPost;
   final String avatar;
   final String userName;
   final String time;
@@ -431,8 +437,12 @@ class ItemNoti extends StatelessWidget {
   final String idAttendend;
   final String timeAttendend;
   final int numberComment;
+
   ItemNoti(
-      {this.avatar,
+      {this.teacher,
+      this.idClass,
+      this.idPost,
+      this.avatar,
       this.userName,
       this.time,
       this.title,
@@ -636,7 +646,11 @@ class ItemNoti extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NewCommentClass()));
+                          builder: (context) => NewCommentClass(
+                                teacher: teacher,
+                                idClass: idClass,
+                                idPost: idPost,
+                              )));
                 },
                 child: Text(
                   numberComment != null
