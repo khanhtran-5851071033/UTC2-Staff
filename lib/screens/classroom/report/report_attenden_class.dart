@@ -68,8 +68,17 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
     Student student,
     bool isCheck,
   ) {
-   
-          return Container(
+    bool isShow = false;
+    if (attenden == 'Tất cả')
+      isShow = true;
+    else if (attenden == 'Có mặt' && isCheck)
+      isShow = true;
+    else if (attenden == 'Vắng' && !isCheck)
+      isShow = true;
+    else
+      isShow = false;
+    return isShow
+        ? Container(
             color: stt.isEven
                 ? ColorApp.lightGrey.withOpacity(.2)
                 : Colors.blue.withOpacity(.08),
@@ -88,7 +97,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                       icon: Icon(
                         isCheck ? Icons.check : Icons.close,
                         size: 15,
-                        color: isCheck != null ? Colors.lightGreen : ColorApp.red,
+                        color: isCheck ? Colors.lightGreen : ColorApp.red,
                       ),
                     )),
                 Expanded(
@@ -98,8 +107,8 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                 Expanded(flex: 2, child: textRow(student.lop)),
               ],
             ),
-          );
-        
+          )
+        : Container();
   }
 
   _showBottomSheet(BuildContext context, Class _class, Teacher teacher,
@@ -161,7 +170,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                       ),
                       Expanded(
                           child: InfoAteen(widget.teacher, widget.classUtc,
-                              controller, student, listPost))
+                              controller, student, listPost, time))
                     ],
                   ),
                 ));
@@ -173,9 +182,9 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
     );
   }
 
-  List<String> timeAtten;
+  // List<String> timeAtten;
   StudentBloc studentBloc = new StudentBloc();
-  String time = '';
+  Post time;
   String attenden = 'Tất cả';
   String formatTime(String time) {
     DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
@@ -188,11 +197,14 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
     studentBloc = BlocProvider.of<StudentBloc>(context);
     studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id));
     if (widget.listPost != null) {
-      timeAtten = widget.listPost.map((e) => formatTime(e.timeAtten)).toList();
+      time = widget.listPost[0];
+      // timeAtten = widget.listPost.map((e) => formatTime(e.timeAtten)).toList();
     }
-    if (timeAtten.length == widget.listPost.length) time = timeAtten.first;
+    // if (timeAtten.length == widget.listPost.length) time = timeAtten.first;
     attendStudentBloc = BlocProvider.of<AttendStudentBloc>(context);
-
+    print(time.id);
+    attendStudentBloc
+        .add(GetListStudentOfClassOfAttendEvent(widget.classUtc.id, time.id));
     super.initState();
   }
 
@@ -240,17 +252,18 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Filter(
-                    title: 'Đợt điểm danh',
+                    title: 'Đợt',
                     value: time,
-                    item: timeAtten,
+                    item: widget.listPost,
                     function: (val) {
                       setState(() {
                         time = val;
                       });
+                      attendStudentBloc.add(GetListStudentOfClassOfAttendEvent(
+                          widget.classUtc.id, time.id));
                     },
-                    isSearch: false,
                   ),
-                  Filter(
+                  Filter1(
                     title: 'Lọc',
                     value: attenden,
                     item: [
@@ -263,7 +276,6 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                         attenden = val;
                       });
                     },
-                    isSearch: true,
                   ),
                 ],
               ),
@@ -281,17 +293,30 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                               SizedBox(
                                 height: 5,
                               ),
-                              BlocBuilder<StudentBloc, StudentState>(
+                              BlocConsumer<AttendStudentBloc,
+                                  AttendStudentState>(
+                                listener: (context, state) {
+                                  if (state is LoadedAttend) {
+                                    for (var p in widget.listPost) {
+                                      if (p.id == state.idPost) {
+                                        setState(() {
+                                          time = p;
+                                        });
+                                        break;
+                                      }
+                                    }
+                                  }
+                                },
                                 builder: (context, state) {
-                                  if (state is StudentInitial) {
+                                  if (state is AttendInitial) {
                                     return SpinKitChasingDots(
                                       color: ColorApp.lightBlue,
                                     );
-                                  } else if (state is LoadingStudentState) {
+                                  } else if (state is LoadingAttend) {
                                     return SpinKitChasingDots(
                                       color: ColorApp.lightBlue,
                                     );
-                                  } else if (state is LoadedStudentState) {
+                                  } else if (state is LoadedAttend) {
                                     return Container(
                                         height: size.height * 2 / 3,
                                         decoration: BoxDecoration(
@@ -300,13 +325,15 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                                         child: ListView.builder(
                                             itemCount: state.listStudent.length,
                                             itemBuilder: (context, index) {
-                                            
                                               return rowTable(
                                                   (index + 1),
                                                   state.listStudent[index],
-                                                  true);
+                                                  state.attend[index] ==
+                                                          'Thành công'
+                                                      ? true
+                                                      : false);
                                             }));
-                                  } else if (state is LoadErrorStudentState) {
+                                  } else if (state is LoadErrorAttend) {
                                     return Center(
                                         child: Padding(
                                       padding:
@@ -333,12 +360,50 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
 
 class Filter extends StatelessWidget {
   final String title;
+  final Post value;
+  final List<Post> item;
+  final Function function;
+
+  Filter({this.title, this.value, this.item, this.function});
+  String formatTime(String time) {
+    DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+    return DateFormat("HH:mm - dd/MM/yyyy").format(parseDate);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Text(title + ':   '),
+          DropdownButton<Post>(
+            value: value,
+            items: item.map((Post value) {
+              return new DropdownMenuItem<Post>(
+                value: value,
+                child: new Text(
+                  formatTime(value.timeAtten),
+                  style: TextStyle(color: ColorApp.mediumBlue),
+                ),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              function(newValue);
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class Filter1 extends StatelessWidget {
+  final String title;
   final String value;
   final List<String> item;
   final Function function;
-  final bool isSearch;
 
-  Filter({this.title, this.value, this.item, this.function, this.isSearch});
+  Filter1({this.title, this.value, this.item, this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -352,25 +417,21 @@ class Filter extends StatelessWidget {
               return new DropdownMenuItem<String>(
                 value: value,
                 child: Row(
-                  mainAxisAlignment: isSearch
-                      ? MainAxisAlignment.spaceAround
-                      : MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    isSearch
-                        ? Icon(
-                            value == 'Tất cả'
-                                ? null
-                                : value == 'Có mặt'
-                                    ? Icons.check
-                                    : Icons.close,
-                            size: 15,
-                            color: value == 'Tất cả'
-                                ? null
-                                : value == 'Có mặt'
-                                    ? Colors.lightGreen
-                                    : ColorApp.red,
-                          )
-                        : Container(),
+                    Icon(
+                      value == 'Tất cả'
+                          ? null
+                          : value == 'Có mặt'
+                              ? Icons.check
+                              : Icons.close,
+                      size: 15,
+                      color: value == 'Tất cả'
+                          ? null
+                          : value == 'Có mặt'
+                              ? Colors.lightGreen
+                              : ColorApp.red,
+                    ),
                     new Text(
                       value,
                       style: TextStyle(color: ColorApp.mediumBlue),

@@ -18,7 +18,6 @@ class GetListStudentOfClassEvent extends StudentEvent {
 }
 
 
-
 class FilterListStudentEvent extends StudentEvent {
   final String khoa, lop, heDaoTao;
 

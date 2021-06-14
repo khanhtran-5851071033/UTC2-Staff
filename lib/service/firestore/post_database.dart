@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PostDatabase {
   Future<void> createPost(
       Map<String, String> dataPost, String idClass, String idPost) async {
-   
     await FirebaseFirestore.instance
         .collection('Class')
         .doc(idClass)
@@ -32,6 +31,17 @@ class PostDatabase {
     return list;
   }
 
+  getPostByDate(String idClass, String timeAttend) async {
+    List<Post> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Class')
+        .doc(idClass)
+        .collection('Post')
+        .where('timeAtten', arrayContains: timeAttend)
+        .get();
+    list = data.docs.map((e) => Post(e)).toList();
+    return list[0];
+  }
 }
 
 class Post {

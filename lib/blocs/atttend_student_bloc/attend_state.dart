@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 
@@ -16,8 +14,10 @@ class LoadingAttend extends AttendStudentState {}
 
 class LoadedAttend extends AttendStudentState {
   final List<StudentAttend> list;
-
-  LoadedAttend(this.list);
+  final List attend;
+  final List<Student> listStudent;
+  final String idPost;
+  LoadedAttend(this.list, this.attend, this.listStudent,this.idPost);
 }
 
 class LoadErrorAttend extends AttendStudentState {

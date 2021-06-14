@@ -20,9 +20,10 @@ class InfoAteen extends StatefulWidget {
   final Class classUtc;
   final Student student;
   final List<Post> listPost;
+  final Post curPost;
   final ScrollController controller;
   InfoAteen(this.teacher, this.classUtc, this.controller, this.student,
-      this.listPost);
+      this.listPost, this.curPost);
 
   @override
   _InfoAteenState createState() => _InfoAteenState();
@@ -44,9 +45,8 @@ class _InfoAteenState extends State<InfoAteen> {
     }
   }
 
-  PageController controller =
-      PageController(initialPage: 0, viewportFraction: 0.9);
-  final ValueNotifier<int> _pageNotifier = new ValueNotifier<int>(0);
+  PageController controller;
+  ValueNotifier<int> _pageNotifier;
   int _curr = 0;
   // getSudentAttend(idClass, idPost, idStudent) async {
   //   var student = await StudentDatabase.getStudentsOfClassOfAttend(
@@ -59,6 +59,13 @@ class _InfoAteenState extends State<InfoAteen> {
     attenStudentBloc = BlocProvider.of<AttendStudentBloc>(context);
 
     super.initState();
+    // attenStudentBloc.add(GetListStudentOfClassOfAttendEvent(
+    //   widget.classUtc.id,
+    //   widget.curPost.id,
+    // ));
+    _curr = widget.listPost.indexOf(widget.curPost);
+    _pageNotifier = new ValueNotifier<int>(_curr);
+    controller = PageController(initialPage: _curr, viewportFraction: 0.9);
   }
 
   @override
@@ -316,190 +323,192 @@ class _InfoAteenState extends State<InfoAteen> {
                                                 );
                                               } else if (state
                                                   is LoadedAttend) {
-                                                StudentAttend
+                                                // if (state.list.isNotEmpty) {
+                                                List<StudentAttend>
                                                     listAttenOfStudent = state
-                                                            .list
-                                                            .where((element) =>
-                                                                element.id ==
-                                                                widget
-                                                                    .student.id)
-                                                            .toList()
-                                                            .first ??
-                                                        '';
-                                                return listAttenOfStudent ==
-                                                        null
+                                                        .list
+                                                        .where((element) =>
+                                                            element.id ==
+                                                            widget.student.id)
+                                                        .toList();
+                                                return listAttenOfStudent
+                                                            .length <=
+                                                        0
                                                     ? Container(
-                                                        child: Text('đasad'),
+                                                        child: Text(
+                                                            'Chưa điểm danh'),
                                                       )
-                                                    
-                                                : Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              listAttenOfStudent
-                                                                          .timeAttend !=
-                                                                      null
-                                                                  ? 'Có mặt lúc : ' +
-                                                                      DateFormat('HH:mm - dd-MM-yyyy')
-                                                                          .format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(listAttenOfStudent.timeAttend))
-                                                                  : '',
-                                                            ),
-                                                            Icon(
-                                                              isCheck
-                                                                  ? Icons
-                                                                      .check
-                                                                  : Icons
-                                                                      .close,
-                                                              size: 17,
-                                                              color: isCheck
-                                                                  ? Colors
-                                                                      .lightGreen
-                                                                  : ColorApp
-                                                                      .red,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Container(
-                                                          width: double
-                                                              .infinity,
-                                                          child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                child: Text(
-                                                                  listAttenOfStudent.address !=
+                                                    : Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  listAttenOfStudent[0]
+                                                                              .timeAttend !=
                                                                           null
-                                                                      ? 'Vị trí : ' +
-                                                                          listAttenOfStudent.address
-                                                                      : 'Vị trí : ',
-                                                                  softWrap:
-                                                                      true,
-                                                                  maxLines:
-                                                                      3,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .clip,
+                                                                      ? 'Có mặt lúc : ' +
+                                                                          DateFormat('HH:mm - dd-MM-yyyy')
+                                                                              .format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(listAttenOfStudent[0].timeAttend))
+                                                                      : '',
                                                                 ),
-                                                              ),
-                                                              Icon(
-                                                                isCheck
-                                                                    ? Icons
-                                                                        .check
-                                                                    : Icons
-                                                                        .close,
-                                                                size: 17,
-                                                                color: isCheck
-                                                                    ? Colors
-                                                                        .lightGreen
-                                                                    : ColorApp
-                                                                        .red,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Container(
-                                                          width: double
-                                                              .infinity,
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                'Tọa độ : ',
-                                                              ),
-                                                              Expanded(
-                                                                child: InkWell(
-                                                                    onTap: () {
-                                                                      _launchInWebViewWithJavaScript(
-                                                                          'https://www.google.com/maps/place/${listAttenOfStudent.location}');
-                                                                    },
+                                                                Icon(
+                                                                  isCheck
+                                                                      ? Icons
+                                                                          .check
+                                                                      : Icons
+                                                                          .close,
+                                                                  size: 17,
+                                                                  color: isCheck
+                                                                      ? Colors
+                                                                          .lightGreen
+                                                                      : ColorApp
+                                                                          .red,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
                                                                     child: Text(
-                                                                      listAttenOfStudent.location != null
-                                                                          ? listAttenOfStudent.location
-                                                                          : '',
-                                                                      style:
-                                                                          TextStyle(color: Colors.lightBlue),
+                                                                      listAttenOfStudent[0].address !=
+                                                                              null
+                                                                          ? 'Vị trí : ' +
+                                                                              listAttenOfStudent[0].address
+                                                                          : 'Vị trí : ',
                                                                       softWrap:
                                                                           true,
                                                                       maxLines:
-                                                                          2,
+                                                                          3,
                                                                       overflow:
-                                                                          TextOverflow.clip,
-                                                                    )),
+                                                                          TextOverflow
+                                                                              .clip,
+                                                                    ),
+                                                                  ),
+                                                                  Icon(
+                                                                    isCheck
+                                                                        ? Icons
+                                                                            .check
+                                                                        : Icons
+                                                                            .close,
+                                                                    size: 17,
+                                                                    color: isCheck
+                                                                        ? Colors
+                                                                            .lightGreen
+                                                                        : ColorApp
+                                                                            .red,
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              Icon(
-                                                                isCheck
-                                                                    ? Icons
-                                                                        .check
-                                                                    : Icons
-                                                                        .close,
-                                                                size: 17,
-                                                                color: isCheck
-                                                                    ? Colors
-                                                                        .lightGreen
-                                                                    : ColorApp
-                                                                        .red,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Tọa độ : ',
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: InkWell(
+                                                                        onTap: () {
+                                                                          _launchInWebViewWithJavaScript(
+                                                                              'https://www.google.com/maps/place/${listAttenOfStudent[0].location}');
+                                                                        },
+                                                                        child: Text(
+                                                                          listAttenOfStudent[0].location != null
+                                                                              ? listAttenOfStudent[0].location
+                                                                              : '',
+                                                                          style:
+                                                                              TextStyle(color: Colors.lightBlue),
+                                                                          softWrap:
+                                                                              true,
+                                                                          maxLines:
+                                                                              2,
+                                                                          overflow:
+                                                                              TextOverflow.clip,
+                                                                        )),
+                                                                  ),
+                                                                  Icon(
+                                                                    isCheck
+                                                                        ? Icons
+                                                                            .check
+                                                                        : Icons
+                                                                            .close,
+                                                                    size: 17,
+                                                                    color: isCheck
+                                                                        ? Colors
+                                                                            .lightGreen
+                                                                        : ColorApp
+                                                                            .red,
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Container(
-                                                          width: double
-                                                              .infinity,
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                'Trang thái : ',
-                                                              ),
-                                                              Expanded(
-                                                                  child:
-                                                                      Text(
-                                                                listAttenOfStudent.status !=
-                                                                        null
-                                                                    ? listAttenOfStudent
-                                                                        .status
-                                                                    : 'Thất bại',
-                                                                style: TextStyle(
-                                                                    color: listAttenOfStudent.status ==
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    'Trang thái : ',
+                                                                  ),
+                                                                  Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                    listAttenOfStudent[0].status !=
+                                                                            null
+                                                                        ? listAttenOfStudent[0]
+                                                                            .status
+                                                                        : 'Thất bại',
+                                                                    style: TextStyle(
+                                                                        color: listAttenOfStudent[0].status ==
+                                                                                'Thành công'
+                                                                            ? Colors.lightGreen
+                                                                            : ColorApp.red),
+                                                                  )),
+                                                                  Icon(
+                                                                    listAttenOfStudent[0].status ==
                                                                             'Thành công'
-                                                                        ? Colors.lightGreen
-                                                                        : ColorApp.red),
-                                                              )),
-                                                              Icon(
-                                                                listAttenOfStudent.status ==
-                                                                        'Thành công'
-                                                                    ? Icons
-                                                                        .check
-                                                                    : Icons
-                                                                        .close,
-                                                                size: 17,
-                                                                color: listAttenOfStudent.status ==
-                                                                        'Thành công'
-                                                                    ? Colors
-                                                                        .lightGreen
-                                                                    : ColorApp
-                                                                        .red,
+                                                                        ? Icons
+                                                                            .check
+                                                                        : Icons
+                                                                            .close,
+                                                                    size: 17,
+                                                                    color: listAttenOfStudent[0].status ==
+                                                                            'Thành công'
+                                                                        ? Colors
+                                                                            .lightGreen
+                                                                        : ColorApp
+                                                                            .red,
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ]);
+                                                            ),
+                                                          ]);
+                                                // } else {
+                                                //   return Text('Chưa điểm danh');
+                                                // }
                                               } else if (state
                                                   is LoadErrorAttend) {
                                                 return Center(
