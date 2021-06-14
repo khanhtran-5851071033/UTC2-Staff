@@ -81,48 +81,12 @@ class _HomePageState extends State<HomePage> {
       }
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.data['idNoti'] == 'newNoti' && message.data['isAtten'] == 'false') {
-      ////  print('Thông báo new Notity--------------------------------------');
-        MyLocalNotification.showNotification(
-          notifications,
-          message.data['idChannel'],
-          message.data['className'],
-          message.data['classDescription'],
-          message.notification.title,
-          message.notification.body,
-        );
-      } else if (message.data['idNoti'] == 'newNoti' &&
-          message.data['isAtten'] == 'true') {
-        MyLocalNotification.showNotificationAttenden(
-          notifications,
-          message.data['msg'],
-          message.data['idChannel'],
-          message.data['className'],
-          message.data['classDescription'],
-          message.notification.title,
-          message.notification.body,
-          message.data['timeAtten'],
-        );
-      } else {
-       // print('Thông báo NEW CLASS-------------------------------------');
-        MyLocalNotification.showNotificationNewClass(
-          notifications,
-          message.data['nameTeacher'],
-          message.data['msg'], //id lớp học
-          message.data['idChannel'], //id lớp học
-          message.data['className'], //ten lop
-          message.data['classDescription'], //mieu ta
-          //day moi show len
-          message.notification.title, //ten lop
-          message.notification.body, //mieu ta
-        );
-      }
+      createLocalNotify(message);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-     
       Get.to(HomeScreen());
     });
-     FirebaseMessaging.instance.subscribeToTopic('fcm_test');
+    FirebaseMessaging.instance.subscribeToTopic('fcm_test');
     getTokenFCM();
   }
 
@@ -135,7 +99,8 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
         BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
         BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
-        BlocProvider<AttendStudentBloc>(create: (context) => AttendStudentBloc()),
+        BlocProvider<AttendStudentBloc>(
+            create: (context) => AttendStudentBloc()),
         BlocProvider<CommentBloc>(create: (context) => CommentBloc()),
       ],
       child: GetMaterialApp(
@@ -149,6 +114,46 @@ class _HomePageState extends State<HomePage> {
         home: body,
       ),
     );
+  }
+
+  void createLocalNotify(RemoteMessage message) {
+    if (message.data['idNoti'] == 'newNoti' &&
+        message.data['isAtten'] == 'false') {
+      ////  print('Thông báo new Notity--------------------------------------');
+      MyLocalNotification.showNotification(
+        notifications,
+        message.data['idChannel'],
+        message.data['className'],
+        message.data['classDescription'],
+        message.notification.title,
+        message.notification.body,
+      );
+    } else if (message.data['idNoti'] == 'newNoti' &&
+        message.data['isAtten'] == 'true') {
+      MyLocalNotification.showNotificationAttenden(
+        notifications,
+        message.data['msg'],
+        message.data['idChannel'],
+        message.data['className'],
+        message.data['classDescription'],
+        message.notification.title,
+        message.notification.body,
+        message.data['timeAtten'],
+      );
+    } else {
+      // print('Thông báo NEW CLASS-------------------------------------');
+      MyLocalNotification.showNotificationNewClass(
+        notifications,
+        message.data['nameTeacher'],
+        message.data['msg'], //id lớp học
+        message.data['idChannel'], //id lớp học
+        message.data['className'], //ten lop
+        message.data['classDescription'], //mieu ta
+        //day moi show len
+        message.notification.title, //ten lop
+        message.notification.body, //mieu ta
+      );
+    }
   }
 
   getTokenFCM() async {
