@@ -107,7 +107,7 @@ class _NewClassState extends State<NewClass> {
                   Map<String, String> dataClass = {
                     'id': idClass,
                     'name': nameClass,
-                    'note': description,
+                    'note': description ?? '',
                     'teacherId': idTeacher,
                     'date': DateTime.now().toString()
                   };
@@ -121,7 +121,7 @@ class _NewClassState extends State<NewClass> {
                           "msg": idClass,
                           "idChannel": idClass,
                           "className": nameClass,
-                          "classDescription": description,
+                          "classDescription": description ?? '',
                           "nameTeacher": widget.teacher.name
                         },
                         e.token);
@@ -136,7 +136,7 @@ class _NewClassState extends State<NewClass> {
                         "msg": idClass,
                         "idChannel": idClass,
                         "className": nameClass,
-                        "classDescription": description,
+                        "classDescription": description ?? '',
                         "nameTeacher": widget.teacher.name
                       },
                       idClass);

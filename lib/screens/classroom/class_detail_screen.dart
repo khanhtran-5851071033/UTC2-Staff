@@ -229,7 +229,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                       ),
                     );
                   } else if (state is LoadingPost) {
-                    return SpinKitChasingDots(
+                    return SpinKitThreeBounce(
                       color: ColorApp.lightBlue,
                     );
                   } else if (state is LoadErrorPost) {
@@ -240,7 +240,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                       ),
                     );
                   } else {
-                    return SpinKitChasingDots(
+                    return SpinKitThreeBounce(
                       color: ColorApp.lightBlue,
                     );
                   }

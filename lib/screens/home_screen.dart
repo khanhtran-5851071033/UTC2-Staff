@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/activity_page.dart';
-import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:utc2_staff/screens/notify_page.dart';
 import 'package:utc2_staff/screens/schedule_page.dart';
 import 'package:utc2_staff/screens/web_view.dart';

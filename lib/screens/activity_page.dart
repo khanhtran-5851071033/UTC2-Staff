@@ -100,7 +100,7 @@ class _ActivityPageState extends State<ActivityPage> {
         BlocBuilder<ClassBloc, ClassState>(
           builder: (context, state) {
             if (state is LoadingClass)
-              return SpinKitChasingDots(
+              return SpinKitThreeBounce(
                 color: ColorApp.lightBlue,
               );
             else if (state is LoadedClass) {
@@ -143,7 +143,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               );
             } else {
-              return SpinKitChasingDots(
+              return SpinKitThreeBounce(
                 color: ColorApp.lightBlue,
               );
             }

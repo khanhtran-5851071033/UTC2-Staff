@@ -146,6 +146,7 @@ class MyLocalNotification {
                 ' - Hạn : ' +
                 '<b>$timeAtten</b>',
             htmlFormatContentTitle: true,
+            htmlFormatSummaryText: true,
             summaryText: body,
             htmlFormatContent: true);
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -182,7 +183,7 @@ class MyLocalNotification {
             hideExpandedLargeIcon: true,
             contentTitle: 'Mã lớp : ' + '<b>$idQR</b> ',
             htmlFormatContentTitle: true,
-            summaryText: 'Miêu tả : ' + chanelDescription,
+            summaryText: 'Miêu tả : ' + chanelDescription ?? '',
             htmlFormatContent: true);
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(idChannel, chanelName, chanelDescription,

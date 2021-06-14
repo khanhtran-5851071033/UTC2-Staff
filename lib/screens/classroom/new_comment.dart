@@ -145,7 +145,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
             child: BlocBuilder<CommentBloc, CommentState>(
                 builder: (context, state) {
               if (state is LoadingComment)
-                return SpinKitChasingDots(
+                return SpinKitThreeBounce(
                   color: ColorApp.lightBlue,
                 );
               else if (state is LoadedComment) {
@@ -237,7 +237,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
                   ),
                 );
               } else {
-                return SpinKitChasingDots(
+                return SpinKitThreeBounce(
                   color: ColorApp.lightBlue,
                 );
               }

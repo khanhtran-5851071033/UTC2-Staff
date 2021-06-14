@@ -313,12 +313,12 @@ class _InfoAteenState extends State<InfoAteen> {
                                               AttendStudentState>(
                                             builder: (context, state) {
                                               if (state is AttendInitial) {
-                                                return SpinKitChasingDots(
+                                                return SpinKitThreeBounce(
                                                   color: ColorApp.lightBlue,
                                                 );
                                               } else if (state
                                                   is LoadingAttend) {
-                                                return SpinKitChasingDots(
+                                                return SpinKitThreeBounce(
                                                   color: ColorApp.lightBlue,
                                                 );
                                               } else if (state

@@ -33,7 +33,6 @@ class TeacherDatabase {
         .where('email', isEqualTo: email)
         .get();
     list = data.docs.map((e) => Teacher(e)).toList();
- 
     return list[0];
   }
 

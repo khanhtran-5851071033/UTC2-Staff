@@ -367,7 +367,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         },
                                       ),
                                     )
-                                  : SpinKitChasingDots(
+                                  : SpinKitThreeBounce(
                                       color: ColorApp.lightBlue,
                                     );
                             }),
@@ -394,7 +394,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
         color: ColorApp.blue,
         displacement: 60,
         onRefresh: () async {
-         await blocNoti.fetchProducts();
+          await blocNoti.fetchProducts();
         },
         child: StreamBuilder<List<Noti>>(
             stream: blocNoti.stream,
@@ -443,7 +443,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                           ),
                         );
                       })
-                  : SpinKitChasingDots(
+                  : SpinKitThreeBounce(
                       color: ColorApp.lightBlue,
                     );
             }),

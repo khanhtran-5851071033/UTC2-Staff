@@ -15,8 +15,9 @@ import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:utc2_staff/service/firestore/student_database.dart';
+import 'package:utc2_staff/service/firestore/notify_app_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
+import 'package:utc2_staff/utils/utils.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
 import 'service/firestore/teacher_database.dart';
 
@@ -57,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   FirebaseMessaging _fireBaseMessaging;
   final notifications = FlutterLocalNotificationsPlugin();
   Widget body = Scaffold();
+  NotifyAppDatabase notifyAppDatabase = new NotifyAppDatabase();
   @override
   void initState() {
     super.initState();
@@ -80,7 +82,21 @@ class _HomePageState extends State<HomePage> {
         print('MESSAGE>>>>' + message.toString());
       }
     });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String email = preferences.getString('userEmail');
+      var teacher = await TeacherDatabase.getTeacherData(email);
+      String id = generateRandomString(5);
+      Map<String, String> dataNotifyApp = {
+        'id': id ?? '',
+        'idUser': teacher.id ?? '', //user đăng nhập
+        'content': message.data['content'] ?? '',
+        'name': message.data['name'] ?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
+        'date': DateTime.now().toString(), //time nhận được
+      };
+      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
+
       createLocalNotify(message);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {

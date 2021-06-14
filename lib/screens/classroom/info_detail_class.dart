@@ -330,11 +330,11 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                       BlocBuilder<StudentBloc, StudentState>(
                         builder: (context, state) {
                           if (state is StudentInitial) {
-                            return SpinKitChasingDots(
+                            return SpinKitThreeBounce(
                               color: ColorApp.lightBlue,
                             );
                           } else if (state is LoadingStudentState) {
-                            return SpinKitChasingDots(
+                            return SpinKitThreeBounce(
                               color: ColorApp.lightBlue,
                             );
                           } else if (state is LoadedStudentState) {

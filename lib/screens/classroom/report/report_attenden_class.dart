@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -309,11 +307,11 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                                 },
                                 builder: (context, state) {
                                   if (state is AttendInitial) {
-                                    return SpinKitChasingDots(
+                                    return SpinKitThreeBounce(
                                       color: ColorApp.lightBlue,
                                     );
                                   } else if (state is LoadingAttend) {
-                                    return SpinKitChasingDots(
+                                    return SpinKitThreeBounce(
                                       color: ColorApp.lightBlue,
                                     );
                                   } else if (state is LoadedAttend) {
