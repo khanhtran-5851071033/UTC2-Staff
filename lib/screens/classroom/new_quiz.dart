@@ -1,15 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
+import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewQuiz extends StatefulWidget {
+  final String idTeacher;
+
+  const NewQuiz({Key key, this.idTeacher}) : super(key: key);
   @override
   _NewQuizState createState() => _NewQuizState();
 }
 
 class _NewQuizState extends State<NewQuiz> {
+  showAlertDialog(
+    BuildContext context,
+    String idTeacher,
+    String idQuiz,
+    int idQuestion
+  ) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Thoát"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Kết thúc"),
+      onPressed: () async {
+        QuizDatabase.deleteQuiz(idTeacher, idQuiz);
+
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Bài Test chưa hoàn thành bạn có muốn kết thúc?"),
+      content: Text('Dừng ở câu số '+idQuestion.toString()),
+      actions: [
+        continueButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   final _formKey = GlobalKey<FormState>();
+  final _formKey1 = GlobalKey<FormState>();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _questionController = TextEditingController();
+  TextEditingController _answerCorrectController = TextEditingController();
+  TextEditingController _answer1Controller = TextEditingController();
+  TextEditingController _answer2Controller = TextEditingController();
+  TextEditingController _answer3Controller = TextEditingController();
   int _selectedTime = 10;
+  QuizDatabase _quizDatabase = new QuizDatabase();
+  int idQuestion = 0;
+  String idQuiz = generateRandomString(5);
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _questionController.dispose();
+    _answerCorrectController.dispose();
+    _answer1Controller.dispose();
+    _answer2Controller.dispose();
+    _answer3Controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,10 +85,12 @@ class _NewQuizState extends State<NewQuiz> {
           leading: IconButton(
             color: ColorApp.lightGrey,
             onPressed: () {
-              Navigator.pop(context);
+              idQuestion != 0
+                  ? showAlertDialog(context, widget.idTeacher, idQuiz,idQuestion)
+                  : Navigator.pop(context);
             },
             icon: Icon(
-              Icons.arrow_back_ios,
+              Icons.close_rounded,
               color: ColorApp.black,
             ),
           ),
@@ -59,8 +128,15 @@ class _NewQuizState extends State<NewQuiz> {
                 ),
                 child: Column(
                   children: [
-                    TextField(
-                      decoration: InputDecoration(hintText: 'Chủ đề bài Test'),
+                    Form(
+                      key: _formKey1,
+                      child: TextFormField(
+                        controller: _titleController,
+                        validator: (val) => val.isEmpty ? 'Nhập chủ đề' : null,
+                        decoration: InputDecoration(
+                          hintText: 'Chủ đề bài Test',
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 7,
@@ -89,7 +165,7 @@ class _NewQuizState extends State<NewQuiz> {
                         ),
                         Spacer(),
                         Text('Số câu: '),
-                        Text('2')
+                        Text(idQuestion.toString())
                       ],
                     ),
                   ],
@@ -111,23 +187,24 @@ class _NewQuizState extends State<NewQuiz> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextFormField(
+                          controller: _questionController,
                           validator: (val) =>
                               val.isEmpty ? 'Nhập câu hỏi' : null,
-                          onChanged: (value) {},
                           autofocus: true,
                           style: TextStyle(
                               fontSize: 20, color: ColorApp.mediumBlue),
                           decoration: InputDecoration(
                               // border: InputBorder.none,
                               isCollapsed: true,
-                              hintText: 'Câu hỏi 1',
+                              hintText:
+                                  'Câu hỏi ' + (idQuestion + 1).toString(),
                               hintStyle: TextStyle(
                                   fontSize: 16, color: ColorApp.black)),
                         ),
                         TextFormField(
+                          controller: _answerCorrectController,
                           validator: (val) =>
                               val.isEmpty ? 'Nhập câu trả lời đúng' : null,
-                          onChanged: (value) {},
                           style: TextStyle(fontSize: 20, color: Colors.red),
                           decoration: InputDecoration(
                               // border: InputBorder.none,
@@ -137,10 +214,10 @@ class _NewQuizState extends State<NewQuiz> {
                                   TextStyle(fontSize: 16, color: ColorApp.red)),
                         ),
                         TextFormField(
+                          controller: _answer1Controller,
                           validator: (val) => val.isEmpty
                               ? 'Nhập ít nhất 1 câu trả lời sai'
                               : null,
-                          onChanged: (value) {},
                           style: TextStyle(
                               fontSize: 20, color: ColorApp.mediumBlue),
                           decoration: InputDecoration(
@@ -151,7 +228,7 @@ class _NewQuizState extends State<NewQuiz> {
                                   fontSize: 16, color: ColorApp.black)),
                         ),
                         TextFormField(
-                          onChanged: (value) {},
+                          controller: _answer2Controller,
                           style: TextStyle(
                               fontSize: 20, color: ColorApp.mediumBlue),
                           decoration: InputDecoration(
@@ -162,7 +239,7 @@ class _NewQuizState extends State<NewQuiz> {
                                   fontSize: 16, color: ColorApp.black)),
                         ),
                         TextFormField(
-                          onChanged: (value) {},
+                          controller: _answer3Controller,
                           style: TextStyle(
                               fontSize: 20, color: ColorApp.mediumBlue),
                           decoration: InputDecoration(
@@ -199,7 +276,66 @@ class _NewQuizState extends State<NewQuiz> {
                                                 BorderRadius.circular(10),
                                             side: BorderSide(
                                                 color: Colors.transparent)))),
-                                onPressed: () async {}),
+                                onPressed: () async {
+                                  if (_formKey1.currentState.validate()) {
+                                    if (idQuestion == 0) {
+                                      if (_formKey.currentState.validate()) {
+                                        Map<String, String> dataQuiz = {
+                                          'idQuiz': idQuiz,
+                                          'idTeacher': widget.idTeacher,
+                                          'titleQuiz':
+                                              _titleController.text.trim(),
+                                          'timePlay': _selectedTime.toString(),
+                                          'dateCreate':
+                                              DateTime.now().toString(),
+                                          'totalQuestion':
+                                              (idQuestion + 1).toString()
+                                        };
+                                        _quizDatabase.createQuiz(
+                                            dataQuiz, widget.idTeacher, idQuiz);
+
+                                        Map<String, String> dataQuestion = {
+                                          'idQuiz': idQuiz,
+                                          'idQuestion':
+                                              (idQuestion + 1).toString(),
+                                          'question':
+                                              _questionController.text.trim(),
+                                          'answerCorrect':
+                                              _answerCorrectController.text
+                                                  .trim(),
+                                          'answer2':
+                                              _answer1Controller.text.trim(),
+                                          'answer3':
+                                              _answer2Controller.text.trim(),
+                                          'answer4':
+                                              _answer3Controller.text.trim(),
+                                        };
+                                        _quizDatabase.createQuestion(
+                                            dataQuestion,
+                                            widget.idTeacher,
+                                            idQuiz,
+                                            (idQuestion).toString());
+                                        Navigator.pop(context);
+                                      }
+                                    } else {
+                                      Map<String, String> dataQuiz = {
+                                        'idQuiz': idQuiz,
+                                        'idTeacher': widget.idTeacher,
+                                        'titleQuiz':
+                                            _titleController.text.trim(),
+                                        'timePlay': _selectedTime.toString(),
+                                        'dateCreate': DateTime.now().toString(),
+                                        'totalQuestion':
+                                            (idQuestion).toString()
+                                      };
+                                      QuizDatabase.updateQuiz(
+                                          widget.idTeacher, idQuiz, dataQuiz);
+                                      Navigator.pop(context);
+                                    }
+                                  } else {
+                                    print('title null');
+                                  }
+                                }),
                             ElevatedButton(
                                 child: Container(
                                   margin: EdgeInsets.symmetric(vertical: 10),
@@ -228,7 +364,40 @@ class _NewQuizState extends State<NewQuiz> {
                                                 color: Colors.transparent)))),
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                    print('validated');
+                                    if (idQuestion == 0) {
+                                      Map<String, String> dataQuiz = {
+                                        'idQuiz': idQuiz,
+                                        'idTeacher': widget.idTeacher,
+                                      };
+                                      _quizDatabase.createQuiz(
+                                          dataQuiz, widget.idTeacher, idQuiz);
+                                    }
+
+                                    Map<String, String> dataQuestion = {
+                                      'idQuiz': idQuiz,
+                                      'idQuestion': (idQuestion + 1).toString(),
+                                      'question':
+                                          _questionController.text.trim(),
+                                      'answerCorrect':
+                                          _answerCorrectController.text.trim(),
+                                      'answer2': _answer1Controller.text.trim(),
+                                      'answer3': _answer2Controller.text.trim(),
+                                      'answer4': _answer3Controller.text.trim(),
+                                    };
+                                    _quizDatabase.createQuestion(
+                                        dataQuestion,
+                                        widget.idTeacher,
+                                        idQuiz,
+                                        (idQuestion + 1).toString());
+                                    ++idQuestion;
+                                    setState(() {
+                                      idQuestion = idQuestion;
+                                      _questionController.clear();
+                                      _answerCorrectController.clear();
+                                      _answer1Controller.clear();
+                                      _answer2Controller.clear();
+                                      _answer3Controller.clear();
+                                    });
                                   }
                                 }),
                           ],

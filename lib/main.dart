@@ -10,6 +10,8 @@ import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_bloc.dart';
 import 'package:utc2_staff/blocs/login_bloc/login_bloc.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
+import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
+import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
@@ -118,6 +120,8 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<AttendStudentBloc>(
             create: (context) => AttendStudentBloc()),
         BlocProvider<CommentBloc>(create: (context) => CommentBloc()),
+        BlocProvider<QuizBloc>(create: (context) => QuizBloc()),
+        BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

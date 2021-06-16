@@ -11,8 +11,8 @@ class QuizDatabase {
         .set(dataQuiz);
   }
 
-  Future<void> createQuestion(Map<String, String> dataQuiz, String idTeacher,
-      String idQuiz, String idQuestion) async {
+  Future<void> createQuestion(Map<String, String> dataQuestion,
+      String idTeacher, String idQuiz, String idQuestion) async {
     await FirebaseFirestore.instance
         .collection('Teacher')
         .doc(idTeacher)
@@ -20,16 +20,26 @@ class QuizDatabase {
         .doc(idQuiz)
         .collection('Question')
         .doc(idQuestion)
-        .set(dataQuiz);
+        .set(dataQuestion);
   }
 
-  Future<void> deleteQuiz(String idTeacher, String idQuiz) async {
+  static Future<void> deleteQuiz(String idTeacher, String idQuiz) async {
     await FirebaseFirestore.instance
         .collection('Teacher')
         .doc(idTeacher)
         .collection('Quiz')
         .doc(idQuiz)
         .delete();
+  }
+
+  static Future<void> updateQuiz(
+      String idTeacher, String idQuiz, Map<String, String> data) async {
+    FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Quiz')
+        .doc(idQuiz)
+        .update(data);
   }
 
   Future<void> deleteQuestion(
@@ -56,7 +66,7 @@ class QuizDatabase {
   }
 
   static getQuestionData(String idTeacher, String idQuiz) async {
-    List<Quiz> list = [];
+    List<Question> list = [];
     var data = await FirebaseFirestore.instance
         .collection('Teacher')
         .doc(idTeacher)
@@ -64,26 +74,27 @@ class QuizDatabase {
         .doc(idQuiz)
         .collection('Question')
         .get();
-    list = data.docs.map((e) => Quiz(e)).toList();
+    list = data.docs.map((e) => Question(e)).toList();
     return list;
   }
 }
 
 class Quiz {
-  String idQuiz, idTeacher, titleQuiz, timePlay, dateCreate;
+  String idQuiz, idTeacher, titleQuiz, timePlay, dateCreate, totalQuestion;
   Quiz(QueryDocumentSnapshot<Map<String, dynamic>> json) {
-    this.idQuiz = json['id'];
+    this.idQuiz = json['idQuiz'];
     this.idTeacher = json['idTeacher'];
     this.titleQuiz = json['titleQuiz'];
     this.timePlay = json['timePlay'];
     this.dateCreate = json['dateCreate'];
+    this.totalQuestion = json['totalQuestion'];
   }
 }
 
 class Question {
   String idQuiz, idQuestion, question, answerCorrect, answer2, answer3, answer4;
   Question(QueryDocumentSnapshot<Map<String, dynamic>> json) {
-    this.idQuiz = json['id'];
+    this.idQuiz = json['idQuiz'];
     this.idQuestion = json['idQuestion'];
     this.question = json['question'];
     this.answerCorrect = json['answerCorrect'];

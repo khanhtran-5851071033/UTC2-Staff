@@ -316,29 +316,29 @@ class _NewClassState extends State<NewClass> {
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(right: 16.0),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            _captureAndSharePng();
-                                          },
-                                          child: Text(
-                                            'Lưu vào thư viện',
-                                            style:
-                                                TextStyle(color: ColorApp.blue),
-                                          ),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          _shareImage();
-                                        },
-                                        child: Text(
-                                          'Chia sẻ',
-                                          style:
-                                              TextStyle(color: ColorApp.blue),
-                                        ),
-                                      )
+                                      // Padding(
+                                      //   padding: EdgeInsets.only(right: 16.0),
+                                      //   child: TextButton(
+                                      //     onPressed: () {
+                                      //       _captureAndSharePng();
+                                      //     },
+                                      //     child: Text(
+                                      //       'Lưu vào thư viện',
+                                      //       style:
+                                      //           TextStyle(color: ColorApp.blue),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // TextButton(
+                                      //   onPressed: () {
+                                      //     _shareImage();
+                                      //   },
+                                      //   child: Text(
+                                      //     'Chia sẻ',
+                                      //     style:
+                                      //         TextStyle(color: ColorApp.blue),
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                 ],

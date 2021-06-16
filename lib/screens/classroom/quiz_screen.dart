@@ -1,10 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
+import 'package:utc2_staff/blocs/question_bloc/question_event.dart';
+import 'package:utc2_staff/blocs/question_bloc/question_state.dart';
+import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class QuizSreen extends StatefulWidget {
+  final Quiz quiz;
+  final String idTeacher;
+
+  QuizSreen({this.quiz, this.idTeacher});
   @override
   _QuizSreenState createState() => _QuizSreenState();
 }
@@ -15,16 +25,16 @@ class _QuizSreenState extends State<QuizSreen> {
 
   final interval = const Duration(seconds: 1);
 
-  final int timerMaxSeconds = 65;
+  int timerMaxSeconds = 0;
 
   int currentSeconds = 0;
 
   String get timerText =>
       '${((timerMaxSeconds - currentSeconds) ~/ 60).toString().padLeft(2, '0')}: ${((timerMaxSeconds - currentSeconds) % 60).toString().padLeft(2, '0')}';
-
+  Timer _timer;
   startTimeout([int milliseconds]) {
     var duration = interval;
-    Timer.periodic(duration, (timer) {
+    _timer = Timer.periodic(duration, (timer) {
       setState(() {
         currentSeconds = timer.tick;
         if (timer.tick >= timerMaxSeconds) {
@@ -35,41 +45,22 @@ class _QuizSreenState extends State<QuizSreen> {
     });
   }
 
+  int totalAnswer = 0;
+  QuestionBloc questionBloc = new QuestionBloc();
   @override
   void initState() {
     super.initState();
     selectedRadio = 0;
+    timerMaxSeconds = int.parse(widget.quiz.timePlay.toString()) * 60;
+    questionBloc = BlocProvider.of<QuestionBloc>(context);
+    questionBloc.add(GetQuestionEvent(widget.idTeacher, widget.quiz.idQuiz));
   }
 
-  int totalAnswer = 2;
-  List questionList = [
-    {
-      'Question':
-          'A TextSpan is an immutable span of text. It has style property to give style to the text. It is also having children property to add more text to this widget and give style to the children.',
-      'Option1': 'Python',
-      'Option2': 'dart',
-      'Option3': 'Java',
-      'Option4': 'C#',
-      'Correct': 3,
-    },
-    {
-      'Question': 'What is API',
-      'Option1':
-          'TextSpan is an immutable span of text. It has style property to give style to the text. It is also having children property to add more text to this widget and give style to the children.',
-      'Option2': 'dart',
-      'Option3': 'Java',
-      'Option4': 'C#',
-      'Correct': 1,
-    },
-    {
-      'Question': 'Xin chào',
-      'Option1': 'UTC2',
-      'Option2': 'GSA',
-      'Option3': 'GTVT',
-      'Option4': '',
-      'Correct': 4,
-    }
-  ];
+  @override
+  void dispose() {
+    start ? _timer.cancel() : print('');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,29 +88,27 @@ class _QuizSreenState extends State<QuizSreen> {
       ),
       body: Container(
         padding: EdgeInsets.all(size.width * 0.03),
+        height: size.height,
         child: Column(
           children: [
-            Flexible(
-              flex: 1,
+            Container(
               child: QuizTitle(
-                title: 'Test C#',
+                title: widget.quiz.titleQuiz,
                 time: timerText,
-                totalQuestion: totalAnswer.toString() +
-                    "/" +
-                    questionList.length.toString(),
+                totalQuestion:
+                    totalAnswer.toString() + "/" + widget.quiz.totalQuestion,
                 start: () {
-                  startTimeout();
                   setState(() {
                     start = true;
                   });
+                  startTimeout();
                 },
               ),
             ),
             SizedBox(
               height: size.width * 0.03,
             ),
-            Flexible(
-              flex: 5,
+            Expanded(
               child: AnimatedCrossFade(
                 secondChild: Container(),
                 firstCurve: Curves.easeInOutSine,
@@ -143,59 +132,90 @@ class _QuizSreenState extends State<QuizSreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: ColorApp.lightGrey)),
-                  child: Scrollbar(
-                    child: ListView.builder(
-                        padding: EdgeInsets.all(size.width * 0.03),
-                        itemCount: questionList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Question(
-                              number: index,
-                              question: questionList[index]['Question'],
-                              option1: Option(
-                                answer: questionList[index]['Option1'],
-                                value: 1,
-                                selectedRadio: selectedRadio,
-                                setSelectedRadio: (val) {
-                                  setState(() {
-                                    selectedRadio = val;
-                                  });
-                                },
-                              ),
-                              option2: Option(
-                                answer: questionList[index]['Option2'],
-                                value: 2,
-                                selectedRadio: selectedRadio,
-                                setSelectedRadio: (val) {
-                                  setState(() {
-                                    selectedRadio = val;
-                                  });
-                                },
-                              ),
-                              option3: Option(
-                                answer: questionList[index]['Option3'],
-                                value: 3,
-                                selectedRadio: selectedRadio,
-                                setSelectedRadio: (val) {
-                                  setState(() {
-                                    selectedRadio = val;
-                                  });
-                                },
-                              ),
-                              option4: Option(
-                                answer: questionList[index]['Option4'],
-                                value: 4,
-                                selectedRadio: selectedRadio,
-                                setSelectedRadio: (val) {
-                                  setState(() {
-                                    selectedRadio = val;
-                                  });
-                                },
-                              ),
-                            ),
-                          );
-                        }),
+                  child: BlocBuilder<QuestionBloc, QuestionState>(
+                    builder: (context, state) {
+                      if (state is LoadingQuestion)
+                        return SpinKitThreeBounce(
+                          color: ColorApp.lightBlue,
+                        );
+                      else if (state is LoadedQuestion) {
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            questionBloc.add(GetQuestionEvent(
+                                widget.idTeacher, widget.quiz.idQuiz));
+                          },
+                          child: Scrollbar(
+                            child: ListView.builder(
+                                padding: EdgeInsets.all(size.width * 0.03),
+                                itemCount: state.list.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: Question(
+                                      number: index,
+                                      question: state.list[index].question,
+                                      option1: Option(
+                                        answer: state.list[index].answerCorrect,
+                                        value: 1,
+                                        selectedRadio: selectedRadio,
+                                        setSelectedRadio: (val) {
+                                          setState(() {
+                                            selectedRadio = val;
+                                          });
+                                        },
+                                      ),
+                                      option2: Option(
+                                        answer: state.list[index].answer2,
+                                        value: 2,
+                                        selectedRadio: selectedRadio,
+                                        setSelectedRadio: (val) {
+                                          setState(() {
+                                            selectedRadio = val;
+                                          });
+                                        },
+                                      ),
+                                      option3: state.list[index].answer3 != ''
+                                          ? Option(
+                                              answer: state.list[index].answer3,
+                                              value: 3,
+                                              selectedRadio: selectedRadio,
+                                              setSelectedRadio: (val) {
+                                                setState(() {
+                                                  selectedRadio = val;
+                                                });
+                                              },
+                                            )
+                                          : Container(),
+                                      option4: state.list[index].answer4 != ''
+                                          ? Option(
+                                              answer: state.list[index].answer4,
+                                              value: 4,
+                                              selectedRadio: selectedRadio,
+                                              setSelectedRadio: (val) {
+                                                setState(() {
+                                                  selectedRadio = val;
+                                                });
+                                              },
+                                            )
+                                          : Container(),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        );
+                      } else if (state is LoadErrorQuestion) {
+                        return Center(
+                          child: Text(
+                            state.error,
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          ),
+                        );
+                      } else {
+                        return SpinKitThreeBounce(
+                          color: ColorApp.lightBlue,
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

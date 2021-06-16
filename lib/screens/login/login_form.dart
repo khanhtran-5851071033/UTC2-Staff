@@ -47,15 +47,16 @@ class _LoginFormState extends State<LoginForm> {
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             Container(
-                // margin: EdgeInsets.only(right: 10),
-                width: 30,
-                child: Image.asset('assets/icons/google.png')),
+                child: Image.asset(
+              'assets/icons/google.png',
+              width: 25,
+            )),
             Text(
               'Đăng nhập bằng tài khoản Giảng Viên',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: size.width * 0.04,
               ),
             ),
           ]),

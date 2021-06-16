@@ -11,7 +11,7 @@ class GetQuestionEvent extends QuestionEvent {
   final String idTeacher;
   final String idQuiz;
 
-  GetQuestionEvent({this.idTeacher, this.idQuiz});
+  GetQuestionEvent(this.idTeacher, this.idQuiz);
   @override
   List<Object> get props => [idTeacher, idQuiz];
 }

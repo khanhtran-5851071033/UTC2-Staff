@@ -1,7 +1,11 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
+import 'package:utc2_staff/blocs/quiz_bloc/quiz_event.dart';
+import 'package:utc2_staff/blocs/quiz_bloc/quiz_state.dart';
 import 'package:utc2_staff/screens/classroom/new_quiz.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
@@ -36,6 +40,14 @@ class _NewNotifyState extends State<NewNotify> {
   GlobalKey globalKey = new GlobalKey();
   TextEditingController _controller = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  QuizBloc quizBloc = new QuizBloc();
+  @override
+  void initState() {
+    quizBloc = BlocProvider.of<QuizBloc>(context);
+    quizBloc.add(GetQuizEvent(widget.teacher.id));
+    super.initState();
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -455,8 +467,10 @@ class _NewNotifyState extends State<NewNotify> {
                     ),
                     AnimatedCrossFade(
                       firstChild: Container(
-                        height: size.height / 3,
-                        child: ListQuiz(),
+                        height: size.height / 2.5,
+                        child: ListQuiz(
+                          idTeacher: widget.teacher.id,
+                        ),
                       ),
                       secondChild: Container(),
                       crossFadeState: isQuiz
@@ -476,18 +490,22 @@ class _NewNotifyState extends State<NewNotify> {
 }
 
 class ListQuiz extends StatefulWidget {
-  ListQuiz();
+  final String idTeacher;
+  ListQuiz({this.idTeacher});
 
   @override
   _ListQuizState createState() => _ListQuizState();
 }
 
 class _ListQuizState extends State<ListQuiz> {
-  List lis = [
-    {'name': 'C#', 'selected': true},
-    {'name': 'Java', 'selected': false},
-    {'name': 'Python', 'selected': true},
-  ];
+  QuizBloc quizBloc = new QuizBloc();
+  @override
+  void initState() {
+    quizBloc = BlocProvider.of<QuizBloc>(context);
+    quizBloc.add(GetQuizEvent(widget.idTeacher));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -498,7 +516,12 @@ class _ListQuizState extends State<ListQuiz> {
           child: TextButton.icon(
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => NewQuiz()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewQuiz(
+                            idTeacher: widget.idTeacher,
+                          ))).then(
+                  (value) => quizBloc.add(GetQuizEvent(widget.idTeacher)));
             },
             label: Text(
               'Tạo mới',
@@ -517,59 +540,111 @@ class _ListQuizState extends State<ListQuiz> {
                         side: BorderSide(color: Colors.blue)))),
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: lis.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
-                          stops: [0.08, 1],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Colors.white, ColorApp.lightGrey])),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Checkbox(
-                        value: lis[index]['selected'],
-                        activeColor: ColorApp.mediumBlue,
-                        checkColor: Colors.white,
-                        shape: CircleBorder(),
-                        onChanged: (value) {
-                          setState(() {
-                            lis[index]['selected'] = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: Container(
-                            alignment: Alignment.centerLeft,
-                            // height: 25,
-                            child: Text(lis[index]['name'])),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QuizSreen()));
-                          },
-                          icon: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: ColorApp.mediumBlue,
-                            size: 13,
-                          ))
-                    ],
+        BlocBuilder<QuizBloc, QuizState>(
+          builder: (context, state) {
+            if (state is LoadingQuiz)
+              return SpinKitThreeBounce(
+                color: ColorApp.lightBlue,
+              );
+            else if (state is LoadedQuiz) {
+              return Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    quizBloc.add(GetQuizEvent(widget.idTeacher));
+                  },
+                  child: ListView.builder(
+                      itemCount: state.list.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                  stops: [0.08, 1],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.white, ColorApp.lightGrey])),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                value: state.list[index].idQuiz != null,
+                                activeColor: ColorApp.mediumBlue,
+                                checkColor: Colors.white,
+                                shape: CircleBorder(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    // lis[index]['selected'] = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    // height: 25,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(state.list[index].titleQuiz),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(state
+                                                    .list[index].totalQuestion +
+                                                ' câu'),
+                                            Text(state.list[index].timePlay +
+                                                ' min'),
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => QuizSreen(
+                                                  quiz: state.list[index],
+                                                  idTeacher: widget.idTeacher,
+                                                )));
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: ColorApp.mediumBlue,
+                                    size: 13,
+                                  ))
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+              );
+            } else if (state is LoadErrorQuiz) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    state.error,
+                    style: TextStyle(color: Colors.black, fontSize: 18),
                   ),
-                );
-              }),
+                ),
+              );
+            } else {
+              return SpinKitThreeBounce(
+                color: ColorApp.lightBlue,
+              );
+            }
+          },
         ),
       ],
     );
