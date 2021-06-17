@@ -117,8 +117,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
         BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
         BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
-        BlocProvider<AttendStudentBloc>(
-            create: (context) => AttendStudentBloc()),
+        BlocProvider<AttendStudentBloc>(create: (context) => AttendStudentBloc()),
         BlocProvider<CommentBloc>(create: (context) => CommentBloc()),
         BlocProvider<QuizBloc>(create: (context) => QuizBloc()),
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),

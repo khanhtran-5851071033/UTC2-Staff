@@ -10,6 +10,7 @@ import 'package:utc2_staff/screens/classroom/new_quiz.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
+import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/push_noti_firebase.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -498,6 +499,9 @@ class ListQuiz extends StatefulWidget {
 }
 
 class _ListQuizState extends State<ListQuiz> {
+  List quizSelect = [];
+  List<Quiz> quizAdd = [];
+
   QuizBloc quizBloc = new QuizBloc();
   @override
   void initState() {
@@ -547,6 +551,9 @@ class _ListQuizState extends State<ListQuiz> {
                 color: ColorApp.lightBlue,
               );
             else if (state is LoadedQuiz) {
+              for (int i = 0; i < state.list.length; i++) {
+                quizSelect.add(false);
+              }
               return Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
@@ -569,14 +576,25 @@ class _ListQuizState extends State<ListQuiz> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Checkbox(
-                                value: state.list[index].idQuiz != null,
+                                value: quizSelect[index],
                                 activeColor: ColorApp.mediumBlue,
                                 checkColor: Colors.white,
                                 shape: CircleBorder(),
                                 onChanged: (value) {
                                   setState(() {
-                                    // lis[index]['selected'] = value;
+                                    quizSelect[index] = value;
                                   });
+                                  if (value) {
+                                    setState(() {
+                                      quizAdd.add(state.list[index]);
+                                      print(quizAdd[index].titleQuiz);
+                                      print(quizAdd.length);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      quizAdd.remove(state.list[index]);
+                                    });
+                                  }
                                 },
                               ),
                               SizedBox(

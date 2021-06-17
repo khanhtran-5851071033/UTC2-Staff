@@ -153,7 +153,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                               textAlign: TextAlign.justify,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w500),
                             ),
                           ),
@@ -165,7 +165,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                               children: [
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
+                                      horizontal: 5, vertical: 5),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     color: ColorApp.mediumBlue,
@@ -177,7 +177,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         width: size.width * 0.07,
                                       ),
                                       SizedBox(
-                                        width: 7,
+                                        width: 5,
                                       ),
                                       Text(
                                         'UTC2',
@@ -237,6 +237,9 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                       ),
                                       Text(
                                         view,
+                                        overflow: TextOverflow.clip,
+                                        softWrap: true,
+                                        maxLines: 1,
                                         style: TextStyle(
                                           color: Color(0xff29166F),
                                         ),

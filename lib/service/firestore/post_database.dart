@@ -61,14 +61,4 @@ class Post {
   }
 }
 
-class Comment {
-  String id, idPost, comment, time;
-}
 
-class File {
-  String id, idPost, title;
-}
-
-class Quiz {
-  String id, idPost, ques, correct, o1, o2, o3;
-}

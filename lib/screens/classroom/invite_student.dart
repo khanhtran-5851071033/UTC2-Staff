@@ -109,7 +109,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                           course = 'Tất cả';
                           indexHe = listHeDaoTao.indexOf(val);
                         });
-                       
+
                         studentBloc.add(FilterListStudentEvent(
                             course, nameClass, generation));
                       },
@@ -184,7 +184,6 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
 
                                     isAll = value;
                                   });
-                               
                                 },
                               ),
                             ),
@@ -248,7 +247,6 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                                                         .listStudent[index].id);
                                                   });
                                                 }
-                                               
                                               },
                                             ),
                                           ),

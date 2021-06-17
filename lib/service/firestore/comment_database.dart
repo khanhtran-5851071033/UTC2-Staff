@@ -33,11 +33,8 @@ class CommentDatabase {
         .collection('Post')
         .doc(idPost)
         .collection('Comment')
-        .get();
-    print(data.docs.length);
+        .get();  
     list = data.docs.map((e) => Comment(e)).toList();
-    print(
-        list.length.toString() + '------Bị nulll đây ta---------------------');
     return list;
   }
 }
