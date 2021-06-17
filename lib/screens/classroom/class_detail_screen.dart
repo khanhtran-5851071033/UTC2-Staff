@@ -199,14 +199,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
 
                                 return ItemNoti(
                                   teacher: teacher,
-                                  idClass: _class.id,
-                                  idPost: e.id,
-                                  avatar: e.avatar,
-                                  userName: e.name,
-                                  title: e.title,
-                                  time: DateFormat('HH:mm - dd-MM-yyyy')
-                                      .format(parseDate),
-                                  content: e.content != null ? e.content : '',
                                   numberFile: index,
                                   function: (value) {
                                     if (value == 'delete') {
@@ -216,13 +208,8 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                           .add(GetPostEvent(widget.idClass));
                                     }
                                   },
-                                  idAttendend: e.idAtten,
-                                  timeAttendend: e.timeAtten != null
-                                      ? DateFormat('HH:mm').format(
-                                          DateFormat("yyyy-MM-dd HH:mm:ss")
-                                              .parse(e.timeAtten))
-                                      : null,
                                   numberComment: index,
+                                  post: e,
                                 );
                               }),
                         ),
@@ -425,33 +412,17 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
 
 class ItemNoti extends StatelessWidget {
   final Teacher teacher;
-  final String idClass;
-  final String idPost;
-  final String avatar;
-  final String userName;
-  final String time;
-  final String title;
-  final String content;
   final int numberFile;
   final Function function;
-  final String idAttendend;
-  final String timeAttendend;
   final int numberComment;
+  final Post post;
 
   ItemNoti(
       {this.teacher,
-      this.idClass,
-      this.idPost,
-      this.avatar,
-      this.userName,
-      this.time,
-      this.title,
-      this.content,
       this.numberFile,
       this.function,
-      this.idAttendend,
-      this.timeAttendend,
-      this.numberComment});
+      this.numberComment,
+      this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -479,7 +450,8 @@ class ItemNoti extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: ColorApp.lightGrey,
                         radius: 15,
-                        backgroundImage: CachedNetworkImageProvider(avatar),
+                        backgroundImage:
+                            CachedNetworkImageProvider(post.avatar),
                       ),
                     ),
                     SizedBox(
@@ -489,14 +461,17 @@ class ItemNoti extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          userName.toUpperCase(),
+                          post.name.toUpperCase(),
                           softWrap: true,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: ColorApp.black, fontSize: 17),
                         ),
                         Text(
-                          "Đã đăng  " + time,
+                          "Đã đăng  " +
+                              DateFormat('HH:mm - dd-MM-yyyy').format(
+                                  DateFormat("yyyy-MM-dd HH:mm:ss")
+                                      .parse(post.date)),
                           style: TextStyle(color: Colors.grey, fontSize: 13),
                         ),
                       ],
@@ -545,16 +520,16 @@ class ItemNoti extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  title,
+                  post.title,
                   softWrap: true,
                   style: TextStyle(color: ColorApp.black, fontSize: 16),
                 ),
                 SizedBox(
-                  height: content != null ? 5 : 0,
+                  height: post.content != null ? 5 : 0,
                 ),
-                content != null
+                post.content != null
                     ? Text(
-                        content,
+                        post.content,
                         softWrap: true,
                         style: TextStyle(
                             color: ColorApp.black.withOpacity(.6),
@@ -564,7 +539,7 @@ class ItemNoti extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                idAttendend != null
+                post.idAtten != null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -576,7 +551,7 @@ class ItemNoti extends StatelessWidget {
                                   fontWeight: FontWeight.normal),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: idAttendend,
+                                    text: post.idAtten,
                                     style: TextStyle(
                                       color: ColorApp.red,
                                     )),
@@ -591,7 +566,9 @@ class ItemNoti extends StatelessWidget {
                                   fontWeight: FontWeight.normal),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: timeAttendend,
+                                    text: DateFormat('HH:mm').format(
+                                        DateFormat("yyyy-MM-dd HH:mm:ss")
+                                            .parse(post.timeAtten)),
                                     style: TextStyle(
                                       color: ColorApp.red,
                                     )),
@@ -599,6 +576,20 @@ class ItemNoti extends StatelessWidget {
                             ),
                           ),
                         ],
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 10,
+                ),
+                post.idQuiz != null
+                    ? Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Test ' + post.idQuiz),
+                            Text(post.quizContent),
+                          ],
+                        ),
                       )
                     : Container(),
                 SizedBox(
@@ -648,8 +639,8 @@ class ItemNoti extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => NewCommentClass(
                                 teacher: teacher,
-                                idClass: idClass,
-                                idPost: idPost,
+                                idClass: post.idClass,
+                                idPost: post.id,
                               )));
                 },
                 child: Text(

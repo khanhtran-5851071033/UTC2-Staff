@@ -32,6 +32,7 @@ class _NewNotifyState extends State<NewNotify> {
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
   String title, content;
+  Quiz quizAdd;
 
   String genId() {
     return DateFormat('HHmmss')
@@ -95,6 +96,7 @@ class _NewNotifyState extends State<NewNotify> {
                           DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
                               .add(Duration(minutes: _selectedTime))
                               .toString())),
+                      "idQuiz": quizAdd?.idQuiz,
                     },
                     widget.idClass);
                 if (response.statusCode == 200) {
@@ -121,6 +123,14 @@ class _NewNotifyState extends State<NewNotify> {
                       ? DateTime.now()
                           .add(Duration(minutes: _selectedTime))
                           .toString()
+                      : null,
+                  "idQuiz": isQuiz && quizAdd != null ? quizAdd.idQuiz : null,
+                  "quizContent": isQuiz && quizAdd != null
+                      ? quizAdd.titleQuiz +
+                          ' ' +
+                          quizAdd.timePlay +
+                          ' Số câu:' +
+                          quizAdd.totalQuestion
                       : null,
                 };
                 postDatabase.createPost(dataPost, widget.idClass, idPost);
@@ -471,6 +481,11 @@ class _NewNotifyState extends State<NewNotify> {
                         height: size.height / 2.5,
                         child: ListQuiz(
                           idTeacher: widget.teacher.id,
+                          setQuiz: (quiz) {
+                            setState(() {
+                              quizAdd = quiz;
+                            });
+                          },
                         ),
                       ),
                       secondChild: Container(),
@@ -492,7 +507,8 @@ class _NewNotifyState extends State<NewNotify> {
 
 class ListQuiz extends StatefulWidget {
   final String idTeacher;
-  ListQuiz({this.idTeacher});
+  final Function(Quiz quiz) setQuiz;
+  ListQuiz({this.idTeacher, this.setQuiz});
 
   @override
   _ListQuizState createState() => _ListQuizState();
@@ -500,7 +516,6 @@ class ListQuiz extends StatefulWidget {
 
 class _ListQuizState extends State<ListQuiz> {
   List quizSelect = [];
-  List<Quiz> quizAdd = [];
 
   QuizBloc quizBloc = new QuizBloc();
   @override
@@ -544,109 +559,131 @@ class _ListQuizState extends State<ListQuiz> {
                         side: BorderSide(color: Colors.blue)))),
           ),
         ),
-        BlocBuilder<QuizBloc, QuizState>(
+        BlocConsumer<QuizBloc, QuizState>(
+          listener: (context, state) {
+            if (state is LoadedQuiz) {
+              for (int i = 0; i < state.list.length; i++) {
+                if (quizSelect.length < state.list.length)
+                  quizSelect.add(false);
+              }
+            } else {}
+          },
           builder: (context, state) {
             if (state is LoadingQuiz)
               return SpinKitThreeBounce(
                 color: ColorApp.lightBlue,
               );
             else if (state is LoadedQuiz) {
-              for (int i = 0; i < state.list.length; i++) {
-                quizSelect.add(false);
-              }
-              return Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    quizBloc.add(GetQuizEvent(widget.idTeacher));
-                  },
-                  child: ListView.builder(
-                      itemCount: state.list.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                  stops: [0.08, 1],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [Colors.white, ColorApp.lightGrey])),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Checkbox(
-                                value: quizSelect[index],
-                                activeColor: ColorApp.mediumBlue,
-                                checkColor: Colors.white,
-                                shape: CircleBorder(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    quizSelect[index] = value;
-                                  });
-                                  if (value) {
-                                    setState(() {
-                                      quizAdd.add(state.list[index]);
-                                      print(quizAdd[index].titleQuiz);
-                                      print(quizAdd.length);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      quizAdd.remove(state.list[index]);
-                                    });
-                                  }
-                                },
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    // height: 25,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(state.list[index].titleQuiz),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(state
-                                                    .list[index].totalQuestion +
-                                                ' câu'),
-                                            Text(state.list[index].timePlay +
-                                                ' min'),
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => QuizSreen(
-                                                  quiz: state.list[index],
-                                                  idTeacher: widget.idTeacher,
-                                                )));
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: ColorApp.mediumBlue,
-                                    size: 13,
-                                  ))
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-              );
+              return quizSelect.isNotEmpty
+                  ? Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          quizBloc.add(GetQuizEvent(widget.idTeacher));
+                        },
+                        child: ListView.builder(
+                            itemCount: state.list.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(
+                                        stops: [0.08, 1],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Colors.white,
+                                          ColorApp.lightGrey
+                                        ])),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Checkbox(
+                                      value: quizSelect[index],
+                                      activeColor: ColorApp.mediumBlue,
+                                      checkColor: Colors.white,
+                                      shape: CircleBorder(),
+                                      onChanged: (value) {
+                                        if (value) {
+                                          for (int i = 0;
+                                              i < quizSelect.length;
+                                              i++) {
+                                            if (i == index) {
+                                              setState(() {
+                                                quizSelect[i] = value;
+                                                widget.setQuiz(state.list[i]);
+                                              });
+                                            } else {
+                                              setState(() {
+                                                quizSelect[i] = !value;
+                                              });
+                                            }
+                                          }
+                                        } else {
+                                          setState(() {
+                                            quizSelect[index] = value;
+                                            widget.setQuiz(null);
+                                          });
+                                        }
+                                        print(quizSelect);
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          // height: 25,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(state.list[index].titleQuiz),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(state.list[index]
+                                                          .totalQuestion +
+                                                      ' câu'),
+                                                  Text(state.list[index]
+                                                          .timePlay +
+                                                      ' min'),
+                                                ],
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      QuizSreen(
+                                                        quiz: state.list[index],
+                                                        idTeacher:
+                                                            widget.idTeacher,
+                                                      )));
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          color: ColorApp.mediumBlue,
+                                          size: 13,
+                                        ))
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                    )
+                  : Container();
             } else if (state is LoadErrorQuiz) {
               return Center(
                 child: Padding(
