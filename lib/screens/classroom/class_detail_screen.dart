@@ -586,7 +586,21 @@ class ItemNoti extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Test ' + post.idQuiz),
+                            RichText(
+                              text: TextSpan(
+                                text: 'Mã làm bài: ',
+                                style: TextStyle(
+                                    color: ColorApp.black,
+                                    fontWeight: FontWeight.normal),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: post.idQuiz,
+                                      style: TextStyle(
+                                        color: ColorApp.red,
+                                      )),
+                                ],
+                              ),
+                            ),
                             Text(post.quizContent),
                           ],
                         ),

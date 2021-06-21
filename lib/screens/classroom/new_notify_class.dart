@@ -127,10 +127,10 @@ class _NewNotifyState extends State<NewNotify> {
                   "idQuiz": isQuiz && quizAdd != null ? quizAdd.idQuiz : null,
                   "quizContent": isQuiz && quizAdd != null
                       ? quizAdd.titleQuiz +
-                          ' ' +
+                          ' - ' +
                           quizAdd.timePlay +
-                          ' Số câu:' +
-                          quizAdd.totalQuestion
+                          ' phút - ' +
+                          quizAdd.totalQuestion+' câu'
                       : null,
                 };
                 postDatabase.createPost(dataPost, widget.idClass, idPost);

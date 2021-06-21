@@ -20,6 +20,7 @@ import 'package:flutter/services.dart';
 import 'package:utc2_staff/service/firestore/notify_app_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/utils.dart';
+import 'blocs/notify_app_bloc/notify_app_bloc.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
 import 'service/firestore/teacher_database.dart';
 
@@ -93,8 +94,8 @@ class _HomePageState extends State<HomePage> {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
-        'name': message.data['name'] ?? '', //người đăng
-        'avatar': message.data['avatar'] ?? '', //người đăng
+        'name': teacher.name ?? '' ?? '', //người đăng
+        'avatar': teacher.avatar?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<CommentBloc>(create: (context) => CommentBloc()),
         BlocProvider<QuizBloc>(create: (context) => QuizBloc()),
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
+        BlocProvider<NotifyAppBloc>(create: (context) => NotifyAppBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

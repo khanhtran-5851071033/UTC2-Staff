@@ -145,8 +145,12 @@ class _NewCommentClassState extends State<NewCommentClass> {
             child: BlocBuilder<CommentBloc, CommentState>(
                 builder: (context, state) {
               if (state is LoadingComment)
-                return SpinKitThreeBounce(
-                  color: ColorApp.lightBlue,
+                return Container(
+                  child: Center(
+                      child: SpinKitThreeBounce(
+                    color: Colors.lightBlue,
+                    size: size.width * 0.06,
+                  )),
                 );
               else if (state is LoadedComment) {
                 return ListView.builder(
@@ -237,8 +241,12 @@ class _NewCommentClassState extends State<NewCommentClass> {
                   ),
                 );
               } else {
-                return SpinKitThreeBounce(
-                  color: ColorApp.lightBlue,
+                return Container(
+                  child: Center(
+                      child: SpinKitThreeBounce(
+                    color: Colors.lightBlue,
+                    size: size.width * 0.06,
+                  )),
                 );
               }
             }),

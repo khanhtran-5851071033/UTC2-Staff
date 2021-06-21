@@ -1,5 +1,6 @@
 
 import 'package:rxdart/rxdart.dart';
+import 'package:utc2_staff/models/content_utc_web.dart';
 import 'package:utc2_staff/models/event_utc_web.dart';
 import 'package:web_scraper/web_scraper.dart';
 
