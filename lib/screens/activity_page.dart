@@ -23,28 +23,7 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage> {
   ClassDatabase classDatabase = ClassDatabase();
   List<Post> post = [];
-  List activity = [
-    {
-      'title': 'Đồ án tốt nghiệp',
-      'name': 'Phạm Thị Miên',
-      'subAct': ['Báo Cáo tiến độ']
-    },
-    {
-      'title': 'AI.GTVT.2.20-21',
-      'name': 'Nguyễn Đình Hiển',
-      'subAct': [
-        'BT1 (Nhóm) : Tìm hiểu về AI',
-        'BT2 (Nhóm) : Thuật Giải Heuristic',
-        'BT3 (Nhóm) : Phương pháp tìm kiếm'
-      ]
-    },
-    {
-      'title': 'Phân tích thiết kế hướng đối tượng (k58-utc2)',
-      'name': 'Nguyễn Quang Phúc',
-      'subAct': []
-    },
-    {'title': 'data minning 20-21', 'name': 'Trần Phong Nhã', 'subAct': []},
-  ];
+
 
   showAlertDialog(BuildContext context, String name, String id) {
     // set up the buttons

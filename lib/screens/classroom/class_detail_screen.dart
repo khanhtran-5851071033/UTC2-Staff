@@ -193,9 +193,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                   horizontal: size.width * 0.03),
                               itemBuilder: (context, index) {
                                 var e = state.list[index];
-                                DateTime parseDate =
-                                    new DateFormat("yyyy-MM-dd HH:mm:ss")
-                                        .parse(e.date);
+                            
 
                                 return ItemNoti(
                                   teacher: teacher,

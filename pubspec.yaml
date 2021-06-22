@@ -77,6 +77,10 @@ dependencies:
   flutter_native_timezone: ^1.0.10
   signature: ^4.1.1
   url_launcher: ^6.0.6
+  firebase_storage: ^8.0.3
+
+  # pick file
+  file_picker: ^3.0.1
   
 
  

@@ -216,8 +216,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                             children: [
                               Text(
                                 widget.teacher.name != null
-                                    ? 'Giảng viên phụ trách : ' +
-                                        widget.teacher.name
+                                    ? 'GV phụ trách : ' + widget.teacher.name
                                     : '',
                               ),
                               SizedBox(
@@ -225,8 +224,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                               ),
                               Text(
                                 widget.teacher.email != null
-                                    ? 'Email giảng viên : ' +
-                                        widget.teacher.email
+                                    ? 'Email GV : ' + widget.teacher.email
                                     : '',
                               ),
                             ],

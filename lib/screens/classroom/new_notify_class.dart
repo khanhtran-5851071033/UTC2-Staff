@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_event.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_state.dart';
+import 'package:utc2_staff/screens/classroom/new_file.dart';
 import 'package:utc2_staff/screens/classroom/new_quiz.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
@@ -27,7 +28,7 @@ class NewNotify extends StatefulWidget {
 }
 
 class _NewNotifyState extends State<NewNotify> {
-  bool expaned = false, isQuiz = false;
+  bool expaned = false, isQuiz = false, isFile = false;
   String idAtent = '';
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
@@ -130,7 +131,8 @@ class _NewNotifyState extends State<NewNotify> {
                           ' - ' +
                           quizAdd.timePlay +
                           ' phút - ' +
-                          quizAdd.totalQuestion+' câu'
+                          quizAdd.totalQuestion +
+                          ' câu'
                       : null,
                 };
                 postDatabase.createPost(dataPost, widget.idClass, idPost);
@@ -280,6 +282,22 @@ class _NewNotifyState extends State<NewNotify> {
                           height: 35,
                           child: Text('Tệp đính kèm')),
                     ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isFile ? isFile = false : isFile = true;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewFile()));
+                          });
+                        },
+                        icon: Icon(
+                          isFile
+                              ? Icons.remove_circle
+                              : Icons.add_circle_rounded,
+                          color: ColorApp.mediumBlue,
+                        ))
                   ],
                 ),
               ),
