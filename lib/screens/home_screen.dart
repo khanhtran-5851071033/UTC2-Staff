@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/activity_page.dart';
 import 'package:utc2_staff/screens/notify_page.dart';
@@ -24,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar appBar = AppBar(title: Text(''));
   TeacherBloc teacherBloc;
   Teacher teacher;
+  Widget utc2= Container(
+                        child: Center(
+                            child: SpinKitThreeBounce(
+                          color: Colors.lightBlue,
+                          size:30,
+                        )),
+                      );
   @override
   void initState() {
     super.initState();
@@ -37,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Widget utc2 = HomePage();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -46,16 +53,30 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: _selectedIndex == 0 || _selectedIndex == 3
             ? PreferredSize(
                 preferredSize: Size(size.width, appBar.preferredSize.height),
-                child: BlocBuilder<TeacherBloc, TeacherState>(
-                    builder: (context, state) {
-                  if (state is TeacherLoaded) {
-                    {
-                      teacher = state.teacher;
-                      return mainAppBar(size, state.teacher);
+                child: BlocConsumer<TeacherBloc, TeacherState>(
+                  listener: (context, state) {
+                    if (state is TeacherLoaded) {
+                      setState(() {
+                        utc2 = HomePage(
+                          idTeacher: state.teacher.id,
+                        );
+                      });
                     }
-                  } else
-                    return loadingAppBar(size);
-                }))
+                  },
+                  builder: (context, state) {
+                    return BlocBuilder<TeacherBloc, TeacherState>(
+                        builder: (context, state) {
+                      if (state is TeacherLoaded) {
+                        {
+                          teacher = state.teacher;
+
+                          return mainAppBar(size, state.teacher);
+                        }
+                      } else
+                        return loadingAppBar(size);
+                    });
+                  },
+                ))
             : null,
         drawer: CustomDrawer(linkWeb: (link) {
           setState(() {
@@ -102,7 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onItemSelected: (index) => setState(() {
             _selectedIndex = index;
             utc2 = Container();
-            utc2 = HomePage();
+            utc2 = teacher != null
+                ? HomePage(
+                    idTeacher: teacher.id,
+                  )
+                : Container();
 
             // duration: Duration(milliseconds: 300), curve: Curves.ease);
           }),

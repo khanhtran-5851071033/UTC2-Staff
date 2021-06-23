@@ -13,6 +13,7 @@ import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ import 'package:utc2_staff/service/firestore/notify_app_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'blocs/notify_app_bloc/notify_app_bloc.dart';
+import 'blocs/schedule_bloc/schedule_bloc.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
 import 'service/firestore/teacher_database.dart';
 
@@ -123,6 +125,8 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<QuizBloc>(create: (context) => QuizBloc()),
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
         BlocProvider<NotifyAppBloc>(create: (context) => NotifyAppBloc()),
+        BlocProvider<ScheduleBloc>(create: (context) => ScheduleBloc()),
+        BlocProvider<TaskOfScheduleBloc>(create: (context) => TaskOfScheduleBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

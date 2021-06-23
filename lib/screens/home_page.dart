@@ -1,10 +1,22 @@
 import 'dart:math';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+import 'package:utc2_staff/blocs/schedule_bloc/schedule_bloc.dart';
+import 'package:utc2_staff/blocs/schedule_bloc/schedule_event.dart';
+import 'package:utc2_staff/blocs/schedule_bloc/schedule_state.dart';
+import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
+import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_event.dart';
+import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_state.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
 class HomePage extends StatefulWidget {
+  final String idTeacher;
+
+  const HomePage({Key key, this.idTeacher}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -25,6 +37,17 @@ class _HomePageState extends State<HomePage> {
     'https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png'
   ];
   final _scrollController = ScrollController();
+  ScheduleBloc scheduleBloc = new ScheduleBloc();
+  TaskOfScheduleBloc taskBloc = new TaskOfScheduleBloc();
+  int lenght;
+  @override
+  void initState() {
+    scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
+    taskBloc = BlocProvider.of<TaskOfScheduleBloc>(context);
+    scheduleBloc.add(GetScheduleEvent(widget.idTeacher));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -216,6 +239,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  String formatTime(String time) {
+    DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+    return DateFormat("HH:mm").format(parseDate);
+  }
+
   Widget taskToday(Size size, PageController pageController,
       ValueNotifier<int> _pageNotifier) {
     return Container(
@@ -236,173 +264,218 @@ class _HomePageState extends State<HomePage> {
                 margin: EdgeInsets.only(bottom: 10),
                 width: size.width,
                 height: size.width / 2.2,
-                child: PageView(
-                  physics: BouncingScrollPhysics(),
-                  controller: pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _pageNotifier.value = index;
-                    });
-                  },
-                  children: List.generate(3, (index) {
-                    return Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                            padding: EdgeInsets.only(left: 5),
-                            color: Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)],
-                            child: Container(
-                              padding: EdgeInsets.all(size.width * 0.03),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 3,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 5), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Trí Tuệ Nhân Tạo',
-                                    style: TextStyle(
-                                        color: ColorApp.mediumBlue,
-                                        fontSize: size.width * 0.045,
-                                        letterSpacing: 1,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(5),
-                                        child: Text(
-                                          '07:00 -11:30',
-                                          style: TextStyle(
-                                            color: Colors.orange,
-                                          ),
-                                        ),
-                                        decoration: BoxDecoration(
+                child: BlocBuilder<ScheduleBloc, ScheduleState>(
+                  builder: (context, state) {
+                    if (state is LoadingSchedule)
+                      return Container(
+                        child: Center(
+                            child: SpinKitThreeBounce(
+                          color: Colors.lightBlue,
+                          size: size.width * 0.06,
+                        )),
+                      );
+                    else if (state is LoadedSchedule) {
+                      lenght = state.list.length;
+
+                      return PageView(
+                        physics: BouncingScrollPhysics(),
+                        controller: pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _pageNotifier.value = index;
+                            taskBloc.add(GetTaskOfScheduleEvent(
+                                widget.idTeacher,
+                                state.list[index].idSchedule));
+                            print(state.list[index].idSchedule);
+                          });
+                        },
+                        children: List.generate(state.list.length, (index) {
+                         
+                                return Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Container(
+                                        padding: EdgeInsets.only(left: 5),
+                                        color: Colors.primaries[Random()
+                                            .nextInt(Colors.primaries.length)],
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.all(size.width * 0.03),
+                                          decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: Colors.orangeAccent
-                                                .withOpacity(.1)),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.all(5),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.place,
-                                              color: ColorApp.lightBlue,
-                                              size: 16,
-                                            ),
-                                            Text(
-                                              '6E10',
-                                              style: TextStyle(
-                                                color: ColorApp.blue,
+                                                BorderRadius.circular(10),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.3),
+                                                spreadRadius: 3,
+                                                blurRadius: 7,
+                                                offset: Offset(0,
+                                                    5), // changes position of shadow
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: ColorApp.lightBlue
-                                                .withOpacity(.1)),
-                                      ),
-                                    ],
-                                  ),
-                                  // Spacer(),
-                                  Expanded(
-                                    child: Container(
-                                      width: size.width,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Row(
+                                            ],
+                                          ),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: List.generate(user.length,
-                                                (index) {
-                                              return Align(
-                                                widthFactor: 0.4,
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  width: 35,
-                                                  decoration: BoxDecoration(
-                                                      color: ColorApp.lightGrey,
-                                                      shape: BoxShape.circle),
-                                                  padding: EdgeInsets.all(2),
-                                                  child: CircleAvatar(
-                                                    radius: 20.0,
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                            user[index]),
-                                                    child:
-                                                        index == user.length - 1
-                                                            ? Text('12')
-                                                            : Container(),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                          ),
-                                          ElevatedButton(
-                                              child: Text("Vào lớp",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      letterSpacing: 1,
-                                                      wordSpacing: 1,
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              style: ButtonStyle(
-                                                  foregroundColor:
-                                                      MaterialStateProperty.all<Color>(
-                                                          Colors.white),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<Color>(
-                                                          ColorApp.mediumBlue),
-                                                  shape: MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                          side: BorderSide(color: Colors.transparent)))),
-                                              onPressed: () => null)
-                                        ],
-                                      ),
-                                    ),
+                                            children: [
+                                              Text(
+                                                state.list[index].titleSchedule,
+                                                style: TextStyle(
+                                                    color: ColorApp.mediumBlue,
+                                                    fontSize:
+                                                        size.width * 0.045,
+                                                    letterSpacing: 1,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                            BlocBuilder<TaskOfScheduleBloc,
+                              TaskOfScheduleState>(
+                            builder: (context, stateTask) {
+                              if (state is LoadingTaskOfSchedule)
+                                return Container(
+                                  child: Center(
+                                      child: SpinKitThreeBounce(
+                                    color: Colors.lightBlue,
+                                    size: size.width * 0.06,
+                                  )),
+                                );
+                              else if (stateTask is LoadedTaskOfSchedule) {
+                                                  return Column(
+                                                    children: List.generate(
+                                                      stateTask.list.length,
+                                                      (index1) => Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            child: Text(
+                                                              formatTime(stateTask
+                                                                      .list[
+                                                                          index1]
+                                                                      .timeStart) +
+                                                                  ' - ' +
+                                                                  formatTime(stateTask
+                                                                      .list[
+                                                                          index1]
+                                                                      .timeEnd),
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .orange,
+                                                              ),
+                                                            ),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .orangeAccent
+                                                                    .withOpacity(
+                                                                        .1)),
+                                                          ),
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.place,
+                                                                  color: ColorApp
+                                                                      .lightBlue,
+                                                                  size: 16,
+                                                                ),
+                                                                Text(
+                                                                  stateTask
+                                                                      .list[
+                                                                          index1]
+                                                                      .idRoom,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        ColorApp
+                                                                            .blue,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: ColorApp
+                                                                    .lightBlue
+                                                                    .withOpacity(
+                                                                        .1)),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );} else if (stateTask is LoadErrorTaskOfSchedule) {
+                                return Center(
+                                  child: Text(
+                                    stateTask.error,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
                                   ),
-                                ],
-                              ),
-                            ),
-                          )),
-                    );
-                  }),
+                                );
+                              } else {
+                                return Container(
+                                  child: Center(
+                                      child: SpinKitThreeBounce(
+                                    color: Colors.lightBlue,
+                                    size: size.width * 0.06,
+                                  )),
+                                );
+                              }
+                                                },
+                                              ),
+                                              // Spacer(),
+                                            
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                );
+                              }
+                      ,)
+                       
+                      );
+                    } else if (state is LoadErrorSchedule) {
+                      return Center(
+                        child: Text(
+                          state.error,
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        child: Center(
+                            child: SpinKitThreeBounce(
+                          color: Colors.lightBlue,
+                          size: size.width * 0.06,
+                        )),
+                      );
+                    }
+                  },
                 ),
               )
             ],
           ),
           Center(
             child: DotsIndicator(
-              dotsCount: 3,
+              dotsCount: lenght ?? 2,
               mainAxisAlignment: MainAxisAlignment.center,
               position: _pageNotifier.value.toDouble(),
               decorator: DotsDecorator(
