@@ -111,6 +111,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
                 suffixIcon: IconButton(
                   onPressed: () async {
                     if (content != null) {
+                  
                       var response = await PushNotiFireBaseAPI.pushNotiTopic(
                           widget.teacher.name +
                               " đã nhận xét bài viết của \n" +
@@ -130,6 +131,7 @@ class _NewCommentClassState extends State<NewCommentClass> {
                             "idChannel": widget.idClass,
                             "className": widget.classUtc.name,
                             "classDescription": widget.classUtc.note,
+                            
                           },
                           widget.idClass);
                       if (response.statusCode == 200) {

@@ -896,7 +896,7 @@ class _EventScreenState extends State<EventScreen> {
                                       child: Center(
                                           child: SpinKitThreeBounce(
                                         color: Colors.lightBlue,
-                                        size: size.width * 0.06,
+                                        size: 30,
                                       )),
                                     );
                             }),
@@ -943,10 +943,9 @@ class _EventScreenState extends State<EventScreen> {
                           return index == snapshot.data.length &&
                                   snapshot.data.length < 11
                               ? Container(
-                                  height: 100,
                                   child: Center(
                                       child: SpinKitThreeBounce(
-                                    color: Color(0xff29166F),
+                                    color: Colors.lightBlue,
                                     size: 30,
                                   )),
                                 )
