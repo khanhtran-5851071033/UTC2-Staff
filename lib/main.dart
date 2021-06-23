@@ -87,20 +87,8 @@ class _HomePageState extends State<HomePage> {
         print('MESSAGE>>>>' + message.toString());
       }
     });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String email = preferences.getString('userEmail');
-      var teacher = await TeacherDatabase.getTeacherData(email);
-      String id = generateRandomString(5);
-      Map<String, String> dataNotifyApp = {
-        'id': id ?? '',
-        'idUser': teacher.id ?? '', //user đăng nhập
-        'content': message.data['content'] ?? '',
-        'name': teacher.name ?? '' ?? '', //người đăng
-        'avatar': teacher.avatar?? '', //người đăng
-        'date': DateTime.now().toString(), //time nhận được
-      };
-      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message)  {
+     
 
       createLocalNotify(message);
     });
@@ -120,13 +108,15 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
         BlocProvider<TeacherBloc>(create: (context) => TeacherBloc()),
         BlocProvider<StudentBloc>(create: (context) => StudentBloc()),
-        BlocProvider<AttendStudentBloc>(create: (context) => AttendStudentBloc()),
+        BlocProvider<AttendStudentBloc>(
+            create: (context) => AttendStudentBloc()),
         BlocProvider<CommentBloc>(create: (context) => CommentBloc()),
         BlocProvider<QuizBloc>(create: (context) => QuizBloc()),
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
         BlocProvider<NotifyAppBloc>(create: (context) => NotifyAppBloc()),
         BlocProvider<ScheduleBloc>(create: (context) => ScheduleBloc()),
-        BlocProvider<TaskOfScheduleBloc>(create: (context) => TaskOfScheduleBloc()),
+        BlocProvider<TaskOfScheduleBloc>(
+            create: (context) => TaskOfScheduleBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -141,9 +131,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void createLocalNotify(RemoteMessage message) {
+  void createLocalNotify(RemoteMessage message)async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String email = preferences.getString('userEmail');
+      var teacher = await TeacherDatabase.getTeacherData(email);
+      String id = generateRandomString(5);
+  
     if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'false') {
+              Map<String, String> dataNotifyApp = {
+        'id': id ?? '',
+        'idUser': teacher.id ?? '', //user đăng nhập
+        'content': message.data['content'] ?? '',
+        'name': message.data['name'] ?? '' ?? '', //người đăng
+        'avatar': message.data['avatar']?? '', //người đăng
+        'date': DateTime.now().toString(), //time nhận được
+      };
+      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
       ////  print('Thông báo new Notity--------------------------------------');
       MyLocalNotification.showNotification(
         notifications,
@@ -155,6 +159,15 @@ class _HomePageState extends State<HomePage> {
       );
     } else if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'true') {
+                 Map<String, String> dataNotifyApp = {
+        'id': id ?? '',
+        'idUser': teacher.id ?? '', //user đăng nhập
+        'content': message.data['content'] ?? '',
+        'name': message.data['name'] ?? '' ?? '', //người đăng
+        'avatar': message.data['avatar']?? '', //người đăng
+        'date': DateTime.now().toString(), //time nhận được
+      };
+      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
       MyLocalNotification.showNotificationAttenden(
         notifications,
         message.data['msg'],
@@ -166,6 +179,15 @@ class _HomePageState extends State<HomePage> {
         message.data['timeAtten'],
       );
     } else {
+          Map<String, String> dataNotifyApp = {
+        'id': id ?? '',
+        'idUser': teacher.id ?? '', //user đăng nhập
+        'content': message.data['content'] ?? '',
+        'name': message.data['name'] ?? '' ?? '', //người đăng
+        'avatar': message.data['avatar']?? '', //người đăng
+        'date': DateTime.now().toString(), //time nhận được
+      };
+      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
       // print('Thông báo NEW CLASS-------------------------------------');
       MyLocalNotification.showNotificationNewClass(
         notifications,

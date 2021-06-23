@@ -25,13 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar appBar = AppBar(title: Text(''));
   TeacherBloc teacherBloc;
   Teacher teacher;
-  Widget utc2= Container(
-                        child: Center(
-                            child: SpinKitThreeBounce(
-                          color: Colors.lightBlue,
-                          size:30,
-                        )),
-                      );
+  Widget utc2 = Container(
+    child: Center(
+        child: SpinKitThreeBounce(
+      color: Colors.lightBlue,
+      size: 30,
+    )),
+  );
   @override
   void initState() {
     super.initState();
@@ -111,9 +111,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? NotifyPage(
                       idUser: teacher.id,
                     )
-                  : Container(),
+                  : Container(
+                      child: Center(
+                          child: SpinKitThreeBounce(
+                        color: Colors.lightBlue,
+                        size: 30,
+                      )),
+                    ),
               SchedulePage(),
-              teacher != null ? ActivityPage(teacher: teacher) : Container(),
+              teacher != null
+                  ? ActivityPage(teacher: teacher)
+                  : Container(
+                      child: Center(
+                          child: SpinKitThreeBounce(
+                        color: Colors.lightBlue,
+                        size: 30,
+                      )),
+                    ),
             ],
           ),
         ),
@@ -127,7 +141,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? HomePage(
                     idTeacher: teacher.id,
                   )
-                : Container();
+                : Container(
+                    child: Center(
+                        child: SpinKitThreeBounce(
+                      color: Colors.lightBlue,
+                      size: 30,
+                    )),
+                  );
 
             // duration: Duration(milliseconds: 300), curve: Curves.ease);
           }),

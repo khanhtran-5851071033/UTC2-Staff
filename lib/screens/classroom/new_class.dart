@@ -12,8 +12,6 @@ import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -31,42 +29,42 @@ class _NewClassState extends State<NewClass> {
 
   GlobalKey globalKey = new GlobalKey();
 
-  Future<void> _captureAndSharePng() async {
-    RenderRepaintBoundary boundary =
-        globalKey.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage();
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData.buffer.asUint8List();
-    ImageGallerySaver.saveImage(pngBytes,
-        name: DateTime.now().toString(), quality: 100);
+  // Future<void> _captureAndSharePng() async {
+  //   RenderRepaintBoundary boundary =
+  //       globalKey.currentContext.findRenderObject();
+  //   ui.Image image = await boundary.toImage();
+  //   ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  //   Uint8List pngBytes = byteData.buffer.asUint8List();
+  //   ImageGallerySaver.saveImage(pngBytes,
+  //       name: DateTime.now().toString(), quality: 100);
 
-    // Fluttertoast.showToast(
-    //     msg: "Đã lưu vào thư viện",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: ColorApp.mediumBlue,
-    //     textColor: Colors.white,
-    //     fontSize: 16.0);
-  }
+  //   // Fluttertoast.showToast(
+  //   //     msg: "Đã lưu vào thư viện",
+  //   //     toastLength: Toast.LENGTH_SHORT,
+  //   //     gravity: ToastGravity.CENTER,
+  //   //     timeInSecForIosWeb: 1,
+  //   //     backgroundColor: ColorApp.mediumBlue,
+  //   //     textColor: Colors.white,
+  //   //     fontSize: 16.0);
+  // }
 
-  Future<void> _shareImage() async {
-    try {
-      RenderRepaintBoundary boundary =
-          globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage();
-      final directory = (await getExternalStorageDirectory()).path;
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
-      File imgFile = new File('$directory/$DateTime' + '.png');
-      imgFile.writeAsBytes(pngBytes);
-      // await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
-      //     text: 'QR của lớp học.');
-    } catch (e) {
-      print('error: $e');
-    }
-  }
+  // Future<void> _shareImage() async {
+  //   try {
+  //     RenderRepaintBoundary boundary =
+  //         globalKey.currentContext.findRenderObject();
+  //     ui.Image image = await boundary.toImage();
+  //     final directory = (await getExternalStorageDirectory()).path;
+  //     ByteData byteData =
+  //         await image.toByteData(format: ui.ImageByteFormat.png);
+  //     Uint8List pngBytes = byteData.buffer.asUint8List();
+  //     File imgFile = new File('$directory/$DateTime' + '.png');
+  //     imgFile.writeAsBytes(pngBytes);
+  //     // await Share.file('Chia sẻ mã QR', 'qr.png', pngBytes, 'image/png',
+  //     //     text: 'QR của lớp học.');
+  //   } catch (e) {
+  //     print('error: $e');
+  //   }
+  // }
 
   List<Student> listInvite = [];
   String idClass, nameClass, description, idTeacher;
@@ -104,6 +102,7 @@ class _NewClassState extends State<NewClass> {
           TextButton.icon(
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
+                     await FirebaseMessaging.instance.subscribeToTopic(idClass);
                   Map<String, String> dataClass = {
                     'id': idClass,
                     'name': nameClass,
@@ -112,23 +111,7 @@ class _NewClassState extends State<NewClass> {
                     'date': DateTime.now().toString()
                   };
                   classdb.createClass(dataClass, idClass);
-                  for (var e in listInvite) {
-                    PushNotiFireBaseAPI.pushNotiToken(
-                        nameClass,
-                        idClass,
-                        {
-                          "idNoti": 'newClass',
-                          "msg": idClass,
-                          "idChannel": idClass,
-                          "className": nameClass,
-                          "classDescription": description ?? '',
-                          "nameTeacher": widget.teacher.name
-                        },
-                        e.token);
-                  }
-
-                  await FirebaseMessaging.instance.subscribeToTopic(idClass);
-                  PushNotiFireBaseAPI.pushNotiTopic(
+                   PushNotiFireBaseAPI.pushNotiTopic(
                       nameClass,
                       idClass,
                       {
@@ -137,9 +120,42 @@ class _NewClassState extends State<NewClass> {
                         "idChannel": idClass,
                         "className": nameClass,
                         "classDescription": description ?? '',
-                        "nameTeacher": widget.teacher.name
+                        "nameTeacher": widget.teacher.name,
+                        "content": "Đã tạo lớp mới: " +
+                            nameClass +
+                            "\n" +
+                            "Mã lớp : " +
+                            idClass,
+                        "avatar": widget.teacher.avatar,
+                        "name": widget.teacher.name,
                       },
                       idClass);
+                  if (listInvite.isNotEmpty) {
+                    for (var e in listInvite) {
+                      PushNotiFireBaseAPI.pushNotiToken(
+                          nameClass,
+                          idClass,
+                          {
+                            "idNoti": 'newClass',
+                            "msg": idClass,
+                            "idChannel": idClass,
+                            "className": nameClass,
+                            "classDescription": description ?? '',
+                            "nameTeacher": widget.teacher.name,
+                            "content": "Đã tạo lớp mới: " +
+                                nameClass +
+                                "\n" +
+                                "Mã lớp : " +
+                                idClass,
+                            "avatar": widget.teacher.avatar,
+                            "name": widget.teacher.name,
+                          },
+                          e.token);
+                    }
+                  }
+
+               
+                 
                   Get.back();
                 }
               },
@@ -158,8 +174,8 @@ class _NewClassState extends State<NewClass> {
       ),
       body: SingleChildScrollView(
         child: Container(
-             padding: EdgeInsets.symmetric(
-                  vertical: size.width * 0.03, horizontal: size.width * 0.03),
+          padding: EdgeInsets.symmetric(
+              vertical: size.width * 0.03, horizontal: size.width * 0.03),
           child: Column(
             children: [
               Container(
@@ -176,8 +192,7 @@ class _NewClassState extends State<NewClass> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.03,
-                    vertical: size.width * 0.03),
+                    horizontal: size.width * 0.03, vertical: size.width * 0.03),
                 child: Column(
                   children: [
                     Row(
@@ -229,13 +244,13 @@ class _NewClassState extends State<NewClass> {
                             });
                           }
                         },
-                        style: TextStyle(
-                            fontSize: 20, color: ColorApp.mediumBlue),
+                        style:
+                            TextStyle(fontSize: 20, color: ColorApp.mediumBlue),
                         decoration: InputDecoration(
                             // border: InputBorder.none,
                             labelText: 'Tên lớp..',
-                            labelStyle: TextStyle(
-                                fontSize: 18, color: ColorApp.black)),
+                            labelStyle:
+                                TextStyle(fontSize: 18, color: ColorApp.black)),
                       ),
                     ),
                     AnimatedCrossFade(
@@ -275,8 +290,7 @@ class _NewClassState extends State<NewClass> {
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.CENTER,
                                           timeInSecForIosWeb: 1,
-                                          backgroundColor:
-                                              ColorApp.mediumBlue,
+                                          backgroundColor: ColorApp.mediumBlue,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
                                     },
@@ -300,8 +314,7 @@ class _NewClassState extends State<NewClass> {
                                     child: Container(
                                       color: Colors.white,
                                       child: QrImage(
-                                        data:
-                                            idClass == null ? '' : idClass,
+                                        data: idClass == null ? '' : idClass,
                                         embeddedImage: AssetImage(
                                             'assets/images/logoUTC.png'),
                                         version: QrVersions.auto,
@@ -362,8 +375,7 @@ class _NewClassState extends State<NewClass> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.03,
-                    vertical: size.width * 0.03),
+                    horizontal: size.width * 0.03, vertical: size.width * 0.03),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -388,13 +400,13 @@ class _NewClassState extends State<NewClass> {
                             description = val;
                           });
                         },
-                        style: TextStyle(
-                            fontSize: 20, color: ColorApp.mediumBlue),
+                        style:
+                            TextStyle(fontSize: 20, color: ColorApp.mediumBlue),
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: 'Mô tả..',
-                            labelStyle: TextStyle(
-                                fontSize: 18, color: ColorApp.black)),
+                            labelStyle:
+                                TextStyle(fontSize: 18, color: ColorApp.black)),
                       ),
                     ),
                   ],
@@ -417,8 +429,7 @@ class _NewClassState extends State<NewClass> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.03,
-                    vertical: size.width * 0.03),
+                    horizontal: size.width * 0.03, vertical: size.width * 0.03),
                 child: Column(
                   children: [
                     Container(
@@ -502,13 +513,10 @@ class _NewClassState extends State<NewClass> {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 5),
                                   decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(3),
+                                      borderRadius: BorderRadius.circular(3),
                                       color: index.isEven
-                                          ? ColorApp.lightBlue
-                                              .withOpacity(.05)
-                                          : ColorApp.lightGrey
-                                              .withOpacity(.2)),
+                                          ? ColorApp.lightBlue.withOpacity(.05)
+                                          : ColorApp.lightGrey.withOpacity(.2)),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,

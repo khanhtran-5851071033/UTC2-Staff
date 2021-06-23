@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_bloc.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_event.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_state.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/comment_database.dart';
+import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
+import 'package:utc2_staff/service/push_noti_firebase.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewCommentClass extends StatefulWidget {
   final Teacher teacher;
   final String idClass;
   final String idPost;
-  NewCommentClass({this.teacher, this.idClass, this.idPost});
+  final Post post;
+  final Class classUtc;
+  NewCommentClass(
+      {this.teacher, this.idClass, this.idPost, this.post, this.classUtc});
   @override
   _NewCommentClassState createState() => _NewCommentClassState();
 }
@@ -102,8 +109,34 @@ class _NewCommentClassState extends State<NewCommentClass> {
             decoration: InputDecoration(
                 errorText: error ? 'Vui lòng thêm nhận xét' : null,
                 suffixIcon: IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (content != null) {
+                      var response = await PushNotiFireBaseAPI.pushNotiTopic(
+                          widget.teacher.name +
+                              " đã nhận xét bài viết của \n" +
+                              widget.post.name,
+                          content,
+                          {
+                            'idNoti': 'newNoti',
+                            "isAtten": 'false',
+                            "msg": widget.idPost,
+                            "content": widget.classUtc.name +
+                                "\nĐã nhận xét bài viết của " +
+                                widget.post.name +
+                                "\n" +
+                                content,
+                            "avatar": widget.teacher.avatar,
+                            "name": widget.teacher.name,
+                            "idChannel": widget.idClass,
+                            "className": widget.classUtc.name,
+                            "classDescription": widget.classUtc.note,
+                          },
+                          widget.idClass);
+                      if (response.statusCode == 200) {
+                        print('success');
+                        Navigator.pop(context);
+                      } else
+                        print('fail');
                       var idComment = generateRandomString(5);
                       Map<String, String> dataComment = {
                         'id': idComment,

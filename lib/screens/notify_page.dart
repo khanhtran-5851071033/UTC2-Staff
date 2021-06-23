@@ -496,7 +496,7 @@ class _NotifyAppState extends State<NotifyApp> {
       height: widget.size.height,
       padding: EdgeInsets.symmetric(horizontal: widget.size.width * 0.03),
       child: RefreshIndicator(
-        displacement: 60,
+        displacement: 20,
         onRefresh: () async {
           notifyAppBloc.add(GetNotifyAppEvent(widget.idUser));
         },
@@ -530,6 +530,7 @@ class _NotifyAppState extends State<NotifyApp> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   padding: EdgeInsets.all(4),
@@ -574,7 +575,7 @@ class _NotifyAppState extends State<NotifyApp> {
                                       Text(
                                         state.list[index].content,
                                         softWrap: true,
-                                        maxLines: 2,
+                                        maxLines: 10,
                                         overflow: TextOverflow.clip,
                                         style: TextStyle(
                                             color: ColorApp.black,

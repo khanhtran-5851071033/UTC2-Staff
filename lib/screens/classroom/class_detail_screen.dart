@@ -193,11 +193,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                   horizontal: size.width * 0.03),
                               itemBuilder: (context, index) {
                                 var e = state.list[index];
-                            
 
                                 return ItemNoti(
                                   teacher: teacher,
-                                  numberFile: index,
                                   function: (value) {
                                     if (value == 'delete') {
                                       postDatabase.deletePost(
@@ -206,8 +204,10 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                           .add(GetPostEvent(widget.idClass));
                                     }
                                   },
+                                  numberFile: index,
                                   numberComment: index,
                                   post: e,
+                                  classUtc: _class,
                                 );
                               }),
                         ),
@@ -414,13 +414,14 @@ class ItemNoti extends StatelessWidget {
   final Function function;
   final int numberComment;
   final Post post;
+  final Class classUtc;
 
   ItemNoti(
       {this.teacher,
       this.numberFile,
       this.function,
       this.numberComment,
-      this.post});
+      this.post, this.classUtc});
 
   @override
   Widget build(BuildContext context) {
@@ -653,6 +654,8 @@ class ItemNoti extends StatelessWidget {
                                 teacher: teacher,
                                 idClass: post.idClass,
                                 idPost: post.id,
+                                classUtc: classUtc,
+                                post: post,
                               )));
                 },
                 child: Text(

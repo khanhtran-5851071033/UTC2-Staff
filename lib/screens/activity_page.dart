@@ -24,7 +24,6 @@ class _ActivityPageState extends State<ActivityPage> {
   ClassDatabase classDatabase = ClassDatabase();
   List<Post> post = [];
 
-
   showAlertDialog(BuildContext context, String name, String id) {
     // set up the buttons
     Widget cancelButton = TextButton(
@@ -122,8 +121,12 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               );
             } else {
-              return SpinKitThreeBounce(
-                color: ColorApp.lightBlue,
+              return Container(
+                child: Center(
+                    child: SpinKitThreeBounce(
+                  color: Colors.lightBlue,
+                  size: 30,
+                )),
               );
             }
           },
