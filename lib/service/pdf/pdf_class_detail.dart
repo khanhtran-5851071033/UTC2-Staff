@@ -1,12 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:intl/intl.dart';
+import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 class PdfParagraphApi {
-  static Future<File> generate() async {
+  static Future<File> generate(
+      Teacher teacher, Class classUtc, List<Student> listStudent) async {
     final pdf = Document();
     var customFont =
         Font.ttf(await rootBundle.load('font/OpenSans-Regular.ttf'));
@@ -15,25 +20,23 @@ class PdfParagraphApi {
     final imageSVG = await rootBundle.loadString('assets/images/logoUTC.SVG');
     final imageSVG1 =
         await rootBundle.loadString('assets/images/bannerUTC.svg');
-
+    final List<List<dynamic>> list = [];
+    int i = 0;
+    for (var item in listStudent) {
+      ++i;
+      list.add([i, item.id, item.name, item.lop]);
+    }
     pdf.addPage(
       MultiPage(
         build: (context) => <Widget>[
           buildCustomHeader(imageSVG1),
           SizedBox(height: 0.5 * PdfPageFormat.cm),
           title(customFont),
-          buildCustomInfo(customFont, imageSVG),
+          buildCustomInfo(customFont, imageSVG, classUtc, teacher),
           title1(customFont),
           Table.fromTextArray(
             headers: ['STT', 'MSV', 'Họ Tên', 'Lớp', 'Điểm TP'],
-            data: [
-              ['1', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-              ['2', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-              ['3', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-              ['4', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-              ['5', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-              ['6', '5855855', 'Trần Quốc Khánh', 'CNTT.K58', '7'],
-            ],
+            data: list,
             border: null,
             cellStyle: TextStyle(
                 fontWeight: FontWeight.normal,
@@ -56,7 +59,7 @@ class PdfParagraphApi {
           ),
           Divider(thickness: .5),
           SizedBox(height: 0.5 * PdfPageFormat.cm),
-          textCheck('Phạm Thị Miên', customFont, customFontBold)
+          textCheck(teacher.name, customFont, customFontBold)
         ],
         footer: (context) {
           final text = 'Trang ${context.pageNumber} of ${context.pagesCount}';
@@ -71,7 +74,7 @@ class PdfParagraphApi {
         },
       ),
     );
-    return PdfApi.saveDocument(name: 'utc2_class.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: '${classUtc.name}.pdf', pdf: pdf);
   }
 
   static Widget buildCustomHeader(String imageSVG1) => Container(
@@ -90,7 +93,9 @@ class PdfParagraphApi {
             ]),
       );
 
-  static Widget buildCustomInfo(Font customFont, String logo) => Container(
+  static Widget buildCustomInfo(
+          Font customFont, String logo, Class classUtc, Teacher teacher) =>
+      Container(
         width: 21 * PdfPageFormat.cm,
         padding: EdgeInsets.only(bottom: 3 * PdfPageFormat.mm),
         child: Row(
@@ -98,18 +103,27 @@ class PdfParagraphApi {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                textInfo('Tên lớp : ', 'Đồ Án Tốt Nghiệp', customFont),
+                textInfo(
+                    'Giảng viên phụ trách: ', teacher.name ?? '', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
-                textInfo('Mã lớp : ', 'YKKFN', customFont),
+                textInfo('Email : ', teacher.email ?? '', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
-                textInfo('Mô tả : ', '...', customFont),
+                textInfo('Tên lớp : ', classUtc.name ?? '', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
-                textInfo('Giảng viên phụ trách: ', 'Phạm Thị Miên', customFont),
+                textInfo('Mã lớp : ', classUtc.id ?? '', customFont),
                 SizedBox(height: 0.2 * PdfPageFormat.cm),
-                textInfo('Email : ', 'ptmien@utc2.edu.vn', customFont),
+                textInfo('Mô tả : ', classUtc.note ?? '', customFont),
+                SizedBox(height: 0.2 * PdfPageFormat.cm),
+                textInfo(
+                    'Ngày tạo : ',
+                    DateFormat('HH:mm - dd-MM-yyyy').format(
+                            DateFormat("yyyy-MM-dd HH:mm:ss")
+                                .parse(classUtc.date)) ??
+                        '',
+                    customFont),
               ]),
               Column(children: [
-                qrCode(logo,'mã lớp'),
+                qrCode(logo, classUtc.id),
               ])
             ]),
       );
@@ -190,7 +204,7 @@ class PdfParagraphApi {
         ),
       );
 
-  static Widget qrCode(String logo,String idClass) =>
+  static Widget qrCode(String logo, String idClass) =>
       Stack(alignment: Alignment.center, children: [
         Container(
           height: 70,

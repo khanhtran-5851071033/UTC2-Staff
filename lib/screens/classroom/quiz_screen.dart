@@ -76,8 +76,8 @@ class _QuizSreenState extends State<QuizSreen> {
         actions: [
           TextButton.icon(
               onPressed: () async {
-                final pdfFile = await PdfParagraphApi.generate();
-                PdfApi.openFile(pdfFile);
+                // final pdfFile = await PdfParagraphApi.generate();
+                // PdfApi.openFile(pdfFile);
               },
               icon: Image.asset(
                 'assets/icons/pdf.png',

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
@@ -31,6 +35,15 @@ class _ReportInfoClassState extends State<ReportInfoClass> {
     }
   }
 
+  List<Student> listStudent = [];
+  StudentBloc studentBloc = new StudentBloc();
+  @override
+  void initState() {
+    studentBloc = BlocProvider.of<StudentBloc>(context);
+    studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -56,7 +69,8 @@ class _ReportInfoClassState extends State<ReportInfoClass> {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              final pdfFile = await PdfParagraphApi.generate();
+              final pdfFile = await PdfParagraphApi.generate(
+                  widget.teacher, widget.classUtc,listStudent);
               PdfApi.openFile(pdfFile);
             },
             icon: Image.asset(
@@ -73,8 +87,10 @@ class _ReportInfoClassState extends State<ReportInfoClass> {
           color: Colors.white,
           child: Column(
             children: [
-              SizedBox(
-                height: 15,
+              Container(
+                height: 20,
+                width: size.width,
+                color: ColorApp.lightGrey.withOpacity(.5),
               ),
               Container(
                 width: size.width,
@@ -113,10 +129,42 @@ class _ReportInfoClassState extends State<ReportInfoClass> {
                 ),
               ),
               Expanded(
-                child: InfoDetailClass(
-                  teacher: widget.teacher,
-                  classUtc: widget.classUtc,
-                  controller: controller,
+                child: BlocConsumer<StudentBloc, StudentState>(
+                  listener: (context, state) {
+                    if (state is LoadedStudentState) {
+                      listStudent = state.listStudent;
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is StudentInitial) {
+                      return SpinKitThreeBounce(
+                        color: ColorApp.lightBlue,
+                        size: 30,
+                      );
+                    } else if (state is LoadingStudentState) {
+                      return SpinKitThreeBounce(
+                        color: ColorApp.lightBlue,
+                        size: 30,
+                      );
+                    } else if (state is LoadedStudentState) {
+                      return InfoDetailClass(
+                        teacher: widget.teacher,
+                        classUtc: widget.classUtc,
+                        controller: controller,
+                        listStudent: state.listStudent,
+                      );
+                    } else if (state is LoadErrorStudentState) {
+                      return Center(
+                          child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          state.error,
+                          style: TextStyle(fontSize: 16, color: ColorApp.red),
+                        ),
+                      ));
+                    } else
+                      return Container();
+                  },
                 ),
               ),
             ],

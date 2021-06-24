@@ -300,6 +300,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           teacher: teacher,
                           classUtc: _class,
                           controller: controller,
+                          listStudent: [],
                         ),
                       ),
                     ],

@@ -14,7 +14,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async* {
     switch (event.runtimeType) {
       case GetScheduleEvent:
-        print(event.props[0].toString() + 'id------------');
+       
         yield LoadingSchedule();
         List<Schedule> list = await ScheduleDatabase.getScheduleData(
           event.props[0],
@@ -32,6 +32,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         }
         // print(todayList.length);
         if (todayList.length > 0) {
+          print(todayList.length);
           yield LoadedSchedule(todayList);
         } else
           yield LoadErrorSchedule('Chưa có lịch giảng');
