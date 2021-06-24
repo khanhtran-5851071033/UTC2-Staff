@@ -8,7 +8,6 @@ import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 class TaskOfScheduleBloc
     extends Bloc<TaskOfScheduleEvent, TaskOfScheduleState> {
   TaskOfScheduleBloc() : super(TaskOfScheduleInitial());
-  List<TaskOfSchedule> todayList = [];
   @override
   Stream<TaskOfScheduleState> mapEventToState(
     TaskOfScheduleEvent event,
@@ -16,21 +15,19 @@ class TaskOfScheduleBloc
     switch (event.runtimeType) {
       case GetTaskOfScheduleEvent:
         yield LoadingTaskOfSchedule();
+
+        List<TaskOfSchedule> todayList = [];
         List<TaskOfSchedule> list =
             await ScheduleDatabase.getTaskOfScheduleData(
           event.props[0],
           event.props[1],
         );
         for (var task in list) {
-          if (task.timeStart != '') {
-            DateTime timeStart =
-                DateFormat("yyyy-MM-dd HH:mm:ss").parse(task.timeStart);
-            DateTime now = DateTime.now();
-            if (timeStart.day == now.day &&
-                timeStart.month == now.month &&
-                timeStart.year == now.year) {
-              todayList.add(task);
-            }
+
+          DateTime now = DateTime.now();
+
+          if (task.note - 1 == now.weekday) {
+            todayList.add(task);
           }
         }
         if (todayList.isNotEmpty) {

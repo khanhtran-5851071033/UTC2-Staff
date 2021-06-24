@@ -293,10 +293,10 @@ class _HomePageState extends State<HomePage> {
                                   onPageChanged: (index) {
                                     setState(() {
                                       _pageNotifier.value = index;
-                                      taskBloc.add(GetTaskOfScheduleEvent(
-                                          widget.idTeacher,
-                                          state.list[index].idSchedule));
                                     });
+                                    taskBloc.add(GetTaskOfScheduleEvent(
+                                        widget.idTeacher,
+                                        state.list[index].idSchedule));
                                   },
                                   children: List.generate(
                                     state.list.length,
@@ -357,15 +357,15 @@ class _HomePageState extends State<HomePage> {
                                                         if (state
                                                             is LoadingTaskOfSchedule)
                                                           return Container(
-                                                            child: Center(
-                                                                child:
-                                                                    SpinKitThreeBounce(
-                                                              color: Colors
-                                                                  .lightBlue,
-                                                              size: size.width *
-                                                                  0.06,
-                                                            )),
-                                                          );
+                                                              // child: Center(
+                                                              //     child:
+                                                              //         SpinKitThreeBounce(
+                                                              //   color: Colors
+                                                              //       .lightBlue,
+                                                              //   size: size.width *
+                                                              //       0.06,
+                                                              // )),
+                                                              );
                                                         else if (stateTask
                                                             is LoadedTaskOfSchedule) {
                                                           return Column(
@@ -386,9 +386,8 @@ class _HomePageState extends State<HomePage> {
                                                                           MainAxisAlignment
                                                                               .spaceBetween,
                                                                       children: [
-                                                                        Text(stateTask
-                                                                            .list[index1]
-                                                                            .note),
+                                                                        Text('Thứ ' +
+                                                                            (stateTask.list[index1].note).toString()),
                                                                         Text(stateTask
                                                                             .list[index1]
                                                                             .titleTask),
@@ -405,11 +404,9 @@ class _HomePageState extends State<HomePage> {
                                                                             EdgeInsets.all(5),
                                                                         child:
                                                                             Text(
-                                                                          stateTask.list[index1].timeStart == ''
-                                                                              ? ''
-                                                                              : formatTime(stateTask.list[index1].timeStart) + ' - ' + stateTask.list[index1].timeEnd == ''
-                                                                                  ? ''
-                                                                                  : formatTime(stateTask.list[index1].timeEnd),
+                                                                          formatTime(stateTask.list[index1].timeStart) +
+                                                                              ' - ' +
+                                                                              formatTime(stateTask.list[index1].timeEnd),
                                                                           style:
                                                                               TextStyle(
                                                                             color:
@@ -464,14 +461,84 @@ class _HomePageState extends State<HomePage> {
                                                           );
                                                         } else {
                                                           return Container(
-                                                            child: Center(
-                                                                child:
-                                                                    SpinKitThreeBounce(
-                                                              color: Colors
-                                                                  .lightBlue,
-                                                              size: size.width *
-                                                                  0.06,
-                                                            )),
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          vertical:
+                                                                              5),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(
+                                                                          'Thứ '),
+                                                                      // Text(
+                                                                      //     '          '),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Container(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              5),
+                                                                      child:
+                                                                          Text(
+                                                                        '                      ',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.orange,
+                                                                        ),
+                                                                      ),
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              5),
+                                                                          color: Colors
+                                                                              .orangeAccent
+                                                                              .withOpacity(.1)),
+                                                                    ),
+                                                                    Container(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              5),
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.place,
+                                                                            color:
+                                                                                ColorApp.lightBlue,
+                                                                            size:
+                                                                                16,
+                                                                          ),
+                                                                          Text(
+                                                                            '          ',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: ColorApp.blue,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              5),
+                                                                          color: ColorApp
+                                                                              .lightBlue
+                                                                              .withOpacity(.1)),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
                                                           );
                                                         }
                                                       },
@@ -512,7 +579,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Center(
             child: DotsIndicator(
-              dotsCount: lenght ?? 2,
+              dotsCount: lenght ?? 1,
               mainAxisAlignment: MainAxisAlignment.center,
               position: _pageNotifier.value.toDouble(),
               decorator: DotsDecorator(

@@ -14,7 +14,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   ) async* {
     switch (event.runtimeType) {
       case GetScheduleEvent:
-       
         yield LoadingSchedule();
         List<Schedule> list = await ScheduleDatabase.getScheduleData(
           event.props[0],
@@ -27,7 +26,21 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           DateTime now = DateTime.now();
           if (now.difference(timeStart).inDays >= 0 &&
               timeEnd.difference(now).inDays >= 0) {
-            todayList.add(task);
+            bool isToday = false;
+
+            List<TaskOfSchedule> listTask =
+                await ScheduleDatabase.getTaskOfScheduleData(
+              event.props[0],
+              task.idSchedule,
+            );
+            for (var task in listTask) {
+              if (task.note - 1 == now.weekday) {
+                isToday = true;
+                break;
+              }
+            }
+
+            if (isToday) todayList.add(task);
           }
         }
         // print(todayList.length);

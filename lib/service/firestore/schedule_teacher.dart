@@ -63,11 +63,12 @@ class ScheduleDatabase {
         .collection('Schedule')
         .get();
     list = data.docs.map((e) => Schedule(e)).toList();
-  
+
     return list;
   }
 
-  static getTaskOfScheduleData(String idTeacher, String idSchedule) async {
+  static Future<List<TaskOfSchedule>> getTaskOfScheduleData(
+      String idTeacher, String idSchedule) async {
     List<TaskOfSchedule> list = [];
     var data = await FirebaseFirestore.instance
         .collection('Teacher')
@@ -102,15 +103,15 @@ class TaskOfSchedule {
       timeStart,
       timeEnd,
       idRoom,
-      note,
       statusAttend;
+  int note;
   TaskOfSchedule(QueryDocumentSnapshot<Map<String, dynamic>> json) {
     this.idSchedule = json['idSchedule'];
     this.idTask = json['idTask'];
     this.titleTask = json['titleTask'];
     this.timeStart = json['timeStart'];
     this.timeEnd = json['timeEnd'];
-    this.note = json['note'];
+    this.note = int.parse(json['note']);
     this.idRoom = json['idRoom'];
     this.statusAttend = json['statusAttend'];
   }
