@@ -14,3 +14,10 @@ class GetScheduleEvent extends ScheduleEvent {
   @override
   List<Object> get props => [idTeacher];
 }
+class GetSchedulePageEvent extends ScheduleEvent {
+  final String idTeacher;
+
+  GetSchedulePageEvent(this.idTeacher);
+  @override
+  List<Object> get props => [idTeacher];
+}

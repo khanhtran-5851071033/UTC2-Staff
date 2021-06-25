@@ -6,9 +6,8 @@ import 'package:utc2_staff/utils/color_random.dart';
 
 import 'package:utc2_staff/utils/utils.dart';
 
-// ignore: must_be_immutable
 class OpitonSchedule extends StatefulWidget {
-  int view;
+  final int view;
   OpitonSchedule({
     this.view,
   });
@@ -146,7 +145,6 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
               if (date.day == today.day &&
                   date.month == today.month &&
                   date.year == today.year) {
-               
                 if (sh > today.hour) {
                   MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
                       notifications,
@@ -161,7 +159,6 @@ class _OpitonScheduleState extends State<OpitonSchedule> {
                       maLich);
                 } else if (sh == today.hour) {
                   if (sm > today.minute) {
-                   
                     MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
                         notifications,
                         wd,
