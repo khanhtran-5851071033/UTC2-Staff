@@ -14,6 +14,7 @@ import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
+import 'package:utc2_staff/blocs/today_task_bloc/today_task_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,7 @@ class _HomePageState extends State<HomePage> {
         print('MESSAGE>>>>' + message.toString());
       }
     });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message)  {
-     
-
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       createLocalNotify(message);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -115,6 +114,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
         BlocProvider<NotifyAppBloc>(create: (context) => NotifyAppBloc()),
         BlocProvider<ScheduleBloc>(create: (context) => ScheduleBloc()),
+        BlocProvider<TodayTaskBloc>(create: (context) => TodayTaskBloc()),
         BlocProvider<TaskOfScheduleBloc>(
             create: (context) => TaskOfScheduleBloc()),
       ],
@@ -131,20 +131,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void createLocalNotify(RemoteMessage message)async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String email = preferences.getString('userEmail');
-      var teacher = await TeacherDatabase.getTeacherData(email);
-      String id = generateRandomString(5);
-  
+  void createLocalNotify(RemoteMessage message) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String email = preferences.getString('userEmail');
+    var teacher = await TeacherDatabase.getTeacherData(email);
+    String id = generateRandomString(5);
+
     if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'false') {
-              Map<String, String> dataNotifyApp = {
+      Map<String, String> dataNotifyApp = {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
         'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
@@ -159,12 +159,12 @@ class _HomePageState extends State<HomePage> {
       );
     } else if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'true') {
-                 Map<String, String> dataNotifyApp = {
+      Map<String, String> dataNotifyApp = {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
         'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
@@ -179,12 +179,12 @@ class _HomePageState extends State<HomePage> {
         message.data['timeAtten'],
       );
     } else {
-          Map<String, String> dataNotifyApp = {
+      Map<String, String> dataNotifyApp = {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
         'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);

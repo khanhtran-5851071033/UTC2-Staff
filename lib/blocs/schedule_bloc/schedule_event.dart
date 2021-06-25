@@ -7,13 +7,7 @@ abstract class ScheduleEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetScheduleEvent extends ScheduleEvent {
-  final String idTeacher;
 
-  GetScheduleEvent(this.idTeacher);
-  @override
-  List<Object> get props => [idTeacher];
-}
 class GetSchedulePageEvent extends ScheduleEvent {
   final String idTeacher;
 

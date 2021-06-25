@@ -60,6 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         utc2 = HomePage(
                           idTeacher: state.teacher.id,
                         );
+
+                        teacher = state.teacher;
                       });
                     }
                   },
@@ -68,8 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, state) {
                       if (state is TeacherLoaded) {
                         {
-                          teacher = state.teacher;
-
                           return mainAppBar(size, state.teacher);
                         }
                       } else
@@ -115,17 +115,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                           child: SpinKitThreeBounce(
                         color: Colors.lightBlue,
-                        size: 30,
+                        size: 25,
                       )),
                     ),
-              SchedulePage(),
+              teacher != null
+                  ? SchedulePage(idTeacher: teacher.id)
+                  : Container(
+                      child: Center(
+                          child: SpinKitThreeBounce(
+                        color: Colors.lightBlue,
+                        size: 25,
+                      )),
+                    ),
               teacher != null
                   ? ActivityPage(teacher: teacher)
                   : Container(
                       child: Center(
                           child: SpinKitThreeBounce(
                         color: Colors.lightBlue,
-                        size: 30,
+                        size: 25,
                       )),
                     ),
             ],

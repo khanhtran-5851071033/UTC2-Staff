@@ -49,7 +49,6 @@ class MyLocalNotification {
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
-    print(scheduledDate);
     return scheduledDate;
   }
 
