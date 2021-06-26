@@ -7,11 +7,12 @@ import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
+//import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 
 class PdfParagraphApi {
-  static Future<File> generate(
-      Teacher teacher, Class classUtc, List<Student> listStudent) async {
+  static Future<File> generate(Teacher teacher, Class classUtc,
+      List<Student> listStudent,) async {
     final pdf = Document();
     var customFont =
         Font.ttf(await rootBundle.load('font/OpenSans-Regular.ttf'));
@@ -20,12 +21,15 @@ class PdfParagraphApi {
     final imageSVG = await rootBundle.loadString('assets/images/logoUTC.SVG');
     final imageSVG1 =
         await rootBundle.loadString('assets/images/bannerUTC.svg');
+   
+   
     final List<List<dynamic>> list = [];
     int i = 0;
     for (var item in listStudent) {
       ++i;
       list.add([i, item.id, item.name, item.lop]);
     }
+
     pdf.addPage(
       MultiPage(
         build: (context) => <Widget>[
@@ -59,7 +63,7 @@ class PdfParagraphApi {
           ),
           Divider(thickness: .5),
           SizedBox(height: 0.5 * PdfPageFormat.cm),
-          textCheck(teacher.name, customFont, customFontBold)
+          textCheck(teacher.name, customFont, customFontBold),
         ],
         footer: (context) {
           final text = 'Trang ${context.pageNumber} of ${context.pagesCount}';
@@ -151,7 +155,12 @@ class PdfParagraphApi {
         ),
       ]);
 
-  static Widget textCheck(String name, Font customFont, Font customFontBold) =>
+  static Widget textCheck(
+    String name,
+    Font customFont,
+    Font customFontBold,
+   
+  ) =>
       Container(
           width: 21 * PdfPageFormat.cm,
           child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -168,6 +177,7 @@ class PdfParagraphApi {
               ),
             ),
             SizedBox(height: 0.5 * PdfPageFormat.cm),
+           
             Text(
               'Người xác nhận          ',
               style: TextStyle(

@@ -14,6 +14,7 @@ import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
+import 'package:utc2_staff/blocs/test_bloc/test_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,7 @@ class _HomePageState extends State<HomePage> {
         print('MESSAGE>>>>' + message.toString());
       }
     });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message)  {
-     
-
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       createLocalNotify(message);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -117,6 +116,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<ScheduleBloc>(create: (context) => ScheduleBloc()),
         BlocProvider<TaskOfScheduleBloc>(
             create: (context) => TaskOfScheduleBloc()),
+        BlocProvider<TestBloc>(create: (context) => TestBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -131,23 +131,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void createLocalNotify(RemoteMessage message)async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String email = preferences.getString('userEmail');
-      var teacher = await TeacherDatabase.getTeacherData(email);
-      String id = generateRandomString(5);
-  
+  void createLocalNotify(RemoteMessage message) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String email = preferences.getString('userEmail');
+    var teacher = await TeacherDatabase.getTeacherData(email);
+    String id = generateRandomString(5);
+
     if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'false') {
-              Map<String, String> dataNotifyApp = {
-        'id': id ?? '',
-        'idUser': teacher.id ?? '', //user đăng nhập
-        'content': message.data['content'] ?? '',
-        'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
-        'date': DateTime.now().toString(), //time nhận được
-      };
-      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
       ////  print('Thông báo new Notity--------------------------------------');
       MyLocalNotification.showNotification(
         notifications,
@@ -157,17 +148,17 @@ class _HomePageState extends State<HomePage> {
         message.notification.title,
         message.notification.body,
       );
-    } else if (message.data['idNoti'] == 'newNoti' &&
-        message.data['isAtten'] == 'true') {
-                 Map<String, String> dataNotifyApp = {
+      Map<String, String> dataNotifyApp = {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
         'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
+    } else if (message.data['idNoti'] == 'newNoti' &&
+        message.data['isAtten'] == 'true') {
       MyLocalNotification.showNotificationAttenden(
         notifications,
         message.data['msg'],
@@ -178,16 +169,16 @@ class _HomePageState extends State<HomePage> {
         message.notification.body,
         message.data['timeAtten'],
       );
-    } else {
-          Map<String, String> dataNotifyApp = {
+      Map<String, String> dataNotifyApp = {
         'id': id ?? '',
         'idUser': teacher.id ?? '', //user đăng nhập
         'content': message.data['content'] ?? '',
         'name': message.data['name'] ?? '' ?? '', //người đăng
-        'avatar': message.data['avatar']?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
+    } else {
       // print('Thông báo NEW CLASS-------------------------------------');
       MyLocalNotification.showNotificationNewClass(
         notifications,
@@ -200,6 +191,15 @@ class _HomePageState extends State<HomePage> {
         message.notification.title, //ten lop
         message.notification.body, //mieu ta
       );
+      Map<String, String> dataNotifyApp = {
+        'id': id ?? '',
+        'idUser': teacher.id ?? '', //user đăng nhập
+        'content': message.data['content'] ?? '',
+        'name': message.data['name'] ?? '' ?? '', //người đăng
+        'avatar': message.data['avatar'] ?? '', //người đăng
+        'date': DateTime.now().toString(), //time nhận được
+      };
+      notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
     }
   }
 

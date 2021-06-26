@@ -7,7 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
-import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
+import 'package:utc2_staff/screens/classroom/report/info_detail_class.dart';
 import 'package:utc2_staff/screens/classroom/new_comment.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report/report_class.dart';
@@ -187,6 +187,9 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           postBloc.add(GetPostEvent(widget.idClass));
                         },
                         child: Scrollbar(
+                          showTrackOnHover: true,
+                          radius: Radius.circular(5),
+                          thickness: 5,
                           child: ListView.builder(
                               itemCount: state.list.length,
                               padding: EdgeInsets.symmetric(
@@ -422,7 +425,8 @@ class ItemNoti extends StatelessWidget {
       this.numberFile,
       this.function,
       this.numberComment,
-      this.post, this.classUtc});
+      this.post,
+      this.classUtc});
 
   @override
   Widget build(BuildContext context) {

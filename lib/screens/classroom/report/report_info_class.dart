@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
-import 'package:utc2_staff/screens/classroom/info_detail_class.dart';
+import 'package:utc2_staff/screens/classroom/report/info_detail_class.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
@@ -70,7 +70,10 @@ class _ReportInfoClassState extends State<ReportInfoClass> {
           TextButton.icon(
             onPressed: () async {
               final pdfFile = await PdfParagraphApi.generate(
-                  widget.teacher, widget.classUtc,listStudent);
+                widget.teacher,
+                widget.classUtc,
+                listStudent,
+              );
               PdfApi.openFile(pdfFile);
             },
             icon: Image.asset(

@@ -94,7 +94,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                   side: BorderSide(color: Colors.blue)))),
-      onPressed: () {
+      onPressed: () async {
         Navigator.pop(context);
       },
     );
@@ -174,8 +174,9 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
   @override
   void initState() {
     studentBloc = BlocProvider.of<StudentBloc>(context);
-    widget.listStudent.isEmpty?  studentBloc.add(GetListStudentOfClassEvent(
-                                  widget.classUtc.id)):print('');
+    widget.listStudent.isEmpty
+        ? studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id))
+        : print('');
     super.initState();
   }
 
@@ -331,7 +332,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                       ),
                       widget.listStudent.isNotEmpty
                           ? Container(
-                              height: 300,
+                              height: 200,
                               decoration: BoxDecoration(
                                   border: Border(bottom: BorderSide(width: 2))),
                               child: ListView.builder(
@@ -345,50 +346,47 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                     );
                                   }),
                             )
-                          : 
-                              BlocBuilder<StudentBloc, StudentState>(
-                                builder: (context, state) {
-                                  if (state is StudentInitial) {
-                                    return SpinKitThreeBounce(
-                                      color: ColorApp.lightBlue,
-                                    );
-                                  } else if (state is LoadingStudentState) {
-                                    return SpinKitThreeBounce(
-                                      color: ColorApp.lightBlue,
-                                    );
-                                  } else if (state is LoadedStudentState) {
-                                    return Container(
-                                      height: 300,
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(width: 2))),
-                                      child: ListView.builder(
-                                          itemCount: state.listStudent.length,
-                                          itemBuilder: (context, index) {
-                                            return rowTable(
-                                              (index + 1),
-                                              state.listStudent[index].name,
-                                              state.listStudent[index].id,
-                                              state.listStudent[index].lop,
-                                            );
-                                          }),
-                                    );
-                                  } else if (state is LoadErrorStudentState) {
-                                    return Center(
-                                        child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        state.error,
-                                        style: TextStyle(
-                                            fontSize: 20, color: ColorApp.red),
-                                      ),
-                                    ));
-                                  } else
-                                    return Container();
-                                },
-                              ),
-                            
+                          : BlocBuilder<StudentBloc, StudentState>(
+                              builder: (context, state) {
+                                if (state is StudentInitial) {
+                                  return SpinKitThreeBounce(
+                                    color: ColorApp.lightBlue,
+                                  );
+                                } else if (state is LoadingStudentState) {
+                                  return SpinKitThreeBounce(
+                                    color: ColorApp.lightBlue,
+                                  );
+                                } else if (state is LoadedStudentState) {
+                                  return Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(width: 2))),
+                                    child: ListView.builder(
+                                        itemCount: state.listStudent.length,
+                                        itemBuilder: (context, index) {
+                                          return rowTable(
+                                            (index + 1),
+                                            state.listStudent[index].name,
+                                            state.listStudent[index].id,
+                                            state.listStudent[index].lop,
+                                          );
+                                        }),
+                                  );
+                                } else if (state is LoadErrorStudentState) {
+                                  return Center(
+                                      child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Text(
+                                      state.error,
+                                      style: TextStyle(
+                                          fontSize: 16, color: ColorApp.red),
+                                    ),
+                                  ));
+                                } else
+                                  return Container();
+                              },
+                            ),
                       SizedBox(
                         height: 10,
                       ),

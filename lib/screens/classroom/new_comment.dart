@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_bloc.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_event.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_state.dart';
@@ -111,7 +110,6 @@ class _NewCommentClassState extends State<NewCommentClass> {
                 suffixIcon: IconButton(
                   onPressed: () async {
                     if (content != null) {
-                  
                       var response = await PushNotiFireBaseAPI.pushNotiTopic(
                           widget.teacher.name +
                               " đã nhận xét bài viết của \n" +
@@ -131,7 +129,6 @@ class _NewCommentClassState extends State<NewCommentClass> {
                             "idChannel": widget.idClass,
                             "className": widget.classUtc.name,
                             "classDescription": widget.classUtc.note,
-                            
                           },
                           widget.idClass);
                       if (response.statusCode == 200) {
@@ -188,86 +185,92 @@ class _NewCommentClassState extends State<NewCommentClass> {
                   )),
                 );
               else if (state is LoadedComment) {
-                return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: state.list.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 7),
-                        width: size.width,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [Colors.white, ColorApp.lightGrey])),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(4),
-                                    child: CircleAvatar(
-                                      backgroundColor: ColorApp.lightGrey,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(
-                                              state.list[index].avatar),
+                return Scrollbar(
+                  showTrackOnHover: true,
+                  radius: Radius.circular(5),
+                  thickness: 5,
+                  child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: state.list.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 7),
+                          width: size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.white, ColorApp.lightGrey])),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(4),
+                                      child: CircleAvatar(
+                                        backgroundColor: ColorApp.lightGrey,
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                state.list[index].avatar),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              state.list[index].name,
-                                              style: TextStyle(
-                                                  color: ColorApp.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              formatTime(
-                                                  state.list[index].date),
-                                              style: TextStyle(
-                                                  color: ColorApp.black
-                                                      .withOpacity(.4)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          state.list[index].content ?? 'null',
-                                          softWrap: true,
-                                          maxLines: 10,
-                                          overflow: TextOverflow.clip,
-                                          style: TextStyle(
-                                              color: ColorApp.black,
-                                              fontSize: 15),
-                                        ),
-                                      ],
+                                    SizedBox(
+                                      width: 5,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                state.list[index].name,
+                                                style: TextStyle(
+                                                    color: ColorApp.black,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                formatTime(
+                                                    state.list[index].date),
+                                                style: TextStyle(
+                                                    color: ColorApp.black
+                                                        .withOpacity(.4)),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            state.list[index].content ?? 'null',
+                                            softWrap: true,
+                                            maxLines: 10,
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                                color: ColorApp.black,
+                                                fontSize: 15),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    });
+                        );
+                      }),
+                );
               } else if (state is LoadErrorComment) {
                 return Center(
                   child: Text(

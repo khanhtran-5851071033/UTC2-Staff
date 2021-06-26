@@ -232,11 +232,11 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 7,
+                                    width: 5,
                                   ),
                                   Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
+                                        horizontal: 4, vertical: 8),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
                                         color:
@@ -246,9 +246,6 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         Icons.visibility,
                                         color: Color(0xff29166F),
                                         size: 15,
-                                      ),
-                                      SizedBox(
-                                        width: 3,
                                       ),
                                       Text(
                                         view,
@@ -394,7 +391,6 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
     super.build(context);
     Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
       color: Colors.white,
       child: RefreshIndicator(
         color: ColorApp.blue,
@@ -406,49 +402,61 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
             stream: blocNoti.stream,
             builder: (context, snapshot) {
               return snapshot.hasData
-                  ? ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: size.width,
-                          margin: EdgeInsets.symmetric(vertical: 7),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                  stops: [0.2, 0.9],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [Colors.white, ColorApp.lightGrey])),
-                          child: TextButton(
-                            onPressed: () {
-                              blocNoti.getContent(snapshot.data[index].link);
-                              _showBottomSheet(
-                                context,
-                                size,
-                                snapshot.data[index].tieude,
-                                snapshot.data[index].thoigian,
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                    flex: 3,
-                                    child: leading(
-                                        size, snapshot.data[index].thoigian)),
-                                SizedBox(
-                                  width: 10,
+                  ? Scrollbar(
+                      showTrackOnHover: true,
+                      radius: Radius.circular(5),
+                      thickness: 5,
+                      child: ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.width * 0.03),
+                          physics: BouncingScrollPhysics(),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: size.width,
+                              margin: EdgeInsets.symmetric(vertical: 7),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      stops: [0.2, 0.9],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.white,
+                                        ColorApp.lightGrey
+                                      ])),
+                              child: TextButton(
+                                onPressed: () {
+                                  blocNoti
+                                      .getContent(snapshot.data[index].link);
+                                  _showBottomSheet(
+                                    context,
+                                    size,
+                                    snapshot.data[index].tieude,
+                                    snapshot.data[index].thoigian,
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                        flex: 3,
+                                        child: leading(size,
+                                            snapshot.data[index].thoigian)),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Flexible(
+                                      flex: 7,
+                                      child: title(snapshot.data[index].tieude),
+                                    ),
+                                  ],
                                 ),
-                                Flexible(
-                                  flex: 7,
-                                  child: title(snapshot.data[index].tieude),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      })
+                              ),
+                            );
+                          }),
+                    )
                   : Container(
                       child: Center(
                           child: SpinKitThreeBounce(
@@ -494,7 +502,6 @@ class _NotifyAppState extends State<NotifyApp> {
   Widget build(BuildContext context) {
     return Container(
       height: widget.size.height,
-      padding: EdgeInsets.symmetric(horizontal: widget.size.width * 0.03),
       child: RefreshIndicator(
         displacement: 20,
         onRefresh: () async {
@@ -511,86 +518,96 @@ class _NotifyAppState extends State<NotifyApp> {
                 )),
               );
             else if (state is LoadedNotifyApp) {
-              return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: state.list.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 7),
-                      width: widget.size.width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Colors.white, ColorApp.lightGrey])),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(4),
-                                  child: CircleAvatar(
-                                    backgroundColor: ColorApp.lightGrey,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        state.list[index].avatar != ''
-                                            ? state.list[index].avatar
-                                            : 'https://utc2.edu.vn/upload/company/logo-15725982242.png'),
+              return Scrollbar(
+                showTrackOnHover: true,
+                radius: Radius.circular(5),
+                thickness: 5,
+                child: ListView.builder(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: widget.size.width * 0.03),
+                    physics: BouncingScrollPhysics(),
+                    itemCount: state.list.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 7),
+                        width: widget.size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Colors.white, ColorApp.lightGrey])),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: CircleAvatar(
+                                      backgroundColor: ColorApp.lightGrey,
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(state
+                                                      .list[index].avatar !=
+                                                  ''
+                                              ? state.list[index].avatar
+                                              : 'https://utc2.edu.vn/upload/company/logo-15725982242.png'),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            state.list[index].name,
-                                            style: TextStyle(
-                                                color: ColorApp.black,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            formatTime(state.list[index].date),
-                                            style: TextStyle(
-                                                color: ColorApp.black
-                                                    .withOpacity(.4)),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        state.list[index].content,
-                                        softWrap: true,
-                                        maxLines: 10,
-                                        overflow: TextOverflow.clip,
-                                        style: TextStyle(
-                                            color: ColorApp.black,
-                                            fontSize: 15),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              state.list[index].name,
+                                              style: TextStyle(
+                                                  color: ColorApp.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              formatTime(
+                                                  state.list[index].date),
+                                              style: TextStyle(
+                                                  color: ColorApp.black
+                                                      .withOpacity(.4)),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          state.list[index].content,
+                                          softWrap: true,
+                                          maxLines: 10,
+                                          overflow: TextOverflow.clip,
+                                          style: TextStyle(
+                                              color: ColorApp.black,
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  });
+                      );
+                    }),
+              );
             } else if (state is LoadErrorNotifyApp) {
               return Center(
                 child: Text(
@@ -917,7 +934,6 @@ class _EventScreenState extends State<EventScreen> {
     Size size = MediaQuery.of(context).size;
     return Container(
       height: widget.size.height,
-      padding: EdgeInsets.symmetric(horizontal: widget.size.width * 0.03),
       child: StreamBuilder<List<Event>>(
           stream: blocEvent.stream,
           builder: (context, snapshot) {
@@ -934,169 +950,184 @@ class _EventScreenState extends State<EventScreen> {
                     onRefresh: () async {
                       blocEvent.fetchEvent();
                     },
-                    child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: snapshot.data.length < 11
-                            ? snapshot.data.length + 1
-                            : snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return index == snapshot.data.length &&
-                                  snapshot.data.length < 11
-                              ? Container(
-                                  child: Center(
-                                      child: SpinKitThreeBounce(
-                                    color: Colors.lightBlue,
-                                    size: 30,
-                                  )),
-                                )
-                              : Container(
-                                  margin: EdgeInsets.symmetric(vertical: 7),
-                                  width: widget.size.width,
-                                  height: widget.size.width / 3,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            Colors.white,
-                                            ColorApp.lightGrey
-                                          ])),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      blocEvent.getContent(
-                                          snapshot.data[index].link);
-                                      _showBottomSheet(
-                                          context,
-                                          size,
-                                          snapshot.data[index].tittle,
-                                          snapshot.data[index].ngay,
-                                          snapshot.data[index].luotxem);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Container(
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  snapshot.data[index].img,
-                                              width: widget.size.width / 3,
-                                              fit: BoxFit.fitHeight,
-                                              height: 130,
-                                              memCacheWidth: 300,
-                                              // memCacheHeight: 200,
-                                              placeholder: (context, url) =>
-                                                  CupertinoActivityIndicator(),
+                    child: Scrollbar(
+                      showTrackOnHover: true,
+                      radius: Radius.circular(5),
+                      thickness: 5,
+                      child: ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: widget.size.width * 0.03),
+                          physics: BouncingScrollPhysics(),
+                          itemCount: snapshot.data.length < 11
+                              ? snapshot.data.length + 1
+                              : snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return index == snapshot.data.length &&
+                                    snapshot.data.length < 11
+                                ? Container(
+                                    child: Center(
+                                        child: SpinKitThreeBounce(
+                                      color: Colors.lightBlue,
+                                      size: 30,
+                                    )),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.symmetric(vertical: 7),
+                                    width: widget.size.width,
+                                    height: widget.size.width / 3,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Colors.white,
+                                              ColorApp.lightGrey
+                                            ])),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        blocEvent.getContent(
+                                            snapshot.data[index].link);
+                                        _showBottomSheet(
+                                            context,
+                                            size,
+                                            snapshot.data[index].tittle,
+                                            snapshot.data[index].ngay,
+                                            snapshot.data[index].luotxem);
+                                      },
+                                      child: Row(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Container(
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    snapshot.data[index].img,
+                                                width: widget.size.width / 3,
+                                                fit: BoxFit.fitHeight,
+                                                height: 130,
+                                                memCacheWidth: 300,
+                                                // memCacheHeight: 200,
+                                                placeholder: (context, url) =>
+                                                    CupertinoActivityIndicator(),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                snapshot.data[index].tittle,
-                                                softWrap: true,
-                                                textAlign: TextAlign.start,
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: ColorApp.black),
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(30),
-                                                          color: Colors
-                                                              .blue[200]
-                                                              .withOpacity(
-                                                                  0.2)),
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.timelapse,
-                                                            color: Colors.grey,
-                                                            size: 15,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          Text(
-                                                            snapshot.data[index]
-                                                                .ngay,
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontSize: 12),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(30),
-                                                          color: Colors
-                                                              .blue[200]
-                                                              .withOpacity(
-                                                                  0.2)),
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.visibility,
-                                                            color: Colors.grey,
-                                                            size: 15,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          Text(
-                                                            snapshot.data[index]
-                                                                .luotxem,
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontSize: 12),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                          SizedBox(
+                                            width: 8,
                                           ),
-                                        )
-                                      ],
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  snapshot.data[index].tittle,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.start,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: ColorApp.black),
+                                                ),
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 5),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30),
+                                                            color: Colors
+                                                                .blue[200]
+                                                                .withOpacity(
+                                                                    0.2)),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.timelapse,
+                                                              color:
+                                                                  Colors.grey,
+                                                              size: 15,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 3,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .ngay,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 3,
+                                                      ),
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 5),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30),
+                                                            color: Colors
+                                                                .blue[200]
+                                                                .withOpacity(
+                                                                    0.2)),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.visibility,
+                                                              color:
+                                                                  Colors.grey,
+                                                              size: 15,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 3,
+                                                            ),
+                                                            Text(
+                                                              snapshot
+                                                                  .data[index]
+                                                                  .luotxem,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                        }),
+                                  );
+                          }),
+                    ),
                   );
           }),
     );

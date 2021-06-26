@@ -89,6 +89,9 @@ class _ActivityPageState extends State<ActivityPage> {
                     classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
                   },
                   child: Scrollbar(
+                    showTrackOnHover: true,
+                    radius: Radius.circular(5),
+                    thickness: 5,
                     child: ListView.builder(
                       itemCount: state.list.length + 1,
                       physics: BouncingScrollPhysics(),

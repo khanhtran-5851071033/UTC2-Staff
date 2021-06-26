@@ -53,6 +53,17 @@ class QuizDatabase {
         .doc(idQuestion)
         .delete();
   }
+  static getOneQuiz(String idTeacher,String idQuiz) async {
+    List<Quiz> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Quiz')
+        .where('idQuiz',isEqualTo: idQuiz)
+        .get();
+    list = data.docs.map((e) => Quiz(e)).toList();
+    return list[0];
+  }
 
   static getQuizData(String idTeacher) async {
     List<Quiz> list = [];

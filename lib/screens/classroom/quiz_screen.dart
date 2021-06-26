@@ -6,8 +6,6 @@ import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
 import 'package:utc2_staff/blocs/question_bloc/question_event.dart';
 import 'package:utc2_staff/blocs/question_bloc/question_state.dart';
 import 'package:utc2_staff/service/firestore/quiz_database.dart';
-import 'package:utc2_staff/service/pdf/pdf_api.dart';
-import 'package:utc2_staff/service/pdf/pdf_class_detail.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class QuizSreen extends StatefulWidget {
@@ -145,6 +143,9 @@ class _QuizSreenState extends State<QuizSreen> {
                                 widget.idTeacher, widget.quiz.idQuiz));
                           },
                           child: Scrollbar(
+                            showTrackOnHover: true,
+                            radius: Radius.circular(5),
+                            thickness: 5,
                             child: ListView.builder(
                                 padding: EdgeInsets.all(size.width * 0.03),
                                 itemCount: state.list.length,

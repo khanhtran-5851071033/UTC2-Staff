@@ -1,8 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:utc2_staff/screens/classroom/invite_student.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
@@ -102,7 +99,7 @@ class _NewClassState extends State<NewClass> {
           TextButton.icon(
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                     await FirebaseMessaging.instance.subscribeToTopic(idClass);
+                  await FirebaseMessaging.instance.subscribeToTopic(idClass);
                   Map<String, String> dataClass = {
                     'id': idClass,
                     'name': nameClass,
@@ -111,25 +108,7 @@ class _NewClassState extends State<NewClass> {
                     'date': DateTime.now().toString()
                   };
                   classdb.createClass(dataClass, idClass);
-                   PushNotiFireBaseAPI.pushNotiTopic(
-                      nameClass,
-                      idClass,
-                      {
-                        "idNoti": 'newClass',
-                        "msg": idClass,
-                        "idChannel": idClass,
-                        "className": nameClass,
-                        "classDescription": description ?? '',
-                        "nameTeacher": widget.teacher.name,
-                        "content": "Đã tạo lớp mới: " +
-                            nameClass +
-                            "\n" +
-                            "Mã lớp : " +
-                            idClass,
-                        "avatar": widget.teacher.avatar,
-                        "name": widget.teacher.name,
-                      },
-                      idClass);
+
                   if (listInvite.isNotEmpty) {
                     for (var e in listInvite) {
                       PushNotiFireBaseAPI.pushNotiToken(
@@ -153,9 +132,25 @@ class _NewClassState extends State<NewClass> {
                           e.token);
                     }
                   }
-
-               
-                 
+                  PushNotiFireBaseAPI.pushNotiTopic(
+                      nameClass,
+                      idClass,
+                      {
+                        "idNoti": 'newClass',
+                        "msg": idClass,
+                        "idChannel": idClass,
+                        "className": nameClass,
+                        "classDescription": description ?? '',
+                        "nameTeacher": widget.teacher.name,
+                        "content": "Đã tạo lớp mới: " +
+                            nameClass +
+                            "\n" +
+                            "Mã lớp : " +
+                            idClass,
+                        "avatar": widget.teacher.avatar,
+                        "name": widget.teacher.name,
+                      },
+                      idClass);
                   Get.back();
                 }
               },
