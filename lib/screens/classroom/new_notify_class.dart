@@ -34,7 +34,7 @@ class NewNotify extends StatefulWidget {
 }
 
 class _NewNotifyState extends State<NewNotify> {
-  bool expaned = false, isQuiz = false, isFile = false;
+  bool expaned = false, isQuiz = false;
   String idAtent = '';
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
@@ -317,7 +317,6 @@ class _NewNotifyState extends State<NewNotify> {
                         IconButton(
                             onPressed: () {
                               setState(() {
-                                isFile ? isFile = false : isFile = true;
                                 Get.to(NewFile(idClass: widget.classUtc.id))
                                     .then((value) {
                                   if (value.isNotEmpty) {
@@ -334,9 +333,7 @@ class _NewNotifyState extends State<NewNotify> {
                               });
                             },
                             icon: Icon(
-                              isFile
-                                  ? Icons.remove_circle
-                                  : Icons.add_circle_rounded,
+                              Icons.add_circle_rounded,
                               color: ColorApp.mediumBlue,
                             ))
                       ],

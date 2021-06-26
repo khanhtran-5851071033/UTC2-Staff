@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/models/firebase_file.dart';
-import 'package:utc2_staff/screens/classroom/image_page.dart';
 import 'package:utc2_staff/service/firestore/api_getfile.dart';
 import 'package:utc2_staff/service/firestore/api_upfile.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -55,7 +55,8 @@ class _NewFileState extends State<NewFile> {
     });
   }
 
-  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+  Widget buildUploadStatus(UploadTask task, String fileName, Size size) =>
+      StreamBuilder<TaskSnapshot>(
         stream: task.snapshotEvents,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -63,12 +64,42 @@ class _NewFileState extends State<NewFile> {
             final progress = snap.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(2);
 
-            return Text(
-              '$percentage %',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            return Container(
+              padding: EdgeInsets.all(10),
+              width: size.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                      stops: [0.1, (double.parse(percentage) / 100)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [ColorApp.mediumBlue, ColorApp.lightBlue])),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      fileName,
+                      softWrap: true,
+                      overflow: TextOverflow.clip,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  Text(
+                    '$percentage %',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
             );
           } else {
-            return Container();
+            return Container(
+              child: Center(
+                  child: SpinKitThreeBounce(
+                color: Colors.lightBlue,
+                size: 20,
+              )),
+            );
           }
         },
       );
@@ -100,7 +131,7 @@ class _NewFileState extends State<NewFile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final fileName = file != null ? basename(file.path) : 'No File Selected';
+    final fileName = file != null ? basename(file.path) : '';
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -152,8 +183,9 @@ class _NewFileState extends State<NewFile> {
             padding: EdgeInsets.all(size.width * 0.03),
             decoration: BoxDecoration(color: Colors.white),
             child: Column(children: [
-              task != null ? buildUploadStatus(task) : Container(),
-              Text(fileName),
+              task != null
+                  ? buildUploadStatus(task, fileName, size)
+                  : Container(),
               Container(
                 width: size.width,
                 child: TextButton.icon(
@@ -299,8 +331,8 @@ class _NewFileState extends State<NewFile> {
   Widget buildHeader(int length) => ListTile(
         tileColor: Colors.blue,
         leading: Container(
-          width: 52,
-          height: 52,
+          width: 40,
+          height: 40,
           child: Icon(
             Icons.file_copy,
             color: Colors.black,
@@ -310,7 +342,7 @@ class _NewFileState extends State<NewFile> {
           '$length Files',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: 17,
             color: Colors.black,
           ),
         ),
