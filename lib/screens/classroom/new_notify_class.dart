@@ -1,11 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_event.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_state.dart';
+import 'package:utc2_staff/models/firebase_file.dart';
+import 'package:utc2_staff/screens/classroom/image_page.dart';
 import 'package:utc2_staff/screens/classroom/new_file.dart';
 import 'package:utc2_staff/screens/classroom/new_quiz.dart';
 import 'package:utc2_staff/screens/classroom/quiz_screen.dart';
@@ -44,11 +50,29 @@ class _NewNotifyState extends State<NewNotify> {
   TextEditingController _controller = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   QuizBloc quizBloc = new QuizBloc();
+  List<FirebaseFile> listFile = [];
   @override
   void initState() {
     quizBloc = BlocProvider.of<QuizBloc>(context);
     quizBloc.add(GetQuizEvent(widget.teacher.id));
     super.initState();
+  }
+
+  bool isImage(String fileName) {
+    return [
+      '.jpeg',
+      '.jpg',
+      '.png',
+      '.PNG',
+      '.JPG',
+      '.JPEG',
+      '.heic',
+      '.HEIC',
+      '.tiff',
+      '.TIFF',
+      '.bmp',
+      '.BMP',
+    ].any(fileName.contains);
   }
 
   @override
@@ -90,9 +114,12 @@ class _NewNotifyState extends State<NewNotify> {
                       'idNoti': 'newNoti',
                       "isAtten": expaned,
                       "msg": idAtent,
-                      "content":"Đã đăng trong lớp : "+widget.classUtc.name+"\n"+ _controller.text.trim(),
-                      "avatar":widget.teacher.avatar,
-                      "name":widget.teacher.name,
+                      "content": "Đã đăng trong lớp : " +
+                          widget.classUtc.name +
+                          "\n" +
+                          _controller.text.trim(),
+                      "avatar": widget.teacher.avatar,
+                      "name": widget.teacher.name,
                       "idChannel": widget.idClass,
                       "className": widget.classUtc.name,
                       "classDescription": widget.classUtc.note,
@@ -262,45 +289,138 @@ class _NewNotifyState extends State<NewNotify> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    Container(
-                      width: 35,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue.withOpacity(.1),
-                        child: Icon(
-                          Icons.attachment,
-                          color: Colors.blue,
-                          size: 16,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 35,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue.withOpacity(.1),
+                            child: Icon(
+                              Icons.attachment,
+                              color: Colors.blue,
+                              size: 16,
+                            ),
+                          ),
                         ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Container(
+                              alignment: Alignment.centerLeft,
+                              height: 35,
+                              child: Text('Tệp đính kèm')),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isFile ? isFile = false : isFile = true;
+                                Get.to(NewFile(idClass: widget.classUtc.id))
+                                    .then((value) {
+                                  if (value.isNotEmpty) {
+                                    for (var item in value) {
+                                      setState(() {
+                                        listFile.add(item);
+                                      });
+                                    }
+                                    // setState(() {
+                                    //   listFile.addAll(value);
+                                    // });
+                                  }
+                                });
+                              });
+                            },
+                            icon: Icon(
+                              isFile
+                                  ? Icons.remove_circle
+                                  : Icons.add_circle_rounded,
+                              color: ColorApp.mediumBlue,
+                            ))
+                      ],
+                    ),
+                    AnimatedCrossFade(
+                      firstChild: Column(
+                        children: List.generate(
+                            listFile.length,
+                            (index) => TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          ImagePage(file: listFile[index]),
+                                    ));
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    margin: EdgeInsets.symmetric(vertical: 2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: LinearGradient(
+                                            stops: [0.08, 1],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Colors.white,
+                                              ColorApp.lightGrey
+                                            ])),
+                                    child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          isImage(listFile[index].name)
+                                              ? CircleAvatar(
+                                                  backgroundColor:
+                                                      ColorApp.lightGrey,
+                                                  radius: 15,
+                                                  backgroundImage:
+                                                      CachedNetworkImageProvider(
+                                                          listFile[index].url),
+                                                )
+                                              : Container(),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              // height: 25,
+                                              child: Text(
+                                                listFile[index].name,
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                FirebaseStorage.instance
+                                                    .ref()
+                                                    .child(
+                                                        '${widget.idClass}/${listFile[index].name}')
+                                                    .delete();
+                                                setState(() {
+                                                  listFile.removeAt(index);
+                                                });
+                                              },
+                                              icon: Icon(
+                                                Icons.close,
+                                                size: 20,
+                                                color:
+                                                    Colors.red.withOpacity(.8),
+                                              )),
+                                        ]),
+                                  ),
+                                )),
                       ),
+                      secondChild: Container(),
+                      crossFadeState: listFile.isNotEmpty
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: Duration(milliseconds: 300),
                     ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: Container(
-                          alignment: Alignment.centerLeft,
-                          height: 35,
-                          child: Text('Tệp đính kèm')),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isFile ? isFile = false : isFile = true;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NewFile()));
-                          });
-                        },
-                        icon: Icon(
-                          isFile
-                              ? Icons.remove_circle
-                              : Icons.add_circle_rounded,
-                          color: ColorApp.mediumBlue,
-                        ))
                   ],
                 ),
               ),
