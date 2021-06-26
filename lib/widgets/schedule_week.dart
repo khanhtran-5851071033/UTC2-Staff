@@ -4,20 +4,20 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/color_random.dart';
-
 import 'package:utc2_staff/utils/utils.dart';
+import 'package:utc2_staff/widgets/schedule_option.dart';
 
-class OpitonScheduleMonth extends StatefulWidget {
+class OpitonScheduleWeek extends StatefulWidget {
   final List<Schedule> listMon;
   final List<TaskOfSchedule> listLich;
 
-  const OpitonScheduleMonth({Key key, this.listMon, this.listLich})
+  const OpitonScheduleWeek({Key key, this.listMon, this.listLich})
       : super(key: key);
   @override
   _OpitonScheduleState createState() => _OpitonScheduleState();
 }
 
-class _OpitonScheduleState extends State<OpitonScheduleMonth>
+class _OpitonScheduleState extends State<OpitonScheduleWeek>
     with AutomaticKeepAliveClientMixin {
   final notifications = FlutterLocalNotificationsPlugin();
   @override
@@ -45,56 +45,6 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
   List<Meeting> meetings;
   List<Meeting> _getDataSource() {
     meetings = <Meeting>[];
-    // List widget.listMon = [
-    //   {
-    //     "id": "1",
-    //     "userId": "userId 1",
-    //     "TenMon": "Lập trình di động",
-    //     "StartDate": "2021-05-01",
-    //     "EndDate": "2021-06-22"
-    //   },
-    //   {
-    //     "id": "2",
-    //     "userId": "userId 1",
-    //     "TenMon": "Trí tuệ nhân tạo",
-    //     "StartDate": "2021-05-01",
-    //     "EndDate": "2021-05-30"
-    //   },
-    // ];
-    // List widget.listLich = [
-    //   {
-    //     "id": "1",
-    //     "MonHocId": "1",
-    //     "StartTime": "07:30",
-    //     "EndTime": "11:00",
-    //     "WeekDay": 3,
-    //     "Room": "101C2"
-    //   },
-    //   {
-    //     "id": "2",
-    //     "MonHocId": "1",
-    //     "StartTime": "13:30",
-    //     "EndTime": "17:00",
-    //     "WeekDay": 1,
-    //     "Room": "201C2"
-    //   },
-    //   {
-    //     "id": "3",
-    //     "MonHocId": "2",
-    //     "StartTime": "13:30",
-    //     "EndTime": "17:00",
-    //     "WeekDay": 5,
-    //     "Room": "Room 1"
-    //   },
-    //   {
-    //     "id": "4",
-    //     "MonHocId": "1",
-    //     "StartTime": "08:30",
-    //     "EndTime": "12:00",
-    //     "WeekDay": 6,
-    //     "Room": "201C2"
-    //   },
-    // ];
 
     int wd, sh, sm, eh, em;
     int maMon, maLich;
@@ -183,7 +133,7 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
     super.build(context);
     return Container(
       child: SfCalendar(
-        view: CalendarView.month,
+        view: CalendarView.week,
         dataSource: MeetingDataSource(meetings),
         allowedViews: <CalendarView>[
           CalendarView.day,
@@ -233,45 +183,4 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments[index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments[index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments[index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments[index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments[index].isAllDay;
-  }
-}
-
-class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  String eventName;
-  DateTime from;
-  DateTime to;
-  Color background;
-  bool isAllDay;
 }

@@ -4,20 +4,20 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/color_random.dart';
-
 import 'package:utc2_staff/utils/utils.dart';
+import 'package:utc2_staff/widgets/schedule_option.dart';
 
-class OpitonScheduleMonth extends StatefulWidget {
+class OpitonScheduleDay extends StatefulWidget {
   final List<Schedule> listMon;
   final List<TaskOfSchedule> listLich;
 
-  const OpitonScheduleMonth({Key key, this.listMon, this.listLich})
+  const OpitonScheduleDay({Key key, this.listMon, this.listLich})
       : super(key: key);
   @override
   _OpitonScheduleState createState() => _OpitonScheduleState();
 }
 
-class _OpitonScheduleState extends State<OpitonScheduleMonth>
+class _OpitonScheduleState extends State<OpitonScheduleDay>
     with AutomaticKeepAliveClientMixin {
   final notifications = FlutterLocalNotificationsPlugin();
   @override
@@ -183,7 +183,7 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
     super.build(context);
     return Container(
       child: SfCalendar(
-        view: CalendarView.month,
+        view: CalendarView.day,
         dataSource: MeetingDataSource(meetings),
         allowedViews: <CalendarView>[
           CalendarView.day,
@@ -233,45 +233,4 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments[index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments[index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments[index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments[index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments[index].isAllDay;
-  }
-}
-
-class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  String eventName;
-  DateTime from;
-  DateTime to;
-  Color background;
-  bool isAllDay;
 }

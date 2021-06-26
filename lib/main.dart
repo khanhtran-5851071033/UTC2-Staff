@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -14,19 +16,17 @@ import 'package:utc2_staff/blocs/question_bloc/question_bloc.dart';
 import 'package:utc2_staff/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
-import 'package:utc2_staff/blocs/test_bloc/test_bloc.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:utc2_staff/service/firestore/notify_app_database.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'blocs/notify_app_bloc/notify_app_bloc.dart';
 import 'blocs/schedule_bloc/schedule_bloc.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
-import 'service/firestore/teacher_database.dart';
-
+import 'blocs/test_bloc/test_bloc.dart';
+import 'blocs/today_task_bloc/today_task_bloc.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<QuestionBloc>(create: (context) => QuestionBloc()),
         BlocProvider<NotifyAppBloc>(create: (context) => NotifyAppBloc()),
         BlocProvider<ScheduleBloc>(create: (context) => ScheduleBloc()),
+        BlocProvider<TodayTaskBloc>(create: (context) => TodayTaskBloc()),
         BlocProvider<TaskOfScheduleBloc>(
             create: (context) => TaskOfScheduleBloc()),
         BlocProvider<TestBloc>(create: (context) => TestBloc()),

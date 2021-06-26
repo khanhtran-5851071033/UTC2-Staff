@@ -12,9 +12,15 @@ class ScheduleInitial extends ScheduleState {}
 
 class LoadingSchedule extends ScheduleState {}
 
-class LoadedSchedule extends ScheduleState {
-  final List<Schedule> list;
-  LoadedSchedule(this.list);
+class LoadingSchedulePage extends ScheduleState {}
+
+
+
+class LoadedSchedulePage extends ScheduleState {
+  final List<Schedule> listMon;
+  final List<TaskOfSchedule> listLich;
+
+  LoadedSchedulePage(this.listMon, this.listLich);
 }
 
 class LoadErrorSchedule extends ScheduleState {
