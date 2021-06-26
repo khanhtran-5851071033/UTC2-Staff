@@ -135,8 +135,8 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
 
               //Mon
               tenMon = widget.listMon[i].titleSchedule;
-              maMon = int.parse(widget.listMon[i].idSchedule);
-              maLich = int.parse(widget.listLich[j].idSchedule);
+              maMon =int.parse( widget.listMon[i].idSchedule);
+              maLich =int.parse(widget.listLich[j].idSchedule);
               room = widget.listLich[j].idRoom;
 
               DateTime startTime =
