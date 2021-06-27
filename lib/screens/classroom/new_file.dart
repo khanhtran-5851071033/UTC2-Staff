@@ -111,23 +111,6 @@ class _NewFileState extends State<NewFile> {
     futureFiles = FirebaseApiGetFile.listAll('files/');
   }
 
-  bool isImage(String fileName) {
-    return [
-      '.jpeg',
-      '.jpg',
-      '.png',
-      '.PNG',
-      '.JPG',
-      '.JPEG',
-      '.heic',
-      '.HEIC',
-      '.tiff',
-      '.TIFF',
-      '.bmp',
-      '.BMP',
-    ].any(fileName.contains);
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

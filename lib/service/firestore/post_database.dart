@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:utc2_staff/models/firebase_file.dart';
 
 class PostDatabase {
   Future<void> createPost(
@@ -9,6 +10,18 @@ class PostDatabase {
         .collection('Post')
         .doc(idPost)
         .set(dataPost);
+  }
+
+  Future<void> createFileInPost(Map<String, String> dataPost, String idClass,
+      String idPost, FirebaseFile file) async {
+    await FirebaseFirestore.instance
+        .collection('Class')
+        .doc(idClass)
+        .collection('Post')
+        .doc(idPost)
+        .collection('File')
+        .doc(file.name)
+        .set({'url': file.url, 'name': file.name});
   }
 
   Future<void> deletePost(String idClass, String idPost) async {

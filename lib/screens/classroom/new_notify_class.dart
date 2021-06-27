@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +33,7 @@ class NewNotify extends StatefulWidget {
 }
 
 class _NewNotifyState extends State<NewNotify> {
-  bool expaned = false, isQuiz = false;
+  bool expandedAtten = false, isQuiz = false;
   String idAtent = '';
   int _selectedTime = 10;
   PostDatabase postDatabase = PostDatabase();
@@ -58,21 +57,78 @@ class _NewNotifyState extends State<NewNotify> {
     super.initState();
   }
 
-  bool isImage(String fileName) {
-    return [
-      '.jpeg',
-      '.jpg',
-      '.png',
-      '.PNG',
-      '.JPG',
-      '.JPEG',
-      '.heic',
-      '.HEIC',
-      '.tiff',
-      '.TIFF',
-      '.bmp',
-      '.BMP',
-    ].any(fileName.contains);
+  void submitPost() async {
+    if (_formKey.currentState.validate()) {
+      ///Push noti
+      ///
+      var response = await PushNotiFireBaseAPI.pushNotiTopic(
+          _controller.text.trim(),
+          content,
+          {
+            'idNoti': 'newNoti',
+            "isAtten": expandedAtten,
+            "msg": idAtent,
+            "content": "Đã đăng trong lớp : " +
+                widget.classUtc.name +
+                "\n" +
+                _controller.text.trim(),
+            "avatar": widget.teacher.avatar,
+            "name": widget.teacher.name,
+            "idChannel": widget.idClass,
+            "className": widget.classUtc.name,
+            "classDescription": widget.classUtc.note,
+            "timeAtten": DateFormat('HH:mm').format(
+                DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
+                    .add(Duration(minutes: _selectedTime))
+                    .toString())),
+            "idQuiz": quizAdd?.idQuiz,
+          },
+          widget.idClass);
+      if (response.statusCode == 200) {
+        print('success');
+        Navigator.pop(context);
+      } else
+        print('fail');
+
+      //gen idPost
+      var idPost = generateRandomString(5);
+
+      //create post on firebase
+      Map<String, String> dataPost = {
+        'id': idPost,
+        'idClass': widget.idClass,
+        'title': _controller.text.trim(),
+        'content': content,
+        'name': widget.teacher.name,
+        'avatar': widget.teacher.avatar,
+        'date': DateTime.now().toString(),
+        'idAtten': expandedAtten
+            ? idAtent != null
+                ? idAtent
+                : null
+            : null,
+        'timeAtten': expandedAtten
+            ? DateTime.now().add(Duration(minutes: _selectedTime)).toString()
+            : null,
+        "idQuiz": isQuiz && quizAdd != null ? quizAdd.idQuiz : null,
+        "quizContent": isQuiz && quizAdd != null
+            ? quizAdd.titleQuiz +
+                ' - ' +
+                quizAdd.timePlay +
+                ' phút - ' +
+                quizAdd.totalQuestion +
+                ' câu'
+            : null,
+      };
+      if (listFile.isNotEmpty) {
+        await postDatabase.createPost(dataPost, widget.idClass, idPost);
+        for (var file in listFile) {
+          postDatabase.createFileInPost(dataPost, widget.idClass, idPost, file);
+        }
+      } else {
+        postDatabase.createPost(dataPost, widget.idClass, idPost);
+      }
+    }
   }
 
   @override
@@ -106,67 +162,7 @@ class _NewNotifyState extends State<NewNotify> {
         actions: [
           TextButton(
             onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                var response = await PushNotiFireBaseAPI.pushNotiTopic(
-                    _controller.text.trim(),
-                    content,
-                    {
-                      'idNoti': 'newNoti',
-                      "isAtten": expaned,
-                      "msg": idAtent,
-                      "content": "Đã đăng trong lớp : " +
-                          widget.classUtc.name +
-                          "\n" +
-                          _controller.text.trim(),
-                      "avatar": widget.teacher.avatar,
-                      "name": widget.teacher.name,
-                      "idChannel": widget.idClass,
-                      "className": widget.classUtc.name,
-                      "classDescription": widget.classUtc.note,
-                      "timeAtten": DateFormat('HH:mm').format(
-                          DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now()
-                              .add(Duration(minutes: _selectedTime))
-                              .toString())),
-                      "idQuiz": quizAdd?.idQuiz,
-                    },
-                    widget.idClass);
-                if (response.statusCode == 200) {
-                  print('success');
-                  Navigator.pop(context);
-                } else
-                  print('fail');
-                var idPost = generateRandomString(5);
-
-                Map<String, String> dataPost = {
-                  'id': idPost,
-                  'idClass': widget.idClass,
-                  'title': _controller.text.trim(),
-                  'content': content,
-                  'name': widget.teacher.name,
-                  'avatar': widget.teacher.avatar,
-                  'date': DateTime.now().toString(),
-                  'idAtten': expaned
-                      ? idAtent != null
-                          ? idAtent
-                          : null
-                      : null,
-                  'timeAtten': expaned
-                      ? DateTime.now()
-                          .add(Duration(minutes: _selectedTime))
-                          .toString()
-                      : null,
-                  "idQuiz": isQuiz && quizAdd != null ? quizAdd.idQuiz : null,
-                  "quizContent": isQuiz && quizAdd != null
-                      ? quizAdd.titleQuiz +
-                          ' - ' +
-                          quizAdd.timePlay +
-                          ' phút - ' +
-                          quizAdd.totalQuestion +
-                          ' câu'
-                      : null,
-                };
-                postDatabase.createPost(dataPost, widget.idClass, idPost);
-              }
+              submitPost();
             },
             child: Text("Đăng    ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -459,12 +455,14 @@ class _NewNotifyState extends State<NewNotify> {
                         IconButton(
                             onPressed: () {
                               setState(() {
-                                expaned ? expaned = false : expaned = true;
-                                if (expaned) idAtent = genId();
+                                expandedAtten
+                                    ? expandedAtten = false
+                                    : expandedAtten = true;
+                                if (expandedAtten) idAtent = genId();
                               });
                             },
                             icon: Icon(
-                              expaned
+                              expandedAtten
                                   ? Icons.remove_circle
                                   : Icons.add_circle_rounded,
                               color: ColorApp.mediumBlue,
@@ -557,7 +555,7 @@ class _NewNotifyState extends State<NewNotify> {
                         ),
                       ),
                       secondChild: Container(),
-                      crossFadeState: expaned
+                      crossFadeState: expandedAtten
                           ? CrossFadeState.showFirst
                           : CrossFadeState.showSecond,
                       duration: Duration(milliseconds: 300),

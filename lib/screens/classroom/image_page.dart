@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:utc2_staff/models/firebase_file.dart';
 import 'package:utc2_staff/service/firestore/api_getfile.dart';
+import 'package:utc2_staff/utils/utils.dart';
 
 class ImagePage extends StatelessWidget {
   final FirebaseFile file;
@@ -10,7 +11,6 @@ class ImagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isImage = ['.jpeg', '.jpg', '.png', '.PNG'].any(file.name.contains);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +31,7 @@ class ImagePage extends StatelessWidget {
           const SizedBox(width: 12),
         ],
       ),
-      body: isImage
+      body: isImage(file.name)
           ? Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
