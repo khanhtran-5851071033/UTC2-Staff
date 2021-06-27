@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
 import 'package:utc2_staff/screens/classroom/report/info_detail_class.dart';
@@ -427,6 +428,25 @@ class ItemNoti extends StatelessWidget {
       this.numberComment,
       this.post,
       this.classUtc});
+  bool isLink(String link) {
+    return [
+      'http://',
+      'https://',
+    ].any(link.contains);
+  }
+
+  Future<void> _launchInWebViewWithJavaScript(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -523,22 +543,34 @@ class ItemNoti extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  post.title,
-                  softWrap: true,
-                  style: TextStyle(color: ColorApp.black, fontSize: 16),
-                ),
+                isLink(post.title)
+                    ? TextButton(
+                        onPressed: () {
+                          _launchInWebViewWithJavaScript(post.title);
+                        },
+                        child: Text(post.title))
+                    : Text(
+                        post.title,
+                        softWrap: true,
+                        style: TextStyle(color: ColorApp.black, fontSize: 16),
+                      ),
                 SizedBox(
                   height: post.content != null ? 5 : 0,
                 ),
                 post.content != null
-                    ? Text(
-                        post.content,
-                        softWrap: true,
-                        style: TextStyle(
-                            color: ColorApp.black.withOpacity(.6),
-                            fontSize: 16),
-                      )
+                    ? isLink(post.content)
+                        ? TextButton(
+                            onPressed: () {
+                              _launchInWebViewWithJavaScript(post.content);
+                            },
+                            child: Text(post.content))
+                        : Text(
+                            post.content,
+                            softWrap: true,
+                            style: TextStyle(
+                                color: ColorApp.black.withOpacity(.6),
+                                fontSize: 16),
+                          )
                     : Container(),
                 SizedBox(
                   height: 10,
