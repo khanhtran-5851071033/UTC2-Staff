@@ -6,14 +6,20 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:utc2_staff/blocs/file_bloc/file_bloc.dart';
+import 'package:utc2_staff/blocs/file_bloc/file_event.dart';
+import 'package:utc2_staff/blocs/file_bloc/file_state.dart';
 import 'package:utc2_staff/blocs/post_bloc/post_bloc.dart';
 import 'package:utc2_staff/blocs/teacher_bloc/teacher_bloc.dart';
+import 'package:utc2_staff/models/firebase_file.dart';
+import 'package:utc2_staff/screens/classroom/image_page.dart';
 import 'package:utc2_staff/screens/classroom/report/info_detail_class.dart';
 import 'package:utc2_staff/screens/classroom/new_comment.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
+import 'package:utc2_staff/service/firestore/file_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
@@ -41,6 +47,8 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   Class _class;
   Teacher teacher;
   List<Post> listPost = [];
+  FileBloc fileBloc = new FileBloc();
+  List<File> listFile = [];
   @override
   void initState() {
     super.initState();
@@ -60,6 +68,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
         InitializationSettings(android: settingsAndroid, iOS: settingsIOS),
         onSelectNotification: onSelectNotification);
     postBloc = BlocProvider.of<PostBloc>(context);
+    fileBloc = BlocProvider.of<FileBloc>(context);
     postBloc.add(GetPostEvent(widget.idClass));
   }
 
@@ -157,82 +166,95 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                 )),
             Flexible(
               flex: 15,
-              child: BlocBuilder<PostBloc, PostState>(
-                builder: (context, state) {
+              child: BlocConsumer<PostBloc, PostState>(
+                listener: (context, state) {
                   if (state is LoadedPost) {
-                    listPost = state.list;
-                    return Container(
-                      // padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: ColorApp.blue.withOpacity(0.02),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(1, 1), // changes position of shadow
-                            ),
-                          ],
-                          gradient: LinearGradient(
-                              stops: [0.2, 0.9],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Colors.white, ColorApp.lightGrey]),
-                          // color: Colors.green,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: ColorApp.lightGrey, width: 0.3)),
-                      margin: EdgeInsets.only(top: 10),
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          postBloc.add(GetPostEvent(widget.idClass));
-                        },
-                        child: Scrollbar(
-                          showTrackOnHover: true,
-                          radius: Radius.circular(5),
-                          thickness: 5,
-                          child: ListView.builder(
-                              itemCount: state.list.length,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.03),
-                              itemBuilder: (context, index) {
-                                var e = state.list[index];
-
-                                return ItemNoti(
-                                  teacher: teacher,
-                                  function: (value) {
-                                    if (value == 'delete') {
-                                      postDatabase.deletePost(
-                                          widget.idClass, e.id);
-                                      postBloc
-                                          .add(GetPostEvent(widget.idClass));
-                                    }
-                                  },
-                                  numberFile: index,
-                                  numberComment: index,
-                                  post: e,
-                                  classUtc: _class,
-                                );
-                              }),
-                        ),
-                      ),
-                    );
-                  } else if (state is LoadingPost) {
-                    return SpinKitThreeBounce(
-                      color: ColorApp.lightBlue,
-                    );
-                  } else if (state is LoadErrorPost) {
-                    return Center(
-                      child: Text(
-                        state.error,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    );
-                  } else {
-                    return SpinKitThreeBounce(
-                      color: ColorApp.lightBlue,
-                    );
+                    setState(() {
+                      fileBloc.add(GetFileEvent(widget.idClass, state.list));
+                    });
                   }
+                },
+                builder: (context, state) {
+                  return BlocBuilder<PostBloc, PostState>(
+                    builder: (context, state) {
+                      if (state is LoadedPost) {
+                        listPost = state.list;
+                        return Container(
+                          // padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorApp.blue.withOpacity(0.02),
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                  offset: Offset(
+                                      1, 1), // changes position of shadow
+                                ),
+                              ],
+                              gradient: LinearGradient(
+                                  stops: [0.2, 0.9],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.white, ColorApp.lightGrey]),
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: ColorApp.lightGrey, width: 0.3)),
+                          margin: EdgeInsets.only(top: 10),
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              postBloc.add(GetPostEvent(widget.idClass));
+                            },
+                            child: Scrollbar(
+                              showTrackOnHover: true,
+                              radius: Radius.circular(5),
+                              thickness: 5,
+                              child: ListView.builder(
+                                  itemCount: state.list.length,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: size.width * 0.03),
+                                  itemBuilder: (context, index) {
+                                    var e = state.list[index];
+
+                                    return ItemNoti(
+                                      teacher: teacher,
+                                      function: (value) {
+                                        if (value == 'delete') {
+                                          postDatabase.deletePost(
+                                              widget.idClass, e.id);
+                                          postBloc.add(
+                                              GetPostEvent(widget.idClass));
+                                        }
+                                      },
+                                      numberFile: index,
+                                      numberComment: index,
+                                      post: e,
+                                      classUtc: _class,
+                                    );
+                                  }),
+                            ),
+                          ),
+                        );
+                      } else if (state is LoadingPost) {
+                        return SpinKitThreeBounce(
+                          color: ColorApp.lightBlue,
+                          size: 30,
+                        );
+                      } else if (state is LoadErrorPost) {
+                        return Center(
+                          child: Text(
+                            state.error,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        );
+                      } else {
+                        return SpinKitThreeBounce(
+                          color: ColorApp.lightBlue,
+                          size: 30,
+                        );
+                      }
+                    },
+                  );
                 },
               ),
             )
@@ -645,22 +667,61 @@ class ItemNoti extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.attachment,
-                      color: Colors.grey,
-                      size: 15,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      numberFile.toString() + ' Tệp đính kèm',
-                      softWrap: true,
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                  ],
+                BlocBuilder<FileBloc, FileState>(
+                  builder: (context, state) {
+                    if (state is LoadedFile) {
+                      var numberFile = state.list
+                          .where((element) => element.idPost == post.id)
+                          .toList()
+                          .length;
+                      List<File> list = state.list
+                          .where((element) => element.idPost == post.id)
+                          .toList();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.attachment,
+                                color: Colors.grey,
+                                size: 15,
+                              ),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              Text(
+                                numberFile.toString() + ' Tệp đính kèm',
+                                softWrap: true,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          numberFile > 0
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: List.generate(
+                                      numberFile,
+                                      (index) => TextButton(
+                                          onPressed: () async {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) => ImagePage(
+                                                  file: FirebaseFile(
+                                                      ref: null,
+                                                      name:
+                                                          list[index].nameFile,
+                                                      url: list[index].url)),
+                                            ));
+                                          },
+                                          child: Text(list[index].nameFile))))
+                              : Container()
+                        ],
+                      );
+                    } else
+                      return Container();
+                  },
                 ),
               ],
             ),

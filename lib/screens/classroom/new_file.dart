@@ -52,6 +52,7 @@ class _NewFileState extends State<NewFile> {
       listUpload.add(FirebaseFile(
           ref: snapshot.ref, name: snapshot.ref.name, url: urlDownload));
       listSelect.add(true);
+      print(snapshot.ref.name);
     });
   }
 
@@ -204,7 +205,8 @@ class _NewFileState extends State<NewFile> {
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          futureFiles = FirebaseApiGetFile.listAll('files/');
+                          futureFiles =
+                              FirebaseApiGetFile.listAll('${widget.idClass}/');
                         },
                         child: ListView.builder(
                           itemCount: listUpload.length,

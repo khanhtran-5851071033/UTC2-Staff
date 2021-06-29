@@ -22,6 +22,7 @@ import 'package:utc2_staff/service/firestore/notify_app_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/utils.dart';
+import 'blocs/file_bloc/file_bloc.dart';
 import 'blocs/notify_app_bloc/notify_app_bloc.dart';
 import 'blocs/schedule_bloc/schedule_bloc.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
@@ -118,6 +119,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<TaskOfScheduleBloc>(
             create: (context) => TaskOfScheduleBloc()),
         BlocProvider<TestBloc>(create: (context) => TestBloc()),
+         BlocProvider<FileBloc>(create: (context) => FileBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

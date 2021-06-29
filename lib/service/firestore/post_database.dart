@@ -21,7 +21,12 @@ class PostDatabase {
         .doc(idPost)
         .collection('File')
         .doc(file.name)
-        .set({'url': file.url, 'name': file.name});
+        .set({
+      'url': file.url,
+      'idPost': idPost,
+      'name': file.name,
+      'ref': file.ref.toString()
+    });
   }
 
   Future<void> deletePost(String idClass, String idPost) async {

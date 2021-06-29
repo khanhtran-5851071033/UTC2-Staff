@@ -112,14 +112,17 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                             listPost1 = widget.listPost
                                 .where((element) => element.idAtten != null)
                                 .toList();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReportAttendenClass(
-                                          teacher: widget.teacher,
-                                          classUtc: widget.classUtc,
-                                          listPost: listPost,
-                                        )));
+                            listPost1.isNotEmpty
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ReportAttendenClass(
+                                              teacher: widget.teacher,
+                                              classUtc: widget.classUtc,
+                                              listPost: listPost,
+                                            )))
+                                : print('Chua co lịch điểm danh');
                           }
                           if (index == 3) {
                             if (listPost.isNotEmpty) {
