@@ -23,7 +23,7 @@ class _OpitonScheduleState extends State<OpitonScheduleDay>
   @override
   void initState() {
     super.initState();
-    MyLocalNotification.configureLocalTimeZone();
+    // MyLocalNotification.configureLocalTimeZone();
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(

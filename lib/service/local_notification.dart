@@ -20,6 +20,9 @@ class MyLocalNotification {
       int maMon,
       int maLich) async {
     String sem = em == 0 ? '00' : '$em';
+
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Bangkok'));
     await notifications.zonedSchedule(
         int.parse('$maMon$maLich'),
         'Đến giờ học môn $tenMon - $room',
@@ -36,9 +39,7 @@ class MyLocalNotification {
   }
 
   static Future<void> configureLocalTimeZone() async {
-    tz.initializeTimeZones();
     final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
     print(timeZoneName);
   }
 
@@ -57,6 +58,7 @@ class MyLocalNotification {
     while (scheduledDate.weekday != wd) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
+    print(scheduledDate);
     return scheduledDate;
   }
 

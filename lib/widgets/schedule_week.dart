@@ -23,7 +23,7 @@ class _OpitonScheduleState extends State<OpitonScheduleWeek>
   @override
   void initState() {
     super.initState();
-    MyLocalNotification.configureLocalTimeZone();
+    // MyLocalNotification.configureLocalTimeZone();
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(
@@ -85,8 +85,8 @@ class _OpitonScheduleState extends State<OpitonScheduleWeek>
 
               //Mon
               tenMon = widget.listMon[i].titleSchedule;
-              maMon =int.parse( widget.listMon[i].idSchedule);
-              maLich =int.parse(widget.listLich[j].idSchedule);
+              maMon = int.parse(widget.listMon[i].idSchedule);
+              maLich = int.parse(widget.listLich[j].idSchedule);
               room = widget.listLich[j].idRoom;
 
               DateTime startTime =
@@ -95,13 +95,8 @@ class _OpitonScheduleState extends State<OpitonScheduleWeek>
               DateTime endTime =
                   DateTime(date.year, date.month, date.day, eh, em);
 
-              meetings.add(Meeting(
-                  tenMon + '\n\n' + room,
-                  startTime,
-                  endTime,
-                  ColorRandom.colors[maMon]
-                      [0],
-                  false));
+              meetings.add(Meeting(tenMon + '\n\n' + room, startTime, endTime,
+                  ColorRandom.colors[maMon][0], false));
               if (date.day == today.day &&
                   date.month == today.month &&
                   date.year == today.year) {
