@@ -120,15 +120,15 @@ class _NewNotifyState extends State<NewNotify> {
                 ' câu'
             : null,
       };
+      await postDatabase.createPost(dataPost, widget.idClass, idPost);
       if (listFile.isNotEmpty) {
-        postDatabase.createPost(dataPost, widget.idClass, idPost);
+       
         for (var file in listFile) {
-          postDatabase.createFileInPost(dataPost, widget.idClass, idPost, file);
-          print('NHIEU FILE');
+          postDatabase.createFileInPost(dataPost, widget.idClass, idPost, file);  
         }
-      } else {
-        postDatabase.createPost(dataPost, widget.idClass, idPost);
       }
+      
+     
     }
   }
 

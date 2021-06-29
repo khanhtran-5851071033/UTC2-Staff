@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:utc2_staff/models/firebase_file.dart';
 import 'package:utc2_staff/service/firestore/api_getfile.dart';
 import 'package:utc2_staff/utils/utils.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImagePage extends StatelessWidget {
   final FirebaseFile file;
@@ -27,11 +28,8 @@ class ImagePage extends StatelessWidget {
         ],
       ),
       body: isImage(file.name)
-          ? Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: CachedNetworkImageProvider(file.url),
-              )),
+          ? PhotoView(
+              imageProvider: CachedNetworkImageProvider(file.url),
             )
           : Center(
               child: Text(

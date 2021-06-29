@@ -120,7 +120,7 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                                             ReportAttendenClass(
                                               teacher: widget.teacher,
                                               classUtc: widget.classUtc,
-                                              listPost: listPost,
+                                              listPost: listPost1,
                                             )))
                                 : print('Chua co lịch điểm danh');
                           }

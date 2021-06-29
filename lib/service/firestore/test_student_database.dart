@@ -27,11 +27,13 @@ class StudentTest {
   String score;
   String timeTest;
   String totalAnswer;
+  String idPost;
   StudentTest(QueryDocumentSnapshot<Map<String, dynamic>> json) {
     this.idStudent = json['idStudent'];
     this.idQuiz = json['idQuiz'];
     this.score = json['score'];
     this.timeTest = json['time'];
     this.totalAnswer = json['totalAnswer'];
+    this.idPost=json['idPost'];
   }
 }

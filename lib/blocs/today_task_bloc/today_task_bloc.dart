@@ -11,7 +11,6 @@ part 'today_task_state.dart';
 class TodayTaskBloc extends Bloc<TodayTaskEvent, TodayTaskState> {
   TodayTaskBloc() : super(TodayTaskInitial());
 
-  List<Schedule> todayList = [];
   @override
   Stream<TodayTaskState> mapEventToState(
     TodayTaskEvent event,
@@ -19,6 +18,7 @@ class TodayTaskBloc extends Bloc<TodayTaskEvent, TodayTaskState> {
     switch (event.runtimeType) {
       case GetTodayTaskEvent:
         yield TodayTaskLoading();
+        List<Schedule> todayList = [];
         List<Schedule> list = await ScheduleDatabase.getScheduleData(
           event.props[0],
         );

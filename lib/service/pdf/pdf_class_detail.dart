@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:pdf/widgets.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
-//import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/widgets.dart';
 
 class PdfParagraphApi {
-  static Future<File> generate(Teacher teacher, Class classUtc,
-      List<Student> listStudent,) async {
+  static Future<File> generate(
+    Teacher teacher,
+    Class classUtc,
+    List<Student> listStudent,
+  ) async {
     final pdf = Document();
     var customFont =
         Font.ttf(await rootBundle.load('font/OpenSans-Regular.ttf'));
@@ -21,8 +23,7 @@ class PdfParagraphApi {
     final imageSVG = await rootBundle.loadString('assets/images/logoUTC.SVG');
     final imageSVG1 =
         await rootBundle.loadString('assets/images/bannerUTC.svg');
-   
-   
+
     final List<List<dynamic>> list = [];
     int i = 0;
     for (var item in listStudent) {
@@ -34,6 +35,7 @@ class PdfParagraphApi {
       MultiPage(
         build: (context) => <Widget>[
           buildCustomHeader(imageSVG1),
+          
           SizedBox(height: 0.5 * PdfPageFormat.cm),
           title(customFont),
           buildCustomInfo(customFont, imageSVG, classUtc, teacher),
@@ -159,7 +161,6 @@ class PdfParagraphApi {
     String name,
     Font customFont,
     Font customFontBold,
-   
   ) =>
       Container(
           width: 21 * PdfPageFormat.cm,
@@ -176,8 +177,8 @@ class PdfParagraphApi {
                 font: customFont,
               ),
             ),
+            
             SizedBox(height: 0.5 * PdfPageFormat.cm),
-           
             Text(
               'Người xác nhận          ',
               style: TextStyle(

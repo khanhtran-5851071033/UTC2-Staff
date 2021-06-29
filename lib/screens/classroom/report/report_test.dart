@@ -136,13 +136,17 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
                                         .where((element) =>
                                             element.idStudent == student.id &&
                                             element.idQuiz ==
-                                                listPost[index].idQuiz)
+                                                listPost[index].idQuiz &&
+                                            element.idPost ==
+                                                listPost[index].id)
                                         .isNotEmpty
                                     ? listStudentTest
                                         .where((element) =>
                                             element.idStudent == student.id &&
                                             element.idQuiz ==
-                                                listPost[index].idQuiz)
+                                                listPost[index].idQuiz &&
+                                            element.idPost ==
+                                                listPost[index].id)
                                         .first
                                         .score
                                     : '0')),
@@ -247,7 +251,9 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
                               } else if (state is LoadedStudentState) {
                                 return Container(
                                     height: size.height,
-                                    width: size.width * 1.3,
+                                    width: widget.listQuiz.length >= 3
+                                        ? size.width * 1.6
+                                        : size.width * 1.3,
                                     child: Column(children: [
                                       headerTable(widget.listQuiz),
                                       Expanded(
