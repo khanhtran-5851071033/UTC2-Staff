@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:utc2_staff/models/firebase_file.dart';
@@ -28,19 +29,23 @@ class FirebaseApiGetFile {
         .toList();
   }
 
-  static Future downloadFile(Reference ref) async {
+  static Future downloadFile(
+      String url, String name, BuildContext context) async {
     var status = await Permission.storage.status;
     // String url = await ref.getDownloadURL();
 
-    Response response = await http.get(Uri.parse(
-        'https://firebasestorage.googleapis.com/v0/b/utc2-ea569.appspot.com/o/files%2F1000-f3.5-iso%20Hi1-18mm.JPG?alt=media&token=defda0ab-6f3e-4a96-96e5-b1517466aed8'));
+    Response response = await http.get(Uri.parse(url));
     if (status.isDenied) {
       await Permission.storage.request();
-      final file = File('/storage/emulated/0/Download/${ref.name}');
+      final file = File('/storage/emulated/0/Download/$name');
       await file.writeAsBytes(response.bodyBytes);
     } else {
-      final file = File('/storage/emulated/0/Download/${ref.name}');
+      final file = File('/storage/emulated/0/Download/$name');
       await file.writeAsBytes(response.bodyBytes);
     }
+    final snackBar = SnackBar(
+      content: Text('Downloaded $name'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -213,73 +213,57 @@ class _NewFileState extends State<NewFile> {
                           itemBuilder: (context, index) {
                             final file = listUpload[index];
 
-                            return TextButton(
-                              onPressed: () async {
-                                // Navigator.of(context)
-                                //     .push(MaterialPageRoute(
-                                //   builder: (context) =>
-                                //       ImagePage(file: file),
-                                // ));
-                                await FirebaseApiGetFile.downloadFile(file.ref);
-
-                                final snackBar = SnackBar(
-                                  content: Text('Downloaded ${file.name}'),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: LinearGradient(
-                                        stops: [0.08, 1],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.white,
-                                          ColorApp.lightGrey
-                                        ])),
-                                child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Checkbox(
-                                        value: listSelect[index],
-                                        activeColor: ColorApp.mediumBlue,
-                                        checkColor: Colors.white,
-                                        shape: CircleBorder(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            listSelect[index] = value;
-                                          });
-                                        },
-                                      ),
-                                      isImage(file.name)
-                                          ? CircleAvatar(
-                                              backgroundColor:
-                                                  ColorApp.lightGrey,
-                                              radius: 15,
-                                              backgroundImage:
-                                                  CachedNetworkImageProvider(
-                                                      file.url),
-                                            )
-                                          : Container(),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          // height: 25,
-                                          child: Text(
-                                            file.name,
-                                          ),
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      stops: [0.08, 1],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.white,
+                                        ColorApp.lightGrey
+                                      ])),
+                              child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Checkbox(
+                                      value: listSelect[index],
+                                      activeColor: ColorApp.mediumBlue,
+                                      checkColor: Colors.white,
+                                      shape: CircleBorder(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          listSelect[index] = value;
+                                        });
+                                      },
+                                    ),
+                                    isImage(file.name)
+                                        ? CircleAvatar(
+                                            backgroundColor:
+                                                ColorApp.lightGrey,
+                                            radius: 15,
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    file.url),
+                                          )
+                                        : Container(),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        // height: 25,
+                                        child: Text(
+                                          file.name,
                                         ),
-                                      )
-                                    ]),
-                              ),
+                                      ),
+                                    )
+                                  ]),
                             );
                           },
                         ),

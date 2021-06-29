@@ -18,6 +18,7 @@ import 'package:utc2_staff/screens/classroom/new_comment.dart';
 import 'package:utc2_staff/screens/classroom/new_notify_class.dart';
 import 'package:utc2_staff/screens/classroom/report/report_class.dart';
 import 'package:utc2_staff/screens/home_screen.dart';
+import 'package:utc2_staff/service/firestore/api_getfile.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/file_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
@@ -705,17 +706,38 @@ class ItemNoti extends StatelessWidget {
                                       numberFile,
                                       (index) => TextButton(
                                           onPressed: () async {
-                                            Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                              builder: (context) => ImagePage(
-                                                  file: FirebaseFile(
-                                                      ref: null,
-                                                      name:
-                                                          list[index].nameFile,
-                                                      url: list[index].url)),
-                                            ));
+                                            if (isImage(list[index].nameFile))
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) => ImagePage(
+                                                    file: FirebaseFile(
+                                                        ref: null,
+                                                        name: list[index]
+                                                            .nameFile,
+                                                        url: list[index].url)),
+                                              ));
+                                            else
+                                              FirebaseApiGetFile.downloadFile(
+                                                  list[index].url,
+                                                  list[index].nameFile,
+                                                  context);
                                           },
-                                          child: Text(list[index].nameFile))))
+                                          child: Row(
+                                            children: [
+                                              Text(list[index].nameFile),
+                                              Spacer(),
+                                              isImage(list[index].nameFile)
+                                                  ? CircleAvatar(
+                                                      backgroundColor:
+                                                          ColorApp.lightGrey,
+                                                      radius: 20,
+                                                      backgroundImage:
+                                                          CachedNetworkImageProvider(
+                                                              list[index].url),
+                                                    )
+                                                  : Container(),
+                                            ],
+                                          ))))
                               : Container()
                         ],
                       );

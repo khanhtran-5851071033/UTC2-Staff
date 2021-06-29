@@ -11,7 +11,6 @@ class ImagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(file.name),
@@ -20,12 +19,8 @@ class ImagePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.file_download),
             onPressed: () async {
-              await FirebaseApiGetFile.downloadFile(file.ref);
-
-              final snackBar = SnackBar(
-                content: Text('Downloaded ${file.name}'),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              await FirebaseApiGetFile.downloadFile(
+                  file.url, file.name, context);
             },
           ),
           const SizedBox(width: 12),

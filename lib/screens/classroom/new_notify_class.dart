@@ -316,7 +316,7 @@ class _NewNotifyState extends State<NewNotify> {
                               setState(() {
                                 Get.to(NewFile(idClass: widget.classUtc.id))
                                     .then((value) {
-                                  if (value.isNotEmpty) {
+                                  if (value != null) {
                                     for (var item in value) {
                                       setState(() {
                                         listFile.add(item);
