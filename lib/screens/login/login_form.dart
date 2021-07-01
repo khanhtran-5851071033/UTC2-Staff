@@ -51,12 +51,17 @@ class _LoginFormState extends State<LoginForm> {
               'assets/icons/google.png',
               width: 25,
             )),
-            Text(
-              'Đăng nhập bằng tài khoản Giảng Viên',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: size.width * 0.04,
+            Expanded(
+              child: Text(
+                'Đăng nhập bằng tài khoản Giảng Viên',
+                softWrap: true,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
           ]),

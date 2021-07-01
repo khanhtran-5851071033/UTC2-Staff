@@ -42,7 +42,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
       softWrap: true,
       maxLines: 2,
       overflow: TextOverflow.clip,
-      style: TextStyle(color: ColorApp.black),
+      style: TextStyle(color: ColorApp.black, fontSize: 11),
     );
   }
 
@@ -91,7 +91,10 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                         _showBottomSheet(context, widget.classUtc,
                             widget.teacher, widget.listPost, student);
                       },
-                      label: Text('Chi tiết'),
+                      label: Text(
+                        'Chi tiết',
+                        style: TextStyle(fontSize: 11),
+                      ),
                       icon: Icon(
                         isCheck ? Icons.check : Icons.close,
                         size: 15,
@@ -157,7 +160,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -381,7 +384,7 @@ class Filter extends StatelessWidget {
                 value: value,
                 child: new Text(
                   formatTime(value.timeAtten),
-                  style: TextStyle(color: ColorApp.mediumBlue),
+                  style: TextStyle(color: ColorApp.mediumBlue, fontSize: 12),
                 ),
               );
             }).toList(),
@@ -432,7 +435,8 @@ class Filter1 extends StatelessWidget {
                     ),
                     new Text(
                       value,
-                      style: TextStyle(color: ColorApp.mediumBlue),
+                      style:
+                          TextStyle(color: ColorApp.mediumBlue, fontSize: 12),
                     ),
                   ],
                 ),

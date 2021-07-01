@@ -189,7 +189,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                     children: [
                                       Image.asset(
                                         'assets/images/logoUTC.png',
-                                        width: size.width * 0.07,
+                                        width: 25,
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -199,7 +199,7 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15),
+                                            fontSize: 13),
                                       ),
                                     ],
                                   ),
@@ -225,8 +225,8 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         Text(
                                           time,
                                           style: TextStyle(
-                                            color: Color(0xff29166F),
-                                          ),
+                                              color: Color(0xff29166F),
+                                              fontSize: 12),
                                         ),
                                       ],
                                     ),
@@ -253,8 +253,8 @@ class _NotiWebState extends State<NotiWeb> with AutomaticKeepAliveClientMixin {
                                         softWrap: true,
                                         maxLines: 1,
                                         style: TextStyle(
-                                          color: Color(0xff29166F),
-                                        ),
+                                            color: Color(0xff29166F),
+                                            fontSize: 12),
                                       )
                                     ]),
                                   )
@@ -721,7 +721,7 @@ class _EventScreenState extends State<EventScreen> {
                                     children: [
                                       Image.asset(
                                         'assets/images/logoUTC.png',
-                                        width: size.width * 0.07,
+                                        width: 25,
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -731,7 +731,7 @@ class _EventScreenState extends State<EventScreen> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15),
+                                            fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -757,8 +757,8 @@ class _EventScreenState extends State<EventScreen> {
                                         Text(
                                           time,
                                           style: TextStyle(
-                                            color: Color(0xff29166F),
-                                          ),
+                                              color: Color(0xff29166F),
+                                              fontSize: 12),
                                         ),
                                       ],
                                     ),
@@ -788,8 +788,8 @@ class _EventScreenState extends State<EventScreen> {
                                         softWrap: true,
                                         maxLines: 1,
                                         style: TextStyle(
-                                          color: Color(0xff29166F),
-                                        ),
+                                            color: Color(0xff29166F),
+                                            fontSize: 12),
                                       )
                                     ]),
                                   )

@@ -303,7 +303,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
@@ -386,9 +386,14 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  'Thông báo gì đó cho lớp học của bạn...',
-                  style: TextStyle(color: ColorApp.lightBlue),
+                Expanded(
+                  child: Text(
+                    'Thông báo gì đó cho lớp học của bạn...',
+                    softWrap: true,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: ColorApp.lightBlue),
+                  ),
                 ),
               ],
             ),
@@ -502,14 +507,14 @@ class ItemNoti extends StatelessWidget {
                           softWrap: true,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: ColorApp.black, fontSize: 17),
+                          style: TextStyle(color: ColorApp.black, fontSize: 14),
                         ),
                         Text(
                           "Đã đăng  " +
                               DateFormat('HH:mm - dd-MM-yyyy').format(
                                   DateFormat("yyyy-MM-dd HH:mm:ss")
                                       .parse(post.date)),
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
+                          style: TextStyle(color: Colors.grey, fontSize: 10),
                         ),
                       ],
                     ),
@@ -682,10 +687,12 @@ class ItemNoti extends StatelessWidget {
                                 width: 3,
                               ),
                               Text(
-                                numberFile.toString() + ' Tệp đính kèm',
+                                numberFile == 0
+                                    ? 'Tệp đính kèm'
+                                    : numberFile.toString() + ' Tệp đính kèm',
                                 softWrap: true,
                                 style:
-                                    TextStyle(color: Colors.grey, fontSize: 14),
+                                    TextStyle(color: Colors.grey, fontSize: 11),
                               ),
                             ],
                           ),
@@ -714,8 +721,14 @@ class ItemNoti extends StatelessWidget {
                                           },
                                           child: Row(
                                             children: [
-                                              Text(list[index].nameFile),
-                                              Spacer(),
+                                              Expanded(
+                                                  child: Text(
+                                                list[index].nameFile,
+                                                softWrap: true,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 11),
+                                              )),
                                               isImage(list[index].nameFile)
                                                   ? CircleAvatar(
                                                       backgroundColor:
@@ -772,7 +785,7 @@ class ItemNoti extends StatelessWidget {
                   numberComment != null
                       ? numberComment.toString() + ' nhận xét của lớp học'
                       : 'Thêm nhận xét của lớp học',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ))
         ],

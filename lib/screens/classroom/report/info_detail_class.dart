@@ -31,7 +31,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
     return Text(
       title,
       textAlign: TextAlign.center,
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.white, fontSize: 12),
     );
   }
 
@@ -39,7 +39,7 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
     return Text(
       title,
       textAlign: TextAlign.center,
-      style: TextStyle(color: ColorApp.black),
+      style: TextStyle(color: ColorApp.black, fontSize: 10),
     );
   }
 
@@ -216,23 +216,29 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                           SizedBox(
                             width: 5,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.teacher.name != null
-                                    ? 'GV phụ trách : ' + widget.teacher.name
-                                    : '',
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                widget.teacher.email != null
-                                    ? 'Email GV : ' + widget.teacher.email
-                                    : '',
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.teacher.name != null
+                                      ? 'GV phụ trách : ' + widget.teacher.name
+                                      : '',
+                                  style: TextStyle(
+                                      color: ColorApp.black, fontSize: 12),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  widget.teacher.email != null
+                                      ? 'Email GV : ' + widget.teacher.email
+                                      : '',
+                                  style: TextStyle(
+                                      color: ColorApp.black, fontSize: 12),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -249,6 +255,8 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                 widget.classUtc.name != null
                                     ? 'Tên lớp : ' + widget.classUtc.name
                                     : '',
+                                style: TextStyle(
+                                    color: ColorApp.black, fontSize: 12),
                               ),
                               SizedBox(
                                 height: 5,
@@ -257,6 +265,8 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                 widget.classUtc.id != null
                                     ? 'Mã lớp : ' + widget.classUtc.id
                                     : '',
+                                style: TextStyle(
+                                    color: ColorApp.black, fontSize: 12),
                               ),
                               SizedBox(
                                 height: 5,
@@ -265,6 +275,8 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                 widget.classUtc.note != null
                                     ? 'Mô tả : ' + widget.classUtc.note
                                     : '',
+                                style: TextStyle(
+                                    color: ColorApp.black, fontSize: 12),
                               ),
                               SizedBox(
                                 height: 5,
@@ -276,6 +288,8 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                             DateFormat("yyyy-MM-dd HH:mm:ss")
                                                 .parse(widget.classUtc.date))
                                     : '',
+                                style: TextStyle(
+                                    color: ColorApp.black, fontSize: 12),
                               ),
                             ],
                           ),
@@ -351,14 +365,16 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                 if (state is StudentInitial) {
                                   return SpinKitThreeBounce(
                                     color: ColorApp.lightBlue,
+                                    size: 30,
                                   );
                                 } else if (state is LoadingStudentState) {
                                   return SpinKitThreeBounce(
                                     color: ColorApp.lightBlue,
+                                    size: 30,
                                   );
                                 } else if (state is LoadedStudentState) {
                                   return Container(
-                                    height: 200,
+                                    height: 250,
                                     decoration: BoxDecoration(
                                         border: Border(
                                             bottom: BorderSide(width: 2))),
@@ -403,6 +419,8 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                     DateTime.now().month.toString() +
                                     ' năm ' +
                                     DateTime.now().year.toString(),
+                                style: TextStyle(
+                                    color: ColorApp.black, fontSize: 12),
                               ),
                               TextButton.icon(
                                   onPressed: () {
@@ -412,7 +430,11 @@ class _InfoDetailClassState extends State<InfoDetailClass> {
                                     Icons.edit,
                                     size: 13,
                                   ),
-                                  label: Text("Ký tên")),
+                                  label: Text(
+                                    "Ký tên",
+                                    style: TextStyle(
+                                        color: ColorApp.black, fontSize: 12),
+                                  )),
                               Container(
                                 height: 50,
                                 child: Stack(
