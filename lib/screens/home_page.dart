@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:utc2_staff/blocs/schedule_bloc/schedule_bloc.dart';
-import 'package:utc2_staff/blocs/schedule_bloc/schedule_event.dart';
 import 'package:utc2_staff/blocs/schedule_bloc/schedule_state.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_event.dart';

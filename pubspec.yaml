@@ -66,7 +66,7 @@ dependencies:
   bottom_navy_bar: ^6.0.0
   avatar_glow: ^2.0.1
   syncfusion_flutter_calendar: ^19.1.64
-  syncfusion_flutter_charts: ^19.1.64
+  syncfusion_flutter_charts: ^19.2.44+1
   fl_chart: ^0.36.1
   qr_flutter: ^4.0.0
   image_gallery_saver: ^1.6.8
@@ -79,6 +79,7 @@ dependencies:
   url_launcher: ^6.0.6
   firebase_storage: ^8.0.3
   photo_view: ^0.11.1
+  syncfusion_flutter_xlsio: ^19.1.64-beta
 
   # pick file
   file_picker: ^3.0.1

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:utc2_staff/blocs/schedule_bloc/schedule_event.dart';
 import 'package:utc2_staff/blocs/schedule_bloc/schedule_state.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';

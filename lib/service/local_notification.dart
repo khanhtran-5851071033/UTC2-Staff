@@ -30,7 +30,9 @@ class MyLocalNotification {
         nextInstanceOfWeekDayTime(sh, sm, wd),
         NotificationDetails(
           android: AndroidNotificationDetails(
-              '$tenMon-$maLich', '$tenMon-$maLich', '$tenMon-$maLich'),
+              '$tenMon-$maLich', '$tenMon-$maLich', '$tenMon-$maLich',
+                additionalFlags: Int32List.fromList(<int>[4])
+              ),
         ),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:

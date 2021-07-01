@@ -23,7 +23,6 @@ import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/file_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
-import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/custom_glow.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:utc2_staff/widgets/class_drawer.dart';
@@ -53,7 +52,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
   @override
   void initState() {
     super.initState();
-    sendNoti();
 
     _class = widget.listClass
         .where((element) => element.id.contains(widget.idClass))
@@ -71,14 +69,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
     postBloc = BlocProvider.of<PostBloc>(context);
     fileBloc = BlocProvider.of<FileBloc>(context);
     postBloc.add(GetPostEvent(widget.idClass));
-  }
-
-  void sendNoti() async {
-    // await MyLocalNotification.configureLocalTimeZone();
-    // await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-    //     notifications, 14, 46);
-    // await MyLocalNotification.scheduleWeeklyMondayTenAMNotification(
-    //     notifications, 11, 48);
   }
 
   Future onSelectNotification(String payload) async =>
@@ -116,7 +106,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           )));
             },
             icon: Image.asset(
-              'assets/icons/pdf.png',
+              'assets/icons/print.png',
               width: 20,
             ),
             label: Text('In báo cáo'),

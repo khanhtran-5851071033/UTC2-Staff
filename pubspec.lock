@@ -874,14 +874,14 @@ packages:
       name: syncfusion_flutter_charts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.1.64"
+    version: "19.2.44+1"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.1.66"
+    version: "19.2.44+1"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
@@ -889,6 +889,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "19.1.64-beta"
+  syncfusion_flutter_xlsio:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_xlsio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.2.44-beta"
+  syncfusion_officecore:
+    dependency: transitive
+    description:
+      name: syncfusion_officecore
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.2.44-beta"
   synchronized:
     dependency: transitive
     description:

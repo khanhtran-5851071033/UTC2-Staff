@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
+import 'package:utc2_staff/service/excel/excel_api.dart';
+import 'package:utc2_staff/service/excel/excel_class_test.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/quiz_database.dart';
@@ -162,7 +164,8 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
   }
 
   StudentBloc studentBloc = new StudentBloc();
-  List score = [];
+
+  List<Student> listStudent = [];
   @override
   void initState() {
     studentBloc = BlocProvider.of<StudentBloc>(context);
@@ -194,9 +197,18 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
         ),
         actions: [
           TextButton.icon(
-            onPressed: () async {},
+            onPressed: () async {
+              final excelFile = await ExcelParagraphApi.generate(
+                  widget.teacher,
+                  widget.classUtc,
+                  listStudent,
+                  widget.listPostQuiz,
+                  widget.listQuiz,
+                  widget.listTest);
+              ExcelApi.openFile(excelFile);
+            },
             icon: Image.asset(
-              'assets/icons/pdf.png',
+              'assets/icons/excel.png',
               width: 20,
             ),
             label: Text('In báo cáo'),
@@ -217,19 +229,9 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
                     itemBuilder: (context, index) {
                       return BlocConsumer<StudentBloc, StudentState>(
                         listener: (context, state) {
-                          // if (state is LoadedStudentState) {
-                          //   for (var student in state.listStudent) {
-                          //     for (int i = 0; i < widget.listTest.length; i++) {
-                          //       if (widget.listTest[i].idStudent ==
-                          //           student.id) {
-                          //         score.add(widget.listTest[i].score);
-                          //         break;
-                          //       }
-                          //     }
-                          //     score.add('0');
-                          //   }
-                          //   print(score);
-                          // }
+                          if (state is LoadedStudentState) {
+                            listStudent = state.listStudent;
+                          }
                         },
                         builder: (context, state) {
                           return BlocBuilder<StudentBloc, StudentState>(
