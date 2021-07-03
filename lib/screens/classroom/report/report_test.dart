@@ -48,7 +48,7 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
       softWrap: true,
       maxLines: 2,
       overflow: TextOverflow.clip,
-      style: TextStyle(color: ColorApp.black, fontSize: 11),
+      style: TextStyle(color: ColorApp.black, fontSize: 13),
     );
   }
 

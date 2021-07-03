@@ -35,7 +35,6 @@ class PdfParagraphApi {
       MultiPage(
         build: (context) => <Widget>[
           buildCustomHeader(imageSVG1),
-          
           SizedBox(height: 0.5 * PdfPageFormat.cm),
           title(customFont),
           buildCustomInfo(customFont, imageSVG, classUtc, teacher),
@@ -177,7 +176,6 @@ class PdfParagraphApi {
                 font: customFont,
               ),
             ),
-            
             SizedBox(height: 0.5 * PdfPageFormat.cm),
             Text(
               'Người xác nhận          ',
@@ -218,8 +216,8 @@ class PdfParagraphApi {
   static Widget qrCode(String logo, String idClass) =>
       Stack(alignment: Alignment.center, children: [
         Container(
-          height: 70,
-          width: 70,
+          height: 80,
+          width: 80,
           child: BarcodeWidget(
             barcode: Barcode.qrCode(),
             data: idClass,

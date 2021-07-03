@@ -617,7 +617,8 @@ class _NewNotifyState extends State<NewNotify> {
                       firstChild: Container(
                         height: size.height / 2.5,
                         child: ListQuiz(
-                          idTeacher: widget.teacher.id,
+                          idTeacher: widget.teacher,
+                          classUtc: widget.classUtc,
                           setQuiz: (quiz) {
                             setState(() {
                               quizAdd = quiz;
@@ -643,9 +644,10 @@ class _NewNotifyState extends State<NewNotify> {
 }
 
 class ListQuiz extends StatefulWidget {
-  final String idTeacher;
+  final Teacher idTeacher;
+  final Class classUtc;
   final Function(Quiz quiz) setQuiz;
-  ListQuiz({this.idTeacher, this.setQuiz});
+  ListQuiz({this.idTeacher, this.setQuiz, this.classUtc});
 
   @override
   _ListQuizState createState() => _ListQuizState();
@@ -658,7 +660,7 @@ class _ListQuizState extends State<ListQuiz> {
   @override
   void initState() {
     quizBloc = BlocProvider.of<QuizBloc>(context);
-    quizBloc.add(GetQuizEvent(widget.idTeacher));
+    quizBloc.add(GetQuizEvent(widget.idTeacher.id));
     super.initState();
   }
 
@@ -675,9 +677,9 @@ class _ListQuizState extends State<ListQuiz> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => NewQuiz(
-                            idTeacher: widget.idTeacher,
+                            idTeacher: widget.idTeacher.id,
                           ))).then(
-                  (value) => quizBloc.add(GetQuizEvent(widget.idTeacher)));
+                  (value) => quizBloc.add(GetQuizEvent(widget.idTeacher.id)));
             },
             label: Text(
               'Tạo mới',
@@ -715,7 +717,7 @@ class _ListQuizState extends State<ListQuiz> {
                   ? Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          quizBloc.add(GetQuizEvent(widget.idTeacher));
+                          quizBloc.add(GetQuizEvent(widget.idTeacher.id));
                         },
                         child: ListView.builder(
                             itemCount: state.list.length,
@@ -805,8 +807,11 @@ class _ListQuizState extends State<ListQuiz> {
                                                   builder: (context) =>
                                                       QuizSreen(
                                                         quiz: state.list[index],
-                                                        idTeacher:
+                                                        teacher:
                                                             widget.idTeacher,
+                                                            classUtc: widget.classUtc,
+
+                                                            
                                                       )));
                                         },
                                         icon: Icon(

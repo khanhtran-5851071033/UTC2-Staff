@@ -194,7 +194,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                           margin: EdgeInsets.only(top: 10),
                           child: RefreshIndicator(
                             onRefresh: () async {
-                              postBloc.add(GetPostEvent(widget.idClass));
+                              postBloc.add(GetPostEvent(_class.id));
                             },
                             child: Scrollbar(
                               showTrackOnHover: true,
@@ -446,12 +446,6 @@ class ItemNoti extends StatelessWidget {
       this.numberComment,
       this.post,
       this.classUtc});
-  bool isLink(String link) {
-    return [
-      'http://',
-      'https://',
-    ].any(link.contains);
-  }
 
   Future<void> _launchInWebViewWithJavaScript(String url) async {
     if (await canLaunch(url)) {
@@ -718,7 +712,6 @@ class ItemNoti extends StatelessWidget {
                                                   list[index].url,
                                                   list[index].nameFile,
                                                   context);
-                                                  
                                             }
                                           },
                                           child: Row(

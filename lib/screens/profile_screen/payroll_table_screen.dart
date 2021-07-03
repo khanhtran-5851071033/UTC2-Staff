@@ -145,55 +145,11 @@ class _PayrollScreenState extends State<PayrollScreen>
               ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Column(
                 children: [
+                  level1('Giảng viên Hạng 2 - Bậc 4', '4.533.055', '2.35'),
+                  level('Lương cứng : Cơ bản * Hệ số', true),
+                  level('Lương 2 : Cơ bản * Hệ số * Số tiết', false),
                   Flexible(
                     flex: 2,
-                    child: Column(
-                      children: [
-                        level1(
-                            'Giảng viên Hạng 2 - Bậc 4', '4.533.055', '2.35'),
-                        level('Lương cứng : Cơ bản * Hệ số', true),
-                        level('Lương 2 : Cơ bản * Hệ số * Số tiết', false),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Bảng lương chi tiết ',
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                              softWrap: true,
-                            ),
-                            Text(
-                              ' Tháng - ' +
-                                  (_pageNotifier.value + 1).toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: ColorApp.mediumBlue),
-                              softWrap: true,
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: DotsIndicator(
-                            dotsCount: data.length,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            position: _pageNotifier.value.toDouble(),
-                            decorator: DotsDecorator(
-                              color: ColorApp.lightGrey, // Inactive color
-                              activeColor: ColorApp.lightBlue,
-                              size: const Size.square(9.0),
-                              activeSize: const Size(15.0, 9.0),
-                              activeShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    flex: 4,
                     child: Container(
                         child: PageView(
                             physics: BouncingScrollPhysics(),

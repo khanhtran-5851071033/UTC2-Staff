@@ -9,6 +9,7 @@ import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/firestore/test_student_database.dart';
+import 'package:utc2_staff/utils/utils.dart';
 
 class ExcelParagraphApi {
   static Future<File> generate(
@@ -42,8 +43,9 @@ class ExcelParagraphApi {
         _buildTestDataRows(listStudent, listPost, listQuiz, listStudentTest);
     sheet.importData(dataTest, 2, 6);
 
+    String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name}.excel', workbook: workbook);
+        name: '${classUtc.name}$time.excel', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {

@@ -30,37 +30,38 @@ class PieChartSample3State extends State {
             )
           ]),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(
-            flex: 3,
+          Expanded(
             child: Stack(
               alignment: Alignment.center,
               children: [
-                PieChart(
-                  PieChartData(
-                      pieTouchData:
-                          PieTouchData(touchCallback: (pieTouchResponse) {
-                        setState(() {
-                          final desiredTouch = pieTouchResponse.touchInput
-                                  is! PointerExitEvent &&
-                              pieTouchResponse.touchInput is! PointerUpEvent;
-                          if (desiredTouch &&
-                              pieTouchResponse.touchedSection != null) {
-                            touchedIndex = pieTouchResponse
-                                .touchedSection.touchedSectionIndex;
-                          } else {
-                            touchedIndex = -1;
-                          }
-                        });
-                      }),
-                      borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(color: Colors.transparent)),
-                      sectionsSpace: 2,
-                      centerSpaceRadius: 15,
-                      sections: showingSections()),
+                Container(
+                  child: PieChart(
+                    PieChartData(
+                        pieTouchData:
+                            PieTouchData(touchCallback: (pieTouchResponse) {
+                          setState(() {
+                            final desiredTouch = pieTouchResponse.touchInput
+                                    is! PointerExitEvent &&
+                                pieTouchResponse.touchInput is! PointerUpEvent;
+                            if (desiredTouch &&
+                                pieTouchResponse.touchedSection != null) {
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection.touchedSectionIndex;
+                            } else {
+                              touchedIndex = -1;
+                            }
+                          });
+                        }),
+                        borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(color: Colors.transparent)),
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 15,
+                        sections: showingSections()),
+                  ),
                 ),
                 CustomAvatarGlow(
                     glowColor: Colors.white,
@@ -76,20 +77,16 @@ class PieChartSample3State extends State {
               ],
             ),
           ),
-          Flexible(
-            flex: 1,
-            child: Container(
-              height: 200,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  detail('Công tác', Color(0xff0293ee), 0, touchedIndex),
-                  detail('Giảng dạy', Color(0xfff8b250), 1, touchedIndex),
-                  detail('Dạy bù', Color(0xff845bef), 2, touchedIndex),
-                  detail('Gác thi', Color(0xff13d38e), 3, touchedIndex)
-                ],
-              ),
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                detail('Công tác', Color(0xff0293ee), 0, touchedIndex),
+                detail('Giảng dạy', Color(0xfff8b250), 1, touchedIndex),
+                detail('Dạy bù', Color(0xff845bef), 2, touchedIndex),
+                detail('Gác thi', Color(0xff13d38e), 3, touchedIndex)
+              ],
             ),
           ),
         ],

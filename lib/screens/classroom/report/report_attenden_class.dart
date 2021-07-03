@@ -233,9 +233,18 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
         ),
         actions: [
           TextButton.icon(
-            onPressed: () async {},
+            onPressed: () async {
+              // final excelFile = await ExcelParagraphApi.generate(
+              //     widget.teacher,
+              //     widget.classUtc,
+              //     listStudent,
+              //     widget.listPostQuiz,
+              //     widget.listQuiz,
+              //     widget.listTest);
+              // ExcelApi.openFile(excelFile);
+            },
             icon: Image.asset(
-              'assets/icons/pdf.png',
+              'assets/icons/excel.png',
               width: 20,
             ),
             label: Text('In báo cáo'),

@@ -285,7 +285,7 @@ class _ProFilePageState extends State<ProFilePage> {
                           child: _avatar(_image, size, widget.teacher.avatar))),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 _name(widget.teacher.name, size),
                 SizedBox(
