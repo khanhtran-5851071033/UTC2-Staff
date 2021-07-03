@@ -30,11 +30,7 @@ class _HomePageState extends State<HomePage> {
     {'title': 'Tổng kết', 'isComplete': true},
     {'title': 'Trình bày', 'isComplete': false}
   ];
-  List user = [
-    'https://images.pexels.com/photos/1987042/pexels-photo-1987042.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    'https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_960_720.png'
-  ];
+
   final _scrollController = ScrollController();
   TodayTaskBloc scheduleBloc;
   TaskOfScheduleBloc taskBloc;
@@ -266,6 +262,7 @@ class _HomePageState extends State<HomePage> {
                 child: BlocConsumer<TodayTaskBloc, TodayTaskState>(
                   listener: (context, state) {
                     if (state is LoadedTodayTask) {
+                       lenght = state.list.length;
                       taskBloc.add(GetTaskOfScheduleEvent(
                           widget.idTeacher, state.list[0].idSchedule));
                     }
@@ -276,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                         child: Center(
                             child: SpinKitThreeBounce(
                           color: Colors.lightBlue,
-                          size: size.width * 0.06,
+                          size: 30,
                         )),
                       );
                     else if (state is LoadedTodayTask) {
@@ -559,7 +556,7 @@ class _HomePageState extends State<HomePage> {
                                                     }
                                                   },
                                                 ),
-                                                // Spacer(),
+                                               
                                               ],
                                             ),
                                           ),
@@ -573,7 +570,7 @@ class _HomePageState extends State<HomePage> {
                           state.error,
                           style: TextStyle(
                             color: Colors.white60,
-                            fontSize: 20,
+                            fontSize: 16,
                           ),
                         ),
                       );
@@ -582,7 +579,7 @@ class _HomePageState extends State<HomePage> {
                         child: Center(
                             child: SpinKitThreeBounce(
                           color: Colors.lightBlue,
-                          size: size.width * 0.06,
+                          size: 30,
                         )),
                       );
                     }

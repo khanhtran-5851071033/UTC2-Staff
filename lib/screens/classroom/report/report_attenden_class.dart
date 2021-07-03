@@ -312,10 +312,12 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                                   if (state is AttendInitial) {
                                     return SpinKitThreeBounce(
                                       color: ColorApp.lightBlue,
+                                      size: 30,
                                     );
                                   } else if (state is LoadingAttend) {
                                     return SpinKitThreeBounce(
                                       color: ColorApp.lightBlue,
+                                      size: 30,
                                     );
                                   } else if (state is LoadedAttend) {
                                     return Container(
@@ -342,11 +344,20 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                                       child: Text(
                                         state.error,
                                         style: TextStyle(
-                                            fontSize: 20, color: ColorApp.red),
+                                            fontSize: 15, color: ColorApp.red),
                                       ),
                                     ));
                                   } else
-                                    return Container();
+                                    return Center(
+                                        child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        'Chưa có sinh viên tham gia vào lớp',
+                                        style: TextStyle(
+                                            fontSize: 16, color: ColorApp.red),
+                                      ),
+                                    ));
                                 },
                               ),
                             ],

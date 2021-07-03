@@ -713,11 +713,13 @@ class ItemNoti extends StatelessWidget {
                                                             .nameFile,
                                                         url: list[index].url)),
                                               ));
-                                            else
+                                            else {
                                               FirebaseApiGetFile.downloadFile(
                                                   list[index].url,
                                                   list[index].nameFile,
                                                   context);
+                                                  
+                                            }
                                           },
                                           child: Row(
                                             children: [

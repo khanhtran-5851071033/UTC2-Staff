@@ -495,7 +495,7 @@ class _NotifyAppState extends State<NotifyApp> {
 
   String formatTime(String time) {
     DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
-    return DateFormat.yMEd('vi').format(parseDate);
+    return DateFormat.yMMMEd('vi').format(parseDate);
   }
 
   @override
@@ -514,7 +514,7 @@ class _NotifyAppState extends State<NotifyApp> {
                 child: Center(
                     child: SpinKitThreeBounce(
                   color: Colors.lightBlue,
-                  size: widget.size.width * 0.06,
+                  size: 30,
                 )),
               );
             else if (state is LoadedNotifyApp) {
@@ -581,7 +581,8 @@ class _NotifyAppState extends State<NotifyApp> {
                                                   state.list[index].date),
                                               style: TextStyle(
                                                   color: ColorApp.black
-                                                      .withOpacity(.4)),
+                                                      .withOpacity(.4),
+                                                  fontSize: 10),
                                             ),
                                           ],
                                         ),

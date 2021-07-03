@@ -219,85 +219,76 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
         height: size.height,
         color: Colors.white,
         margin: EdgeInsets.only(top: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return BlocConsumer<StudentBloc, StudentState>(
-                        listener: (context, state) {
-                          if (state is LoadedStudentState) {
-                            listStudent = state.listStudent;
-                          }
-                        },
-                        builder: (context, state) {
-                          return BlocBuilder<StudentBloc, StudentState>(
-                            builder: (context, state) {
-                              if (state is StudentInitial) {
-                                return Center(
-                                  child: SpinKitThreeBounce(
-                                    color: ColorApp.lightBlue,
-                                    size: 30,
-                                  ),
-                                );
-                              } else if (state is LoadingStudentState) {
-                                return Center(
-                                  child: SpinKitThreeBounce(
-                                    color: ColorApp.lightBlue,
-                                    size: 30,
-                                  ),
-                                );
-                              } else if (state is LoadedStudentState) {
-                                return Container(
-                                    height: size.height,
-                                    width: widget.listQuiz.length >= 3
-                                        ? size.width * 1.6
-                                        : size.width * 1.3,
-                                    child: Column(children: [
-                                      headerTable(widget.listQuiz),
-                                      Expanded(
-                                          child: ListView.builder(
-                                              itemCount:
-                                                  state.listStudent.length,
-                                              itemBuilder: (contex, index) {
-                                                var student =
-                                                    state.listStudent[index];
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return BlocConsumer<StudentBloc, StudentState>(
+                listener: (context, state) {
+                  if (state is LoadedStudentState) {
+                    listStudent = state.listStudent;
+                  }
+                },
+                builder: (context, state) {
+                  return BlocBuilder<StudentBloc, StudentState>(
+                    builder: (context, state) {
+                      if (state is StudentInitial) {
+                        return Center(
+                          child: SpinKitThreeBounce(
+                            color: ColorApp.lightBlue,
+                            size: 30,
+                          ),
+                        );
+                      } else if (state is LoadingStudentState) {
+                        return Center(
+                          child: SpinKitThreeBounce(
+                            color: ColorApp.lightBlue,
+                            size: 30,
+                          ),
+                        );
+                      } else if (state is LoadedStudentState) {
+                        return Container(
+                            height: size.height,
+                            width: widget.listQuiz.length >= 3
+                                ? size.width * 1.6
+                                : size.width * 1.3,
+                            child: Column(children: [
+                              headerTable(widget.listQuiz),
+                              Expanded(
+                                  child: ListView.builder(
+                                      itemCount: state.listStudent.length,
+                                      itemBuilder: (contex, index) {
+                                        var student = state.listStudent[index];
 
-                                                return rowTable(
-                                                    index,
-                                                    widget.listQuiz,
-                                                    widget.listPostQuiz,
-                                                    widget.listTest,
-                                                    student);
-                                              }))
-                                    ]));
-                              } else if (state is LoadErrorStudentState) {
-                                return Center(
-                                    child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    state.error,
-                                    style: TextStyle(
-                                        fontSize: 16, color: ColorApp.red),
-                                  ),
-                                ));
-                              } else
-                                return Center(
-                                  child: SpinKitThreeBounce(
-                                    color: ColorApp.lightBlue,
-                                    size: 30,
-                                  ),
-                                );
-                            },
-                          );
-                        },
-                      );
-                    }))
-          ],
-        ),
+                                        return rowTable(
+                                            index,
+                                            widget.listQuiz,
+                                            widget.listPostQuiz,
+                                            widget.listTest,
+                                            student);
+                                      }))
+                            ]));
+                      } else if (state is LoadErrorStudentState) {
+                        return Center(
+                            child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            state.error,
+                            style: TextStyle(fontSize: 16, color: ColorApp.red),
+                          ),
+                        ));
+                      } else
+                        return Center(
+                          child: SpinKitThreeBounce(
+                            color: ColorApp.lightBlue,
+                            size: 30,
+                          ),
+                        );
+                    },
+                  );
+                },
+              );
+            }),
       ),
     );
   }

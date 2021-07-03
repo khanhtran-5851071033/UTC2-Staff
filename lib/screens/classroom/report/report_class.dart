@@ -45,10 +45,23 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void showInSnackBar(String value) {
+    // ignore: deprecated_member_use
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: new Text(value),
+      backgroundColor: Colors.lightBlue,
+      shape: RoundedRectangleBorder(
+          side: BorderSide.none, borderRadius: BorderRadius.circular(5.0)),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           leading: IconButton(
             color: ColorApp.lightGrey,
@@ -122,7 +135,7 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                                               classUtc: widget.classUtc,
                                               listPost: listPost1,
                                             )))
-                                : print('Chua co lịch điểm danh');
+                                : showInSnackBar('Chưa có lịch điểm danh');
                           }
                           if (index == 3) {
                             if (listPost.isNotEmpty) {
@@ -186,6 +199,8 @@ class _ReportClassScreenState extends State<ReportClassScreen> {
                                   ),
                                 );
                               }
+                            } else {
+                              showInSnackBar('Chưa có điểm bài Test');
                             }
                           }
                         },
@@ -214,9 +229,7 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return TextButton(
-      onPressed: () {
-        function();
-      },
+      onPressed: function,
       child: Container(
         width: size.width,
         height: size.width / 2,
