@@ -5,20 +5,19 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:utc2_staff/service/excel/excel_api.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
-import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
-import 'package:utc2_staff/service/firestore/test_student_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
-class ExcelTestApi {
+import 'dart:async';
+
+class ExcelAttendApi {
   static Future<File> generate(
       Teacher teacher,
       Class classUtc,
       List<Student> listStudent,
       List<Post> listPost,
-      List<Quiz> listQuiz,
-      List<StudentTest> listStudentTest) async {
+      List<StudentAttend> listStudentAttend) async {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.enableSheetCalculations();
@@ -49,30 +48,35 @@ class ExcelTestApi {
         classUtc.name);
     final List<int> imageBytes = File(image).readAsBytesSync();
     sheet.pictures.addStream(2, 5, imageBytes);
-
     //title
-    final Range range1 = sheet.getRangeByName('B1:D1');
-    sheet.getRangeByName('B1:D1').merge();
-    range1.setText('Danh Sách Điểm Kiểm Tra');
+    final Range range1 = sheet.getRangeByName('B10:E10');
+    sheet.getRangeByName('B10:E10').merge();
+    range1.setText('Danh Sách Điểm Danh');
     range1.cellStyle.hAlign = HAlignType.center;
     range1.cellStyle.vAlign = VAlignType.center;
     range1.cellStyle.bold = true;
     range1.cellStyle.fontSize = 14;
 
-    sheet.getRangeByName('A2:X2').cellStyle = headerStyle(workbook);
-    sheet.getRangeByName('B2:E2').columnWidth = 20;
-    sheet.getRangeByName('A2').columnWidth = 30;
+    final Range range3 = sheet.getRangeByName('F12:M100');
+    range3.cellStyle.hAlign = HAlignType.center;
+    range3.cellStyle.vAlign = VAlignType.center;
+    range3.cellStyle.bold = true;
+    range3.cellStyle.fontSize = 14;
+
+    sheet.getRangeByName('A11:X11').cellStyle = headerStyle(workbook);
+    sheet.getRangeByName('B11:X11').columnWidth = 20;
+    sheet.getRangeByName('A11').columnWidth = 30;
 
     //Data
     final List<ExcelDataRow> dataStudent = _buildStudentDataRows(listStudent);
     sheet.importData(dataStudent, 11, 1);
     final List<ExcelDataRow> dataTest =
-        _buildTestDataRows(listStudent, listPost, listQuiz, listStudentTest);
+        _buildTestDataRows(listStudent, listPost, listStudentAttend);
     sheet.importData(dataTest, 11, 6);
 
     String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name}$time.excel', workbook: workbook);
+        name: '${classUtc.name + 'diemdanh'}$time.excel', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {
@@ -114,33 +118,33 @@ List<ExcelDataRow> _buildStudentDataRows(List<Student> listStudent) {
   return excelDataRows;
 }
 
-List<ExcelDataRow> _buildTestDataRows(
-    List<Student> listStudent,
-    List<Post> listPost,
-    List<Quiz> listQuiz,
-    List<StudentTest> listStudentTest) {
+List<ExcelDataRow> _buildTestDataRows(List<Student> listStudent,
+    List<Post> listPost, List<StudentAttend> listStudentAttend) {
   List<ExcelDataRow> excelDataRows = <ExcelDataRow>[];
 
   excelDataRows = listStudent.map<ExcelDataRow>((Student dataRow) {
     return ExcelDataRow(
         cells: List.generate(
-            listQuiz.length,
+            listPost.length,
             (index) => ExcelDataCell(
-                columnHeader: listQuiz[index].titleQuiz,
-                value: listStudentTest
+                columnHeader: formatTimeAnttend(listPost[index].timeAtten),
+                value: listStudentAttend
                         .where((element) =>
-                            element.idStudent == dataRow.id &&
-                            element.idQuiz == listPost[index].idQuiz &&
-                            element.idPost == listPost[index].id)
+                            element.id == dataRow.id &&
+                            element.idPost == listPost[index].id &&
+                            element.idAttend == listPost[index].idAtten)
                         .isNotEmpty
-                    ? listStudentTest
-                        .where((element) =>
-                            element.idStudent == dataRow.id &&
-                            element.idQuiz == listPost[index].idQuiz &&
-                            element.idPost == listPost[index].id)
-                        .first
-                        .score
-                    : '0')));
+                    ? listStudentAttend
+                                .where((element) =>
+                                    element.id == dataRow.id &&
+                                    element.idPost == listPost[index].id &&
+                                    element.idAttend == listPost[index].idAtten)
+                                .first
+                                .status ==
+                            'Thành công'
+                        ? '✔'
+                        : '✗'
+                    : '✗')));
   }).toList();
 
   return excelDataRows;

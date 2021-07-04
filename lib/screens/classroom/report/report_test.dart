@@ -198,7 +198,7 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              final excelFile = await ExcelParagraphApi.generate(
+              final excelFile = await ExcelTestApi.generate(
                   widget.teacher,
                   widget.classUtc,
                   listStudent,

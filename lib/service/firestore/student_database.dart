@@ -88,6 +88,8 @@ class StudentDatabase {
 
 class StudentAttend {
   String id;
+  String idPost;
+  String idAttend;
   String address;
   String location;
   String timeAttend;
@@ -95,6 +97,8 @@ class StudentAttend {
   StudentAttend(QueryDocumentSnapshot<Map<String, dynamic>> json) {
     this.id = json['idStudent'];
     this.address = json['address'];
+    this.idPost = json['idPost'];
+    this.idAttend=json['idAntend'];
     this.location = json['location'];
     this.timeAttend = json['time'];
     this.status = json['status'];

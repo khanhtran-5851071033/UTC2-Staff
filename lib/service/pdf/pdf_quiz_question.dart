@@ -8,7 +8,6 @@ import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/pdf/pdf_api.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
-import 'package:utc2_staff/utils/utils.dart';
 
 class PdfQuizApi {
   static Future<File> generate(

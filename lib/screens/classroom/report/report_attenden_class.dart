@@ -7,6 +7,8 @@ import 'package:utc2_staff/blocs/atttend_student_bloc/attend_event.dart';
 import 'package:utc2_staff/blocs/atttend_student_bloc/attend_state.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/classroom/report/info_atten.dart';
+import 'package:utc2_staff/service/excel/excel_api.dart';
+import 'package:utc2_staff/service/excel/excel_class_attend.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/student_database.dart';
@@ -193,6 +195,8 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
   }
 
   AttendStudentBloc attendStudentBloc = new AttendStudentBloc();
+  List<Student> listStudent = [];
+  List<StudentAttend> listStudentAttend = [];
   @override
   void initState() {
     studentBloc = BlocProvider.of<StudentBloc>(context);
@@ -234,14 +238,20 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              // final excelFile = await ExcelParagraphApi.generate(
-              //     widget.teacher,
-              //     widget.classUtc,
-              //     listStudent,
-              //     widget.listPostQuiz,
-              //     widget.listQuiz,
-              //     widget.listTest);
-              // ExcelApi.openFile(excelFile);
+              for (int i = 0; i < widget.listPost.length; i++) {
+                var item = await StudentDatabase.getStudentsOfClassOfAttend(
+                    widget.classUtc.id, widget.listPost[i].id);
+                listStudentAttend = listStudentAttend + item;
+              }
+              if (listStudent.isNotEmpty) {
+                final excelFile = await ExcelAttendApi.generate(
+                    widget.teacher,
+                    widget.classUtc,
+                    listStudent,
+                    widget.listPost,
+                    listStudentAttend);
+                ExcelApi.openFile(excelFile);
+              }
             },
             icon: Image.asset(
               'assets/icons/excel.png',
@@ -307,6 +317,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                                   AttendStudentState>(
                                 listener: (context, state) {
                                   if (state is LoadedAttend) {
+                                    listStudent = state.listStudent;
                                     for (var p in widget.listPost) {
                                       if (p.id == state.idPost) {
                                         setState(() {
