@@ -61,7 +61,6 @@ class ExcelAttendApi {
     range3.cellStyle.hAlign = HAlignType.center;
     range3.cellStyle.vAlign = VAlignType.center;
     range3.cellStyle.bold = true;
-    range3.cellStyle.fontSize = 14;
 
     sheet.getRangeByName('A11:X11').cellStyle = headerStyle(workbook);
     sheet.getRangeByName('B11:X11').columnWidth = 20;
@@ -76,7 +75,7 @@ class ExcelAttendApi {
 
     String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name + 'diemdanh'}$time.excel', workbook: workbook);
+        name: '${classUtc.name + '_diemdanh_'}$time.excel', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {

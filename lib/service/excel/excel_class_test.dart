@@ -51,17 +51,22 @@ class ExcelTestApi {
     sheet.pictures.addStream(2, 5, imageBytes);
 
     //title
-    final Range range1 = sheet.getRangeByName('B1:D1');
-    sheet.getRangeByName('B1:D1').merge();
-    range1.setText('Danh Sách Điểm Kiểm Tra');
+    final Range range1 = sheet.getRangeByName('B10:E10');
+    sheet.getRangeByName('B10:E10').merge();
+    range1.setText('Danh Sách Kiểm Tra');
     range1.cellStyle.hAlign = HAlignType.center;
     range1.cellStyle.vAlign = VAlignType.center;
     range1.cellStyle.bold = true;
     range1.cellStyle.fontSize = 14;
 
-    sheet.getRangeByName('A2:X2').cellStyle = headerStyle(workbook);
-    sheet.getRangeByName('B2:E2').columnWidth = 20;
-    sheet.getRangeByName('A2').columnWidth = 30;
+    final Range range3 = sheet.getRangeByName('F12:M100');
+    range3.cellStyle.hAlign = HAlignType.center;
+    range3.cellStyle.vAlign = VAlignType.center;
+    range3.cellStyle.bold = true;
+
+    sheet.getRangeByName('A11:X11').cellStyle = headerStyle(workbook);
+    sheet.getRangeByName('B11:X11').columnWidth = 20;
+    sheet.getRangeByName('A11').columnWidth = 30;
 
     //Data
     final List<ExcelDataRow> dataStudent = _buildStudentDataRows(listStudent);
@@ -72,7 +77,7 @@ class ExcelTestApi {
 
     String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name}$time.excel', workbook: workbook);
+        name: '${classUtc.name + '_diemtest_'}$time.excel', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {

@@ -146,7 +146,7 @@ class PdfQuizApi {
         },
       ),
     );
-    return PdfApi.saveDocument(name: '${classUtc.name}.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: '${quiz.titleQuiz}.pdf', pdf: pdf);
   }
 
   static Widget buildCustomHeader(String imageSVG1) => Container(

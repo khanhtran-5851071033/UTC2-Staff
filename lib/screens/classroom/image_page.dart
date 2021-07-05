@@ -14,6 +14,7 @@ class ImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(file.name),
         centerTitle: true,
         actions: [

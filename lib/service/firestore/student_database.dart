@@ -98,7 +98,7 @@ class StudentAttend {
     this.id = json['idStudent'];
     this.address = json['address'];
     this.idPost = json['idPost'];
-    this.idAttend=json['idAntend'];
+    this.idAttend = json['idAttend'];
     this.location = json['location'];
     this.timeAttend = json['time'];
     this.status = json['status'];
