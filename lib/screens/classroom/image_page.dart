@@ -23,6 +23,7 @@ class ImagePage extends StatelessWidget {
             onPressed: () async {
               await FirebaseApiGetFile.downloadFile(
                   file.url, file.name, context);
+              print('có');
             },
           ),
           const SizedBox(width: 12),

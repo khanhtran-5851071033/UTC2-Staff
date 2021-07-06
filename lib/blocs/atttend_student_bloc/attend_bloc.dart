@@ -41,7 +41,7 @@ class AttendStudentBloc extends Bloc<AttendStudentEvent, AttendStudentState> {
             }
             attend.add('Chưa điểm danh');
           }
-          print(attend);
+        
           yield LoadedAttend(list, attend, newLit, event.props[1]);
         } else
           yield LoadErrorAttend('Bạn vắng mặt');

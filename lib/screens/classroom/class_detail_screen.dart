@@ -359,11 +359,10 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => NewNotify(
-                                idClass: widget.idClass,
                                 teacher: state.teacher,
                                 classUtc: _class,
                               )))
-                  .then((value) => postBloc.add(GetPostEvent(widget.idClass)));
+                  .then((value) => postBloc.add(GetPostEvent(_class.id)));
             },
             child: Row(
               children: [
@@ -712,6 +711,7 @@ class ItemNoti extends StatelessWidget {
                                                   list[index].url,
                                                   list[index].nameFile,
                                                   context);
+                                              print('có');
                                             }
                                           },
                                           child: Row(

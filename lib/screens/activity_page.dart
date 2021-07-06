@@ -65,7 +65,7 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
-    // print(widget.teacher.id);
+   
     classBloc = BlocProvider.of<ClassBloc>(context);
     classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
   }

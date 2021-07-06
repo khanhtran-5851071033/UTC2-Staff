@@ -61,6 +61,7 @@ class ExcelAttendApi {
     range3.cellStyle.hAlign = HAlignType.center;
     range3.cellStyle.vAlign = VAlignType.center;
     range3.cellStyle.bold = true;
+    range3.cellStyle.fontColor = '#188038';
 
     sheet.getRangeByName('A11:X11').cellStyle = headerStyle(workbook);
     sheet.getRangeByName('B11:X11').columnWidth = 20;
@@ -142,8 +143,8 @@ List<ExcelDataRow> _buildTestDataRows(List<Student> listStudent,
                                 .status ==
                             'Thành công'
                         ? '✔'
-                        : '✗'
-                    : '✗')));
+                        : ''
+                    : '')));
   }).toList();
 
   return excelDataRows;

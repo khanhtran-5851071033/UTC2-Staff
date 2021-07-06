@@ -49,7 +49,7 @@ class TodayTaskBloc extends Bloc<TodayTaskEvent, TodayTaskState> {
         }
         // print(todayList.length);
         if (todayList.length > 0) {
-          print(todayList.length);
+        
           yield LoadedTodayTask(todayList);
         } else
           yield TodayTaskError('Chưa có lịch giảng');

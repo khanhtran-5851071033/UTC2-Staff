@@ -16,7 +16,8 @@ class NotifyAppBloc extends Bloc<NotifyAppEvent, NotifyAppState> {
       case GetNotifyAppEvent:
         yield LoadingNotifyApp();
         list = await NotifyAppDatabase.getNotifyAppData(
-            event.props[0],);
+          event.props[0],
+        );
         if (list.isNotEmpty) {
           yield LoadedNotifyApp(sapXepGiamDan(list));
         } else

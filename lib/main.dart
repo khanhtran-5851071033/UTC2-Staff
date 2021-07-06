@@ -28,6 +28,7 @@ import 'blocs/schedule_bloc/schedule_bloc.dart';
 import 'blocs/teacher_bloc/teacher_bloc.dart';
 import 'blocs/test_bloc/test_bloc.dart';
 import 'blocs/today_task_bloc/today_task_bloc.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<TaskOfScheduleBloc>(
             create: (context) => TaskOfScheduleBloc()),
         BlocProvider<TestBloc>(create: (context) => TestBloc()),
-         BlocProvider<FileBloc>(create: (context) => FileBloc()),
+        BlocProvider<FileBloc>(create: (context) => FileBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
 
     if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'false') {
-      ////  print('Thông báo new Notity--------------------------------------');
+      print('Thông báo new Notity--------------------------------------');
       MyLocalNotification.showNotification(
         notifications,
         message.data['idChannel'],
@@ -162,6 +163,7 @@ class _HomePageState extends State<HomePage> {
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
     } else if (message.data['idNoti'] == 'newNoti' &&
         message.data['isAtten'] == 'true') {
+      print('Thông báo new Attend--------------------------------------');
       MyLocalNotification.showNotificationAttenden(
         notifications,
         message.data['msg'],
@@ -181,8 +183,8 @@ class _HomePageState extends State<HomePage> {
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
-    } else {
-      // print('Thông báo NEW CLASS-------------------------------------');
+    } else if((message.data['idNoti'] == 'newClass')) {
+      print('Thông báo NEW CLASS-------------------------------------');
       MyLocalNotification.showNotificationNewClass(
         notifications,
         message.data['nameTeacher'],
@@ -204,6 +206,7 @@ class _HomePageState extends State<HomePage> {
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
     }
+    
   }
 
   getTokenFCM() async {

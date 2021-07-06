@@ -19,6 +19,7 @@ class ExcelTestApi {
       List<Post> listPost,
       List<Quiz> listQuiz,
       List<StudentTest> listStudentTest) async {
+    
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.enableSheetCalculations();
@@ -77,7 +78,7 @@ class ExcelTestApi {
 
     String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name + '_diemtest_'}$time.excel', workbook: workbook);
+        name: '${classUtc.name + '_diemtest_'}$time.xlsx', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {

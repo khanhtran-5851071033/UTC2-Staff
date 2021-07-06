@@ -333,7 +333,7 @@ class _NewQuizState extends State<NewQuiz> {
                                       Navigator.pop(context);
                                     }
                                   } else {
-                                    print('title null');
+                                    
                                   }
                                 }),
                             ElevatedButton(

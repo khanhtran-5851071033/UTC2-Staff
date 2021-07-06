@@ -10,7 +10,6 @@ class StudentTestDatabase {
         .doc(idPost)
         .collection('Quiz')
         .get();
-    print(data.docs.length);
     list = data.docs.map((e) => StudentTest(e)).toList();
     return list;
   }

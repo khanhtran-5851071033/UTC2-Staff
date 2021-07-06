@@ -22,12 +22,10 @@ import 'package:utc2_staff/service/push_noti_firebase.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
 class NewNotify extends StatefulWidget {
-  final String idClass;
   final Teacher teacher;
   final Class classUtc;
 
-  const NewNotify({Key key, this.idClass, this.teacher, this.classUtc})
-      : super(key: key);
+  const NewNotify({Key key, this.teacher, this.classUtc}) : super(key: key);
   @override
   _NewNotifyState createState() => _NewNotifyState();
 }
@@ -74,7 +72,7 @@ class _NewNotifyState extends State<NewNotify> {
                 _controller.text.trim(),
             "avatar": widget.teacher.avatar,
             "name": widget.teacher.name,
-            "idChannel": widget.idClass,
+            "idChannel": widget.classUtc.id,
             "className": widget.classUtc.name,
             "classDescription": widget.classUtc.note,
             "timeAtten": DateFormat('HH:mm').format(
@@ -83,7 +81,7 @@ class _NewNotifyState extends State<NewNotify> {
                     .toString())),
             "idQuiz": quizAdd?.idQuiz,
           },
-          widget.idClass);
+          widget.classUtc.id);
       if (response.statusCode == 200) {
         print('success');
         Navigator.pop(context);
@@ -96,7 +94,7 @@ class _NewNotifyState extends State<NewNotify> {
       //create post on firebase
       Map<String, String> dataPost = {
         'id': idPost,
-        'idClass': widget.idClass,
+        'idClass': widget.classUtc.id,
         'title': _controller.text.trim(),
         'content': content,
         'name': widget.teacher.name,
@@ -120,15 +118,13 @@ class _NewNotifyState extends State<NewNotify> {
                 ' câu'
             : null,
       };
-      await postDatabase.createPost(dataPost, widget.idClass, idPost);
+      await postDatabase.createPost(dataPost, widget.classUtc.id, idPost);
       if (listFile.isNotEmpty) {
-       
         for (var file in listFile) {
-          postDatabase.createFileInPost(dataPost, widget.idClass, idPost, file);  
+          postDatabase.createFileInPost(
+              dataPost, widget.classUtc.id, idPost, file);
         }
       }
-      
-     
     }
   }
 
@@ -393,7 +389,7 @@ class _NewNotifyState extends State<NewNotify> {
                                                 FirebaseStorage.instance
                                                     .ref()
                                                     .child(
-                                                        '${widget.idClass}/${listFile[index].name}')
+                                                        '${widget.classUtc.id}/${listFile[index].name}')
                                                     .delete();
                                                 setState(() {
                                                   listFile.removeAt(index);
@@ -809,9 +805,8 @@ class _ListQuizState extends State<ListQuiz> {
                                                         quiz: state.list[index],
                                                         teacher:
                                                             widget.idTeacher,
-                                                            classUtc: widget.classUtc,
-
-                                                            
+                                                        classUtc:
+                                                            widget.classUtc,
                                                       )));
                                         },
                                         icon: Icon(

@@ -47,12 +47,12 @@ class _NewFileState extends State<NewFile> {
     final snapshot = await task.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
 
-    print('Download-Link: $urlDownload');
+   
     setState(() {
       listUpload.add(FirebaseFile(
           ref: snapshot.ref, name: snapshot.ref.name, url: urlDownload));
       listSelect.add(true);
-      print(snapshot.ref.name);
+    
     });
   }
 

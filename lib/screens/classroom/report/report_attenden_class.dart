@@ -207,7 +207,6 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
     }
     // if (timeAtten.length == widget.listPost.length) time = timeAtten.first;
     attendStudentBloc = BlocProvider.of<AttendStudentBloc>(context);
-    print(time.id);
     attendStudentBloc
         .add(GetListStudentOfClassOfAttendEvent(widget.classUtc.id, time.id));
     super.initState();
