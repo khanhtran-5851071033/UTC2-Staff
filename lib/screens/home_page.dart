@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                       'Tham gia họp báo',
                       style: TextStyle(
                           color: ColorApp.mediumBlue,
-                          fontSize: size.width * 0.05,
+                          fontSize: 17,
                           letterSpacing: 1,
                           fontWeight: FontWeight.w600),
                     ),
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                 child: BlocConsumer<TodayTaskBloc, TodayTaskState>(
                   listener: (context, state) {
                     if (state is LoadedTodayTask) {
-                       lenght = state.list.length;
+                      lenght = state.list.length;
                       taskBloc.add(GetTaskOfScheduleEvent(
                           widget.idTeacher, state.list[0].idSchedule));
                     }
@@ -556,7 +556,6 @@ class _HomePageState extends State<HomePage> {
                                                     }
                                                   },
                                                 ),
-                                               
                                               ],
                                             ),
                                           ),

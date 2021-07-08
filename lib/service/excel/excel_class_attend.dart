@@ -76,7 +76,7 @@ class ExcelAttendApi {
 
     String time = formatTime(DateTime.now().toString());
     return ExcelApi.saveDocument(
-        name: '${classUtc.name + '_diemdanh_'}$time.excel', workbook: workbook);
+        name: '${classUtc.name + '_diemdanh_'}$time.xlsx', workbook: workbook);
   }
 
   static Style headerStyle(Workbook workbook) {

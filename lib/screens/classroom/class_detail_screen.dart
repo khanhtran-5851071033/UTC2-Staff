@@ -372,7 +372,7 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                   duration: Duration(milliseconds: 1000),
                   repeat: true,
                   showTwoGlows: true,
-                  repeatPauseDuration: Duration(milliseconds: 100),
+                  repeatPauseDuration: Duration(milliseconds: 1000),
                   child: Container(
                     padding: EdgeInsets.all(4),
                     child: CircleAvatar(
