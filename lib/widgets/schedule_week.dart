@@ -116,15 +116,7 @@ class _OpitonScheduleState extends State<OpitonScheduleWeek>
       }
     }
 
-    // final DateTime startTime =
-    //     DateTime(today.year, today.month, today.day + 1, 7, 0, 0);
 
-    // final DateTime endTime = startTime.add(const Duration(hours: 4));
-
-    // meetings.add(Meeting('Lập trình di động\n 204E7', startTime, endTime,
-    //     ColorApp.lightBlue, false));
-
-    ///Return
     return meetings;
   }
 

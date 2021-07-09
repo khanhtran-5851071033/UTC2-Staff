@@ -46,39 +46,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Container(
-        height: size.height,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomCenter,
-          stops: [
-            0.02,
-            0.1,
-            0.3,
-            0.5,
-            0.8,
-            0.9,
-          ],
-          colors: [
-            ColorApp.lightGrey,
-            ColorApp.lightBlue,
-            ColorApp.mediumBlue,
-            ColorApp.lightBlue,
-            ColorApp.lightBlue,
-            ColorApp.mediumBlue,
-          ],
-        )),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            taskToday(size, pageController, _pageNotifier),
-            Expanded(
-              child: taskThisTime(size),
-            )
-          ],
-        ),
+    return Container(
+      height: size.height,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomCenter,
+        stops: [
+          0.02,
+          0.1,
+          0.3,
+          0.5,
+          0.8,
+          0.9,
+        ],
+        colors: [
+          ColorApp.lightGrey,
+          ColorApp.lightBlue,
+          ColorApp.mediumBlue,
+          ColorApp.lightBlue,
+          ColorApp.lightBlue,
+          ColorApp.mediumBlue,
+        ],
+      )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          taskToday(size, pageController, _pageNotifier),
+          Expanded(
+            child: taskThisTime(size),
+          )
+        ],
       ),
     );
   }
@@ -126,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Tham gia họp báo',
@@ -180,48 +177,47 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
+                    TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.library_add_check_outlined,
+                        color: ColorApp.blue,
+                      ),
+                      label: Text(
+                        "Điểm danh",
+                        style: TextStyle(color: ColorApp.blue),
+                      ),
+                    ),
                     Divider(
                       color: ColorApp.grey,
                     ),
-                    Expanded(
-                      child: Scrollbar(
-                        isAlwaysShown: true,
-                        controller: _scrollController,
-                        radius: Radius.circular(10),
-                        thickness: 2,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          physics: BouncingScrollPhysics(),
-                          itemCount: subTask.length,
-                          itemBuilder: (context, i) {
-                            return ListTile(
-                              leading: Checkbox(
-                                value: subTask[i]['isComplete'],
-                                activeColor: ColorApp.mediumBlue,
-                                checkColor: Colors.white,
-                                shape: CircleBorder(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    subTask[i]['isComplete'] = value;
-                                  });
-                                },
-                              ),
-                              title: Text(subTask[i]['title'].toString()),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    // FlatButton.icon(
-                    //   height: 10,
-                    //   onPressed: () {},
-                    //   icon: Icon(
-                    //     Icons.add,
-                    //     color: ColorApp.blue,
-                    //   ),
-                    //   label: Text(
-                    //     "Thêm mô tả",
-                    //     style: TextStyle(color: ColorApp.blue),
+                    // Expanded(
+                    //   child: Scrollbar(
+                    //     isAlwaysShown: true,
+                    //     controller: _scrollController,
+                    //     radius: Radius.circular(10),
+                    //     thickness: 2,
+                    //     child: ListView.builder(
+                    //       controller: _scrollController,
+                    //       physics: BouncingScrollPhysics(),
+                    //       itemCount: subTask.length,
+                    //       itemBuilder: (context, i) {
+                    //         return ListTile(
+                    //           leading: Checkbox(
+                    //             value: subTask[i]['isComplete'],
+                    //             activeColor: ColorApp.mediumBlue,
+                    //             checkColor: Colors.white,
+                    //             shape: CircleBorder(),
+                    //             onChanged: (value) {
+                    //               setState(() {
+                    //                 subTask[i]['isComplete'] = value;
+                    //               });
+                    //             },
+                    //           ),
+                    //           title: Text(subTask[i]['title'].toString()),
+                    //         );
+                    //       },
+                    //     ),
                     //   ),
                     // ),
                   ],

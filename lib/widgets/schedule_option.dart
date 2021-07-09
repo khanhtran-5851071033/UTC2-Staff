@@ -45,56 +45,7 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
   List<Meeting> meetings;
   List<Meeting> _getDataSource() {
     meetings = <Meeting>[];
-    // List widget.listMon = [
-    //   {
-    //     "id": "1",
-    //     "userId": "userId 1",
-    //     "TenMon": "Lập trình di động",
-    //     "StartDate": "2021-05-01",
-    //     "EndDate": "2021-06-22"
-    //   },
-    //   {
-    //     "id": "2",
-    //     "userId": "userId 1",
-    //     "TenMon": "Trí tuệ nhân tạo",
-    //     "StartDate": "2021-05-01",
-    //     "EndDate": "2021-05-30"
-    //   },
-    // ];
-    // List widget.listLich = [
-    //   {
-    //     "id": "1",
-    //     "MonHocId": "1",
-    //     "StartTime": "07:30",
-    //     "EndTime": "11:00",
-    //     "WeekDay": 3,
-    //     "Room": "101C2"
-    //   },
-    //   {
-    //     "id": "2",
-    //     "MonHocId": "1",
-    //     "StartTime": "13:30",
-    //     "EndTime": "17:00",
-    //     "WeekDay": 1,
-    //     "Room": "201C2"
-    //   },
-    //   {
-    //     "id": "3",
-    //     "MonHocId": "2",
-    //     "StartTime": "13:30",
-    //     "EndTime": "17:00",
-    //     "WeekDay": 5,
-    //     "Room": "Room 1"
-    //   },
-    //   {
-    //     "id": "4",
-    //     "MonHocId": "1",
-    //     "StartTime": "08:30",
-    //     "EndTime": "12:00",
-    //     "WeekDay": 6,
-    //     "Room": "201C2"
-    //   },
-    // ];
+   
 
     int wd, sh, sm, eh, em;
     int maMon, maLich;
@@ -166,15 +117,6 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
       }
     }
 
-    // final DateTime startTime =
-    //     DateTime(today.year, today.month, today.day + 1, 7, 0, 0);
-
-    // final DateTime endTime = startTime.add(const Duration(hours: 4));
-
-    // meetings.add(Meeting('Lập trình di động\n 204E7', startTime, endTime,
-    //     ColorApp.lightBlue, false));
-
-    ///Return
     return meetings;
   }
 
