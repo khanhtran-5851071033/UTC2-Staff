@@ -2,13 +2,94 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TeacherDatabase {
   Future<void> createTeacher(Map<String, String> dataTeacher, String id) async {
-  
     await FirebaseFirestore.instance
         .collection('Teacher')
         .doc(id)
         .set(dataTeacher);
   }
 
+///////////////////////////////////////////////////////////////////////////////
+  void attend(String idTeacher, int idSchedule, int idTask, DateTime dateTime,
+      String location, String address) {
+    var idAttend = 'SCH' +
+        idSchedule.toString() +
+        'T' +
+        idTask.toString() +
+        'D' +
+        dateTime.day.toString() +
+        'M' +
+        dateTime.month.toString();
+    var data = {
+      'idTaskOfSchedule': idTask,
+      'id': idAttend,
+      'status': 'Thành Công',
+      'dateAttend': dateTime.toString(),
+      'location': location,
+      'address': address,
+    };
+
+    FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Schedule')
+        .doc(idSchedule.toString())
+        .collection('TaskOfSchedule')
+        .doc(idTask.toString())
+        .collection('TaskAttend')
+        .doc(idAttend)
+        .set(data);
+  }
+
+  void createTeacherAttend(
+      String idTeacher, int idSchedule, int idTask, int wd, int month) async {
+    var idAttend = 'SCH' +
+        idSchedule.toString() +
+        'T' +
+        idTask.toString() +
+        'D' +
+        wd.toString() +
+        'M' +
+        month.toString();
+    var check = await FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Schedule')
+        .doc(idSchedule.toString())
+        .collection('TaskOfSchedule')
+        .doc(idTask.toString())
+        .collection('TaskAttend')
+        .get();
+    var list = check.docs.map((e) => e).toList();
+
+    bool isExist = false;
+    for (var item in list) {
+      if (item['id'] == idAttend) isExist = true;
+    }
+
+    if (!isExist) {
+      var data = {
+        'idTaskOfSchedule': idTask,
+        'id': idAttend,
+        'status': null,
+        'dateAttend': null,
+        'location': null,
+        'address': null,
+      };
+
+      FirebaseFirestore.instance
+          .collection('Teacher')
+          .doc(idTeacher)
+          .collection('Schedule')
+          .doc(idSchedule.toString())
+          .collection('TaskOfSchedule')
+          .doc(idTask.toString())
+          .collection('TaskAttend')
+          .doc(idAttend)
+          .set(data);
+    }
+  }
+
+///////////////////////////////////////////////////////////////////////////////
   Future<void> deleteTeacher(String id) async {
     await FirebaseFirestore.instance.collection('Teacher').doc(id).delete();
   }

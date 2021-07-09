@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/local_notification.dart';
 import 'package:utc2_staff/utils/color_random.dart';
 
@@ -20,6 +21,7 @@ class OpitonScheduleMonth extends StatefulWidget {
 class _OpitonScheduleState extends State<OpitonScheduleMonth>
     with AutomaticKeepAliveClientMixin {
   final notifications = FlutterLocalNotificationsPlugin();
+  final teacherDatabase = TeacherDatabase();
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,6 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
   List<Meeting> meetings;
   List<Meeting> _getDataSource() {
     meetings = <Meeting>[];
-   
 
     int wd, sh, sm, eh, em;
     int maMon, maLich;
@@ -59,6 +60,9 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
     final DateTime today = DateTime.now();
 
     for (int i = 0; i < widget.listMon.length; i++) {
+      var idSchedule = widget.listMon[i].idSchedule;
+      var idTeacher = widget.listMon[i].idTeacher;
+
       DateTime endDate = DateTime.parse(widget.listMon[i].timeEnd);
       DateTime startDate = DateTime.parse(widget.listMon[i].timeStart);
 
@@ -86,8 +90,8 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
 
               //Mon
               tenMon = widget.listMon[i].titleSchedule;
-              maMon =int.parse( widget.listMon[i].idSchedule);
-              maLich =int.parse(widget.listLich[j].idSchedule);
+              maMon = int.parse(widget.listMon[i].idSchedule);
+              maLich = int.parse(widget.listLich[j].idTask);
               room = widget.listLich[j].idRoom;
 
               DateTime startTime =
@@ -98,6 +102,9 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
 
               meetings.add(Meeting(tenMon + '\n\n' + room, startTime, endTime,
                   ColorRandom.colors[maMon][0], false));
+              teacherDatabase.createTeacherAttend(
+                idTeacher, maMon, maLich, date.day,date.month
+              );
               if (date.day == today.day &&
                   date.month == today.month &&
                   date.year == today.year) {
