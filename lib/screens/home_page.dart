@@ -2,12 +2,20 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/model.dart';
+import 'package:geocoder/services/base.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:utc2_staff/blocs/schedule_bloc/schedule_state.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_event.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_state.dart';
 import 'package:utc2_staff/blocs/today_task_bloc/today_task_bloc.dart';
+import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
+import 'package:utc2_staff/service/firestore/teacher_database.dart';
+import 'package:utc2_staff/service/geo_service.dart';
 import 'package:utc2_staff/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -24,16 +32,10 @@ class _HomePageState extends State<HomePage> {
   PageController pageController =
       PageController(initialPage: 0, viewportFraction: 0.85);
   final ValueNotifier<int> _pageNotifier = new ValueNotifier<int>(0);
-  List subTask = [
-    {'title': 'Báo Cáo', 'isComplete': true},
-    {'title': 'Khảo sát ý kiến', 'isComplete': false},
-    {'title': 'Tổng kết', 'isComplete': true},
-    {'title': 'Trình bày', 'isComplete': false}
-  ];
 
-  final _scrollController = ScrollController();
   TodayTaskBloc scheduleBloc;
   TaskOfScheduleBloc taskBloc;
+  final teacherDatabase = TeacherDatabase();
   int lenght;
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _HomePageState extends State<HomePage> {
     Size size = MediaQuery.of(context).size;
     return Container(
       height: size.height,
+      width: size.width,
       decoration: BoxDecoration(
           gradient: LinearGradient(
         begin: Alignment.topRight,
@@ -81,15 +84,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  GeoService geoService = GeoService();
+  Future<Position> getLocation() async {
+    var currentPosition = await geoService.getCurrentLocation();
+    return currentPosition;
+  }
+
+  Position location;
+  Geocoding geocoding;
+  List<Address> results = [];
+
   Widget taskThisTime(Size size) {
     return Container(
       width: size.width,
       padding: EdgeInsets.all(size.width * 0.03),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: ColorApp.lightGrey.withOpacity(.3),
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
         ),
       ),
       child: Column(
@@ -98,10 +111,10 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Công việc hiện tại'),
+              Text('Công việc hiện tại', style: TextStyle(color: Colors.white)),
               Text(
                 'All(1)',
-                style: TextStyle(color: ColorApp.blue),
+                style: TextStyle(color: Colors.white),
               )
             ],
           ),
@@ -111,116 +124,130 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: Container(
               width: size.width,
-              padding: EdgeInsets.only(left: size.width * 0.01),
+              // padding: EdgeInsets.all(size.width * 0.03),
               decoration: BoxDecoration(
-                  color: Colors
-                      .primaries[Random().nextInt(Colors.primaries.length)],
+                  color: Colors.white.withOpacity(.85),
+                  border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(10)),
-              child: Container(
-                width: size.width,
-                padding: EdgeInsets.all(size.width * 0.03),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Tham gia họp báo',
-                      style: TextStyle(
-                          color: ColorApp.mediumBlue,
-                          fontSize: 17,
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            'Now, 07:00 -11:30',
-                            style: TextStyle(
-                              color: ColorApp.blue,
-                            ),
+              child: Scrollbar(
+                radius: Radius.circular(5),
+                child: ListView.builder(
+                  itemCount: 3,
+                  padding: EdgeInsets.all(8),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'title',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: ColorApp.mediumBlue,
+                                    fontSize: 17,
+                                    letterSpacing: 1,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Spacer()
+                            ],
                           ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: ColorApp.lightBlue.withOpacity(.1)),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.place,
-                                  color: ColorApp.lightBlue,
-                                  size: 16,
-                                ),
-                                Text(
-                                  'C1',
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  'Now, 07:00 -11:30',
                                   style: TextStyle(
-                                    color: ColorApp.blue,
+                                    color: Colors.orange,
                                   ),
                                 ),
-                              ],
-                            ),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: ColorApp.lightBlue.withOpacity(.1)),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.orange.withOpacity(.1)),
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.place,
+                                        color: ColorApp.lightBlue,
+                                        size: 16,
+                                      ),
+                                      Text(
+                                        'C1',
+                                        style: TextStyle(
+                                          color: ColorApp.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color:
+                                          ColorApp.lightBlue.withOpacity(.1)),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    TextButton.icon(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.library_add_check_outlined,
-                        color: ColorApp.blue,
+                          Row(
+                            children: [
+                              TextButton.icon(
+                                onPressed: () async {
+                                  var s =
+                                      await Permission.locationAlways.request();
+                                  print(s);
+                                  location = await getLocation();
+                                  try {
+                                    var geocoding = Geocoder.local;
+                                    var longitude = location.longitude;
+                                    var latitude = location.latitude;
+                                    var results = await geocoding
+                                        .findAddressesFromCoordinates(
+                                            new Coordinates(
+                                                latitude, longitude));
+                                    this.setState(() {
+                                      this.results = results;
+                                    });
+                                    print(results[0].addressLine);
+                                  } catch (e) {
+                                    print("Error occured: $e");
+                                  }
+                                  teacherDatabase.attend(
+                                      widget.idTeacher,
+                                      2,
+                                      21,
+                                      DateTime.now(),
+                                      location.latitude.toString() +
+                                          ',' +
+                                          location.longitude.toString(),
+                                      results[0].addressLine);
+                                },
+                                icon: Icon(Icons.library_add_check_outlined,
+                                    color: ColorApp.blue, size: 18),
+                                label: Text(
+                                  "Điểm danh",
+                                  style: TextStyle(color: ColorApp.blue),
+                                ),
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                          Divider(
+                            color: ColorApp.grey,
+                          )
+                        ],
                       ),
-                      label: Text(
-                        "Điểm danh",
-                        style: TextStyle(color: ColorApp.blue),
-                      ),
-                    ),
-                    Divider(
-                      color: ColorApp.grey,
-                    ),
-                    // Expanded(
-                    //   child: Scrollbar(
-                    //     isAlwaysShown: true,
-                    //     controller: _scrollController,
-                    //     radius: Radius.circular(10),
-                    //     thickness: 2,
-                    //     child: ListView.builder(
-                    //       controller: _scrollController,
-                    //       physics: BouncingScrollPhysics(),
-                    //       itemCount: subTask.length,
-                    //       itemBuilder: (context, i) {
-                    //         return ListTile(
-                    //           leading: Checkbox(
-                    //             value: subTask[i]['isComplete'],
-                    //             activeColor: ColorApp.mediumBlue,
-                    //             checkColor: Colors.white,
-                    //             shape: CircleBorder(),
-                    //             onChanged: (value) {
-                    //               setState(() {
-                    //                 subTask[i]['isComplete'] = value;
-                    //               });
-                    //             },
-                    //           ),
-                    //           title: Text(subTask[i]['title'].toString()),
-                    //         );
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -294,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                                   return Container(
                                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                     child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           padding: EdgeInsets.only(left: 5),
                                           color: Colors.primaries[Random()

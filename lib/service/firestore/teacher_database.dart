@@ -22,7 +22,7 @@ class TeacherDatabase {
     var data = {
       'idTaskOfSchedule': idTask,
       'id': idAttend,
-      'status': 'Thành Công',
+      'status': 'Thành công',
       'dateAttend': dateTime.toString(),
       'location': location,
       'address': address,
@@ -37,7 +37,7 @@ class TeacherDatabase {
         .doc(idTask.toString())
         .collection('TaskAttend')
         .doc(idAttend)
-        .set(data);
+        .update(data);
   }
 
   void createTeacherAttend(
