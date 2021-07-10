@@ -65,7 +65,7 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
-   
+
     classBloc = BlocProvider.of<ClassBloc>(context);
     classBloc.add(GetClassEvent(teacherID: widget.teacher.id));
   }
@@ -80,6 +80,7 @@ class _ActivityPageState extends State<ActivityPage> {
             if (state is LoadingClass)
               return SpinKitThreeBounce(
                 color: ColorApp.lightBlue,
+                size: 30,
               );
             else if (state is LoadedClass) {
               return Container(

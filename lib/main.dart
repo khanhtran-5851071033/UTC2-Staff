@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:utc2_staff/blocs/attend_teacher_bloc/attend_teacher_bloc.dart';
 import 'package:utc2_staff/blocs/atttend_student_bloc/attend_bloc.dart';
 import 'package:utc2_staff/blocs/class_bloc/class_bloc.dart';
 import 'package:utc2_staff/blocs/comment_bloc/comment_bloc.dart';
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
             create: (context) => TaskOfScheduleBloc()),
         BlocProvider<TestBloc>(create: (context) => TestBloc()),
         BlocProvider<FileBloc>(create: (context) => FileBloc()),
+        BlocProvider<AttendTeacherBloc>(create: (context) => AttendTeacherBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(

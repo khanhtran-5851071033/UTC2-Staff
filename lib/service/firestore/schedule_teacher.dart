@@ -81,6 +81,27 @@ class ScheduleDatabase {
 
     return list;
   }
+
+  //diemd danh
+  static Future<List<TaskAttend>> getTaskAttendData(
+    String idTeacher,
+    String idSchedule,
+    String idTaskOfSchedule,
+  ) async {
+    List<TaskAttend> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Schedule')
+        .doc(idSchedule)
+        .collection('TaskOfSchedule')
+        .doc(idTaskOfSchedule)
+        .collection('TaskAttend')
+        .get();
+    list = data.docs.map((e) => TaskAttend(e)).toList();
+
+    return list;
+  }
 }
 
 class Schedule {
@@ -114,5 +135,19 @@ class TaskOfSchedule {
     this.note = int.parse(json['note']);
     this.idRoom = json['idRoom'];
     this.statusAttend = json['statusAttend'];
+  }
+}
+
+class TaskAttend {
+  String id, dateAttend, location, address, status;
+  String idTaskOfSchedule;
+
+  TaskAttend(QueryDocumentSnapshot<Map<String, dynamic>> json) {
+    this.id = json['id'];
+    this.idTaskOfSchedule = json['idTaskOfSchedule'];
+    this.dateAttend = json['dateAttend'];
+    this.address = json['address'];
+    this.location = json['location'];
+    this.status = json['status'];
   }
 }

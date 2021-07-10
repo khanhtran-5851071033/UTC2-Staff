@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 import 'package:http/http.dart' as http;
+
 class ColorApp {
   static const Color lightBlue = Color(0xff5095E6);
   static const Color blue = Color(0xff044AFE);
@@ -53,17 +53,33 @@ String formatTime(String time) {
   return DateFormat("ddMMyyyy").format(parseDate);
 }
 
+String formatTimeSche(String time) {
+  DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+  return DateFormat("dd-MM-yyyy").format(parseDate);
+}
+
+String formatTimeSche1(String time) {
+  DateTime parseDate = new DateFormat("yyyy-MM-dd").parse(time);
+  return DateFormat("dd-MM-yyyy").format(parseDate);
+}
+
+String formatTimeTask(String time) {
+  DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+  return DateFormat("HH:mm").format(parseDate);
+}
+
 String formatTimeAnttend(String time) {
   DateTime parseDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
   return DateFormat.yMMMEd('vi').format(parseDate);
 }
-class Downfile{
- static Future<String> downloadAndSaveFile(String url, String fileName) async {
-  final Directory directory = await getApplicationDocumentsDirectory();
-  final String filePath = '${directory.path}/$fileName';
-  final http.Response response = await http.get(Uri.parse(url));
-  final File file = File(filePath);
-  await file.writeAsBytes(response.bodyBytes);
-  return filePath;
-}
+
+class Downfile {
+  static Future<String> downloadAndSaveFile(String url, String fileName) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String filePath = '${directory.path}/$fileName';
+    final http.Response response = await http.get(Uri.parse(url));
+    final File file = File(filePath);
+    await file.writeAsBytes(response.bodyBytes);
+    return filePath;
+  }
 }

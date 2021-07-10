@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
@@ -60,7 +61,6 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
     final DateTime today = DateTime.now();
 
     for (int i = 0; i < widget.listMon.length; i++) {
-      var idSchedule = widget.listMon[i].idSchedule;
       var idTeacher = widget.listMon[i].idTeacher;
 
       DateTime endDate = DateTime.parse(widget.listMon[i].timeEnd);
@@ -103,7 +103,7 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
               meetings.add(Meeting(tenMon + '\n\n' + room, startTime, endTime,
                   ColorRandom.colors[maMon][0], false));
               teacherDatabase.createTeacherAttend(
-                idTeacher, maMon, maLich, date.day,date.month
+                idTeacher, maMon, maLich, DateFormat("yyyy-MM-dd").format(date)
               );
               if (date.day == today.day &&
                   date.month == today.month &&

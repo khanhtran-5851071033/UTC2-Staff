@@ -13,7 +13,6 @@ import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_bloc.dar
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_event.dart';
 import 'package:utc2_staff/blocs/task_of_schedule_bloc/task_of_schedule_state.dart';
 import 'package:utc2_staff/blocs/today_task_bloc/today_task_bloc.dart';
-import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/service/geo_service.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -223,9 +222,9 @@ class _HomePageState extends State<HomePage> {
                                   }
                                   teacherDatabase.attend(
                                       widget.idTeacher,
-                                      2,
-                                      21,
-                                      DateTime.now(),
+                                      '',
+                                      '12',
+                                      '2021-07-10',
                                       location.latitude.toString() +
                                           ',' +
                                           location.longitude.toString(),

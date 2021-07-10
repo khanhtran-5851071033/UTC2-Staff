@@ -11,7 +11,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEvent event,
   ) async* {
     switch (event.runtimeType) {
-      
       case GetSchedulePageEvent:
         yield* _mapGetSchedulePage(event);
         break;
@@ -36,7 +35,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           listAllLich.add(task);
         }
       }
-      print(listAllLich.length);
       yield LoadedSchedulePage(listMon, listAllLich);
     } else
       yield LoadErrorSchedule('Chưa có lịch dạy nào');

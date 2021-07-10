@@ -9,21 +9,13 @@ class TeacherDatabase {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-  void attend(String idTeacher, int idSchedule, int idTask, DateTime dateTime,
+  void attend(String idTeacher, String idSchedule, String idTask,String idAttend,
       String location, String address) {
-    var idAttend = 'SCH' +
-        idSchedule.toString() +
-        'T' +
-        idTask.toString() +
-        'D' +
-        dateTime.day.toString() +
-        'M' +
-        dateTime.month.toString();
     var data = {
-      'idTaskOfSchedule': idTask,
+      'idTaskOfSchedule': idTask.toString(),
       'id': idAttend,
       'status': 'Thành công',
-      'dateAttend': dateTime.toString(),
+      'dateAttend': DateTime.now().toString(),
       'location': location,
       'address': address,
     };
@@ -41,15 +33,8 @@ class TeacherDatabase {
   }
 
   void createTeacherAttend(
-      String idTeacher, int idSchedule, int idTask, int wd, int month) async {
-    var idAttend = 'SCH' +
-        idSchedule.toString() +
-        'T' +
-        idTask.toString() +
-        'D' +
-        wd.toString() +
-        'M' +
-        month.toString();
+      String idTeacher, int idSchedule, int idTask, String time) async {
+    var idAttend = time;
     var check = await FirebaseFirestore.instance
         .collection('Teacher')
         .doc(idTeacher)
@@ -68,7 +53,7 @@ class TeacherDatabase {
 
     if (!isExist) {
       var data = {
-        'idTaskOfSchedule': idTask,
+        'idTaskOfSchedule': idTask.toString(),
         'id': idAttend,
         'status': null,
         'dateAttend': null,

@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utc2_staff/repositories/google_signin_repo.dart';
 import 'package:utc2_staff/screens/login/login_screen.dart';
-import 'package:utc2_staff/screens/profile_screen/attendance_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/help_screen.dart';
+import 'package:utc2_staff/screens/profile_screen/history_attend/history_attend.dart';
 import 'package:utc2_staff/screens/profile_screen/payroll_table_screen.dart';
 import 'package:utc2_staff/screens/profile_screen/profile_info.dart';
 import 'package:utc2_staff/screens/profile_screen/setting_screen.dart';
@@ -92,7 +92,7 @@ class _ProFilePageState extends State<ProFilePage> {
 
   List buttonList = [
     {'title': 'Thông tin cá nhân', 'icon': Icons.person_pin},
-    {'title': 'Điểm danh', 'icon': Icons.library_add_check_outlined},
+    {'title': 'Lịch sử điểm danh', 'icon': Icons.library_add_check_outlined},
     {'title': 'Khối lượng công việc', 'icon': Icons.poll_outlined},
     {'title': 'Xem bảng lương', 'icon': Icons.money},
     {'title': 'Trợ giúp', 'icon': Icons.help_outline_outlined},
@@ -103,7 +103,7 @@ class _ProFilePageState extends State<ProFilePage> {
 
   List screen = [
     ProfileInfo(),
-    AttendanceScreen(),
+    HistoryAttend(),
     TaskPerformanceScreen(),
     PayrollScreen(),
     HelpScreen(),
@@ -171,7 +171,7 @@ class _ProFilePageState extends State<ProFilePage> {
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 index == 1
-                                                                    ? AttendanceScreen(
+                                                                    ? HistoryAttend(
                                                                         teacher:
                                                                             widget.teacher,
                                                                       )

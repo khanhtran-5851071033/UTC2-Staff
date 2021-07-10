@@ -4,12 +4,24 @@ import 'package:flutter/material.dart';
 class ColorRandom {
   static List<List<Color>> colors = [
     [
-      ColorApp.blue,
-      ColorApp.mediumBlue,
+      Color(0xffFF0099),
+      Color(0xff493240),
     ],
     [
-      Color(0xff009FFF),
-      Color(0xffec2F4B),
+      Color(0xff5433FF),
+      Color(0xff20BDFF),
+    ],
+    [
+      Color(0xffFFE000),
+      Color(0xff799F0C),
+    ],
+    [
+      Color(0xffFFE259),
+      Color(0xffffa751),
+    ],
+    [
+      Color(0xfffbc7d4),
+      Color(0xff9796f0),
     ],
     [
       Color(0xffFF416C),
@@ -24,7 +36,7 @@ class ColorRandom {
       Color(0xff2ebf91),
     ],
     [
-      Color(0xffc31432),
+      Color(0xff12c2e9),
       Color(0xfff12711),
     ],
     [
