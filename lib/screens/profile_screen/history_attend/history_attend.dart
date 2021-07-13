@@ -134,12 +134,13 @@ class Item extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: ColorApp.blue.withOpacity(0.05),
+            color: ColorApp.blue.withOpacity(0.03),
             spreadRadius: 3,
             blurRadius: 5,
             offset: Offset(3, 5), // changes position of shadow
           ),
         ],
+        border: Border.all(color: Colors.lightBlue.withOpacity(.1), width: .5),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -196,7 +197,7 @@ class Item extends StatelessWidget {
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.orangeAccent.withOpacity(.1)),
+                      color: Colors.orangeAccent.withOpacity(.02)),
                   child: Text(
                     formatTimeSche(schedule.timeStart),
                     style: TextStyle(color: Colors.orangeAccent),
@@ -206,13 +207,18 @@ class Item extends StatelessWidget {
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.orangeAccent.withOpacity(.1)),
+                      color: Colors.orangeAccent.withOpacity(.02)),
                   child: Text(formatTimeSche(schedule.timeEnd),
                       style: TextStyle(color: Colors.orangeAccent))),
             ],
           ),
           SizedBox(
             height: 7,
+          ),
+          Divider(
+            height: 15,
+            thickness: 1,
+            color: ColorApp.lightGrey,
           ),
           Column(
             children: List.generate(
@@ -235,6 +241,9 @@ class Item extends StatelessWidget {
                         listTask[index].note.toString() +
                         ' - ' 'Phòng ' +
                         listTask[index].idRoom.toString()),
+                    SizedBox(
+                      height: 30,
+                    ),
                   ],
                 ),
               ),

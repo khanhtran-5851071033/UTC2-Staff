@@ -255,18 +255,23 @@ class _ReportTestScreenState extends State<ReportTestScreen> {
                             child: Column(children: [
                               headerTable(widget.listQuiz),
                               Expanded(
-                                  child: ListView.builder(
-                                      itemCount: state.listStudent.length,
-                                      itemBuilder: (contex, index) {
-                                        var student = state.listStudent[index];
-
-                                        return rowTable(
-                                            index,
-                                            widget.listQuiz,
-                                            widget.listPostQuiz,
-                                            widget.listTest,
-                                            student);
-                                      }))
+                                  child: RefreshIndicator(
+                                    onRefresh: ()async{
+                                      studentBloc.add(GetListStudentOfClassEvent(widget.classUtc.id));
+                                    },
+                                    child: ListView.builder(
+                                        itemCount: state.listStudent.length,
+                                        itemBuilder: (contex, index) {
+                                          var student = state.listStudent[index];
+                                  
+                                          return rowTable(
+                                              index,
+                                              widget.listQuiz,
+                                              widget.listPostQuiz,
+                                              widget.listTest,
+                                              student);
+                                        }),
+                                  ))
                             ]));
                       } else if (state is LoadErrorStudentState) {
                         return Center(

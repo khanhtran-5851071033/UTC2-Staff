@@ -19,7 +19,6 @@ class ExcelTestApi {
       List<Post> listPost,
       List<Quiz> listQuiz,
       List<StudentTest> listStudentTest) async {
-    
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.enableSheetCalculations();
@@ -46,10 +45,10 @@ class ExcelTestApi {
     sheet.getRangeByName('B7').setText('Ngày tạo :');
     sheet.getRangeByName('C7').setText(formatTimeAnttend(classUtc.date));
     String image = await Downfile.downloadAndSaveFile(
-        'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${classUtc.id}',
+        'https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${classUtc.id}',
         classUtc.name);
     final List<int> imageBytes = File(image).readAsBytesSync();
-    sheet.pictures.addStream(2, 5, imageBytes);
+    sheet.pictures.addStream(3, 5, imageBytes);
 
     //title
     final Range range1 = sheet.getRangeByName('B10:E10');

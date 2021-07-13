@@ -6,6 +6,7 @@ import 'package:utc2_staff/blocs/attend_teacher_bloc/attend_teacher_bloc.dart';
 import 'package:utc2_staff/blocs/attend_teacher_bloc/attend_teacher_event.dart';
 import 'package:utc2_staff/blocs/attend_teacher_bloc/attend_teacher_state.dart';
 import 'package:utc2_staff/service/excel/excel_api.dart';
+import 'package:utc2_staff/service/excel/excel_teacher_attend.dart';
 import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
 import 'package:utc2_staff/utils/utils.dart';
@@ -60,9 +61,9 @@ class _DetailHistoryState extends State<DetailHistory> {
           child: Container(
             color: Color.fromRGBO(0, 0, 0, 0.001),
             child: DraggableScrollableSheet(
-              initialChildSize: 0.5,
+              initialChildSize: 0.4,
               minChildSize: 0.2,
-              maxChildSize: 0.8,
+              maxChildSize: 0.6,
               builder: (_, controller) {
                 return Container(
                     child: Container(
@@ -106,7 +107,7 @@ class _DetailHistoryState extends State<DetailHistory> {
                         height: 15,
                       ),
                       Container(
-                        height: 200,
+                        height: 230,
                         padding: EdgeInsets.all(size.width * 0.03),
                         decoration: BoxDecoration(
                           boxShadow: [
@@ -221,12 +222,20 @@ class _DetailHistoryState extends State<DetailHistory> {
                                       radius: 3,
                                       backgroundColor: ColorApp.black,
                                     ),
-                                    Text('  Trạng thái : '),
+                                    Text(
+                                      '  Trạng thái : ',
+                                    ),
                                   ],
                                 ),
-                                task.status != null
-                                    ? Expanded(child: Text(task.status))
-                                    : Container(),
+                                Expanded(
+                                    child: Text(
+                                        task.status != null
+                                            ? task.status
+                                            : 'Vắng',
+                                        style: TextStyle(
+                                            color: task.status == "Thành công"
+                                                ? Colors.lightGreen
+                                                : ColorApp.red)))
                               ],
                             ),
                           ],
@@ -267,14 +276,10 @@ class _DetailHistoryState extends State<DetailHistory> {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              // final excelFile = await ExcelTestApi.generate(
-              //     widget.teacher,
-              //     widget.classUtc,
-              //     listStudent,
-              //     widget.listPostQuiz,
-              //     widget.listQuiz,
-              //     widget.listTest);
-              // ExcelApi.openFile(excelFile);
+              print('zo');
+              final excelFile = await ExcelTeacherAttendApi.generate(
+                  widget.teacher, widget.schedule, widget.listTask, list);
+              ExcelApi.openFile(excelFile);
             },
             icon: Image.asset(
               'assets/icons/excel.png',
@@ -383,7 +388,7 @@ class _DetailHistoryState extends State<DetailHistory> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    item.id,
+                                                    formatTimeSche1(item.id),
                                                     style: TextStyle(
                                                         color: formatTimeSche1(
                                                                     item.id) ==

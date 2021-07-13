@@ -218,7 +218,6 @@ class _DetailClassScreenState extends State<DetailClassScreen> {
                                         }
                                       },
                                       numberFile: index,
-                                      numberComment: index,
                                       post: e,
                                       classUtc: _class,
                                     );
@@ -434,17 +433,11 @@ class ItemNoti extends StatelessWidget {
   final Teacher teacher;
   final int numberFile;
   final Function function;
-  final int numberComment;
   final Post post;
   final Class classUtc;
 
   ItemNoti(
-      {this.teacher,
-      this.numberFile,
-      this.function,
-      this.numberComment,
-      this.post,
-      this.classUtc});
+      {this.teacher, this.numberFile, this.function, this.post, this.classUtc});
 
   Future<void> _launchInWebViewWithJavaScript(String url) async {
     if (await canLaunch(url)) {
@@ -777,9 +770,7 @@ class ItemNoti extends StatelessWidget {
                               )));
                 },
                 child: Text(
-                  numberComment != null
-                      ? numberComment.toString() + ' nhận xét của lớp học'
-                      : 'Thêm nhận xét của lớp học',
+                  'Thêm nhận xét của lớp học',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ))

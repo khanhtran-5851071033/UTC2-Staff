@@ -181,6 +181,7 @@ class _ActivityPageState extends State<ActivityPage> {
         children: [
           GestureDetector(
             onTap: () {
+              FirebaseMessaging.instance.subscribeToTopic(id);
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -13,28 +13,20 @@ class InviteStudentScreen extends StatefulWidget {
 class _InviteStudentScreenState extends State<InviteStudentScreen> {
   List user = [];
   bool isAll = false;
+  List<Student> listInvite = [];
   String generation = "Tất cả";
   String course = "Tất cả";
   String nameClass = "Tất cả";
   StudentBloc studentBloc;
-  List<Student> listInvite = [];
-  List<String> listHeDaoTao = [
-    'Tất cả',
-    'Chính quy',
-    'Vừa học vừa làm',
-    'Cao học'
-  ];
-  int indexHe = 0;
-  List listKhoa = [
-    ['Tất cả', 'Khoá 58', 'Kh 59', 'Vừa học vừa làm', 'Cao Học'],
-    ['Tất cả', 'Khoá 58', 'Khoá 59'],
-    ['Tất cả', 'Vừa học vừa làm'],
-    ['Tất cả', 'Cao Học'],
-  ];
+  List<String> listClassName = ['Tất cả'];
+  List<String> listKhoa = ['Tất cả'];
+  List<String> listHeDaoTao = ['Tất cả'];
+
 
   @override
   void initState() {
     super.initState();
+
     studentBloc = BlocProvider.of<StudentBloc>(context);
     studentBloc.add(GetListStudentEvent());
   }
@@ -106,8 +98,6 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                       function: (val) {
                         setState(() {
                           generation = val;
-                          course = 'Tất cả';
-                          indexHe = listHeDaoTao.indexOf(val);
                         });
 
                         studentBloc.add(FilterListStudentEvent(
@@ -117,12 +107,12 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                     Filter(
                       title: 'Khóa',
                       value: course,
-                      item: listKhoa[indexHe],
+                      item: listKhoa,
                       function: (val) {
                         setState(() {
                           course = val;
                         });
-                        print(course);
+
                         studentBloc.add(FilterListStudentEvent(
                             course, nameClass, generation));
                       },
@@ -130,11 +120,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                     Filter(
                       title: 'Lớp',
                       value: nameClass,
-                      item: [
-                        'Tất cả',
-                        'CQ.58.CNTT',
-                        'CQ.59.LOG.1',
-                      ],
+                      item: listClassName,
                       function: (val) {
                         setState(() {
                           nameClass = val;
@@ -155,6 +141,21 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                         user.add(false);
                       }
                     });
+                    for (int i = 0; i < state.listStudent.length; i++) {
+                      if (!listClassName.contains(state.listStudent[i].lop)) {
+                        listClassName.add(state.listStudent[i].lop);
+                        print(state.listStudent[i].lop);
+                      }
+                      if (!listHeDaoTao
+                          .contains(state.listStudent[i].heDaoTao)) {
+                        listHeDaoTao.add(state.listStudent[i].heDaoTao);
+                        print(state.listStudent[i].heDaoTao);
+                      }
+                      if (!listKhoa.contains(state.listStudent[i].khoa)) {
+                        listKhoa.add(state.listStudent[i].khoa);
+                        print(state.listStudent[i].khoa);
+                      }
+                    }
                   }
                 },
                 builder: (context, state) {
