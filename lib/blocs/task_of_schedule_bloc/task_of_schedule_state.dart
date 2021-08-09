@@ -14,7 +14,8 @@ class LoadingTaskOfSchedule extends TaskOfScheduleState {}
 
 class LoadedTaskOfSchedule extends TaskOfScheduleState {
   final List<TaskOfSchedule> list;
-  LoadedTaskOfSchedule(this.list);
+  final List<TaskOfSchedule> nowList;
+  LoadedTaskOfSchedule(this.list, this.nowList);
 }
 
 class LoadErrorTaskOfSchedule extends TaskOfScheduleState {

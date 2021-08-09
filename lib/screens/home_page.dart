@@ -128,127 +128,173 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white.withOpacity(.85),
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(10)),
-              child: Scrollbar(
-                radius: Radius.circular(5),
-                child: ListView.builder(
-                  itemCount: 3,
-                  padding: EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'title',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: ColorApp.mediumBlue,
-                                    fontSize: 17,
-                                    letterSpacing: 1,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Spacer()
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                child: Text(
-                                  'Now, 07:00 -11:30',
-                                  style: TextStyle(
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.orange.withOpacity(.1)),
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.place,
-                                        color: ColorApp.lightBlue,
-                                        size: 16,
-                                      ),
-                                      Text(
-                                        'C1',
-                                        style: TextStyle(
-                                          color: ColorApp.blue,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color:
-                                          ColorApp.lightBlue.withOpacity(.1)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              TextButton.icon(
-                                onPressed: () async {
-                                  var s =
-                                      await Permission.locationAlways.request();
-                                  print(s);
-                                  location = await getLocation();
-                                  try {
-                                    var geocoding = Geocoder.local;
-                                    var longitude = location.longitude;
-                                    var latitude = location.latitude;
-                                    var results = await geocoding
-                                        .findAddressesFromCoordinates(
-                                            new Coordinates(
-                                                latitude, longitude));
-                                    this.setState(() {
-                                      this.results = results;
-                                    });
-                                    print(results[0].addressLine);
-                                  } catch (e) {
-                                    print("Error occured: $e");
-                                  }
-                                  teacherDatabase.attend(
-                                      widget.idTeacher,
-                                      '',
-                                      '12',
-                                      '2021-07-10',
-                                      location.latitude.toString() +
-                                          ',' +
-                                          location.longitude.toString(),
-                                      results[0].addressLine);
-                                },
-                                icon: Icon(Icons.library_add_check_outlined,
-                                    color: ColorApp.blue, size: 18),
-                                label: Text(
-                                  "Điểm danh",
-                                  style: TextStyle(color: ColorApp.blue),
-                                ),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                          Divider(
-                            color: ColorApp.grey,
-                          )
-                        ],
+              child: BlocBuilder<TaskOfScheduleBloc, TaskOfScheduleState>(
+                  builder: (context, state) {
+                if (state is LoadingTaskOfSchedule)
+                  return Container(
+                    child: Center(
+                        child: SpinKitThreeBounce(
+                      color: Colors.lightBlue,
+                      size: size.width * 0.06,
+                    )),
+                  );
+                else if (state is LoadedTaskOfSchedule) {
+                  if (state.nowList.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Hiện tại chưa có công việc nào',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
                       ),
                     );
-                  },
-                ),
-              ),
+                  } else
+                    return Scrollbar(
+                      radius: Radius.circular(5),
+                      child: ListView.builder(
+                        itemCount: state.nowList.length,
+                        padding: EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      state.nowList[index].titleTask,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: ColorApp.mediumBlue,
+                                          fontSize: 17,
+                                          letterSpacing: 1,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Spacer()
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        'Now, ' +
+                                            DateTime.parse(state
+                                                    .nowList[index].timeStart)
+                                                .hour
+                                                .toString() +
+                                            ':' +
+                                            DateTime.parse(state
+                                                    .nowList[index].timeStart)
+                                                .minute
+                                                .toString() +
+                                            ' - ' +
+                                            DateTime.parse(state
+                                                    .nowList[index].timeEnd)
+                                                .hour
+                                                .toString() +
+                                            ':' +
+                                            DateTime.parse(state
+                                                    .nowList[index].timeEnd)
+                                                .minute
+                                                .toString(),
+                                        style: TextStyle(
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.orange.withOpacity(.1)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.place,
+                                              color: ColorApp.lightBlue,
+                                              size: 16,
+                                            ),
+                                            Text(
+                                              'C1',
+                                              style: TextStyle(
+                                                color: ColorApp.blue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: ColorApp.lightBlue
+                                                .withOpacity(.1)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    TextButton.icon(
+                                      onPressed: () async {
+                                        var s = await Permission.locationAlways
+                                            .request();
+                                        print(s);
+                                        location = await getLocation();
+                                        try {
+                                          var geocoding = Geocoder.local;
+                                          var longitude = location.longitude;
+                                          var latitude = location.latitude;
+                                          var results = await geocoding
+                                              .findAddressesFromCoordinates(
+                                                  new Coordinates(
+                                                      latitude, longitude));
+                                          this.setState(() {
+                                            this.results = results;
+                                          });
+                                          print(results[0].addressLine);
+                                        } catch (e) {
+                                          print("Error occured: ");
+                                        }
+                                        teacherDatabase.attend(
+                                            widget.idTeacher,
+                                            '',
+                                            '12',
+                                            '2021-07-10',
+                                            location.latitude.toString() +
+                                                ',' +
+                                                location.longitude.toString(),
+                                            results[0].addressLine);
+                                      },
+                                      icon: Icon(
+                                          Icons.library_add_check_outlined,
+                                          color: ColorApp.blue,
+                                          size: 18),
+                                      label: Text(
+                                        "Điểm danh",
+                                        style: TextStyle(color: ColorApp.blue),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
+                                ),
+                                Divider(
+                                  color: ColorApp.grey,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                } else
+                  return SizedBox();
+              }),
             ),
           )
         ],

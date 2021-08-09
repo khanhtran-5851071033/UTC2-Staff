@@ -16,21 +16,26 @@ class TaskOfScheduleBloc
         yield LoadingTaskOfSchedule();
 
         List<TaskOfSchedule> todayList = [];
+        List<TaskOfSchedule> nowList = [];
         List<TaskOfSchedule> list =
             await ScheduleDatabase.getTaskOfScheduleData(
           event.props[0],
           event.props[1],
         );
         for (var task in list) {
-
           DateTime now = DateTime.now();
-
+          
           if (task.note - 1 == now.weekday) {
             todayList.add(task);
+            if (now.hour >= DateTime.parse(task.timeStart).hour &&
+                now.hour <= DateTime.parse(task.timeEnd).hour) {
+              nowList.add(task);
+            }
           }
         }
+        print(nowList.length);
         if (todayList.isNotEmpty) {
-          yield LoadedTaskOfSchedule(todayList);
+          yield LoadedTaskOfSchedule(todayList, nowList);
         } else
           yield LoadErrorTaskOfSchedule('Chưa có lịch giảng cụ thể');
         break;
