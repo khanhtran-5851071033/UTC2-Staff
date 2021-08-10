@@ -263,9 +263,15 @@ class _HomePageState extends State<HomePage> {
                                         }
                                         teacherDatabase.attend(
                                             widget.idTeacher,
-                                            '',
-                                            '12',
-                                            '2021-07-10',
+                                            state.nowList[index].idSchedule,
+                                            state.nowList[index].idTask,
+                                            DateTime.now().year.toString() +
+                                                '-' +
+                                                DateTime.now()
+                                                    .month
+                                                    .toString() +
+                                                "-" +
+                                                DateTime.now().day.toString(),
                                             location.latitude.toString() +
                                                 ',' +
                                                 location.longitude.toString(),

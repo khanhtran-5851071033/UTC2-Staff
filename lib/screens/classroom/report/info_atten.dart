@@ -315,11 +315,13 @@ class _InfoAteenState extends State<InfoAteen> {
                                               if (state is AttendInitial) {
                                                 return SpinKitThreeBounce(
                                                   color: ColorApp.lightBlue,
+                                                  size: 30,
                                                 );
                                               } else if (state
                                                   is LoadingAttend) {
                                                 return SpinKitThreeBounce(
                                                   color: ColorApp.lightBlue,
+                                                  size: 30,
                                                 );
                                               } else if (state
                                                   is LoadedAttend) {

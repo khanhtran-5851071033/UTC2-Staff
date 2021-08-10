@@ -55,6 +55,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Text(
                 'Đăng nhập bằng tài khoản Giảng Viên',
                 softWrap: true,
+                textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

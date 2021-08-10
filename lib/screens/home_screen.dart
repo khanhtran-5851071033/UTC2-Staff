@@ -140,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         bottomNavigationBar: BottomNavyBar(
+
           selectedIndex: _selectedIndex,
           showElevation: true, // use this to remove appBar's elevation
           onItemSelected: (index) => setState(() {
@@ -164,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.home_rounded),
                 title: Text('Trang chủ'),
                 activeColor: Colors.blue,
+                textAlign: TextAlign.center,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(
@@ -171,16 +173,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 title: Text('Thông báo'),
                 activeColor: Colors.blue,
+                textAlign: TextAlign.center,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(Icons.date_range),
                 title: Text('Lịch trình'),
                 activeColor: Colors.blue,
+                textAlign: TextAlign.center,
                 inactiveColor: ColorApp.black),
             BottomNavyBarItem(
                 icon: Icon(Icons.stacked_line_chart_rounded),
                 title: Text('Hoạt động'),
                 activeColor: Colors.blue,
+                textAlign: TextAlign.center,
                 inactiveColor: ColorApp.black),
           ],
         ));

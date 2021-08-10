@@ -13,11 +13,7 @@ class NewQuiz extends StatefulWidget {
 
 class _NewQuizState extends State<NewQuiz> {
   showAlertDialog(
-    BuildContext context,
-    String idTeacher,
-    String idQuiz,
-    int idQuestion
-  ) {
+      BuildContext context, String idTeacher, String idQuiz, int idQuestion) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Thoát"),
@@ -38,7 +34,7 @@ class _NewQuizState extends State<NewQuiz> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Bài Test chưa hoàn thành bạn có muốn kết thúc?"),
-      content: Text('Dừng ở câu số '+idQuestion.toString()),
+      content: Text('Dừng ở câu số ' + idQuestion.toString()),
       actions: [
         continueButton,
         cancelButton,
@@ -86,7 +82,8 @@ class _NewQuizState extends State<NewQuiz> {
             color: ColorApp.lightGrey,
             onPressed: () {
               idQuestion != 0
-                  ? showAlertDialog(context, widget.idTeacher, idQuiz,idQuestion)
+                  ? showAlertDialog(
+                      context, widget.idTeacher, idQuiz, idQuestion)
                   : Navigator.pop(context);
             },
             icon: Icon(
@@ -101,19 +98,6 @@ class _NewQuizState extends State<NewQuiz> {
             'Bài tập mới',
             style: TextStyle(color: ColorApp.black),
           ),
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => QuizSreen()));
-              },
-              label: Text('Xem trước  '),
-              icon: Icon(
-                Icons.visibility_rounded,
-                size: 16,
-              ),
-            )
-          ],
         ),
         body: Container(
           child: Column(
@@ -325,16 +309,13 @@ class _NewQuizState extends State<NewQuiz> {
                                             _titleController.text.trim(),
                                         'timePlay': _selectedTime.toString(),
                                         'dateCreate': DateTime.now().toString(),
-                                        'totalQuestion':
-                                            (idQuestion).toString()
+                                        'totalQuestion': (idQuestion).toString()
                                       };
                                       QuizDatabase.updateQuiz(
                                           widget.idTeacher, idQuiz, dataQuiz);
                                       Navigator.pop(context);
                                     }
-                                  } else {
-                                    
-                                  }
+                                  } else {}
                                 }),
                             ElevatedButton(
                                 child: Container(

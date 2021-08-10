@@ -22,7 +22,6 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
   List<String> listKhoa = ['Tất cả'];
   List<String> listHeDaoTao = ['Tất cả'];
 
-
   @override
   void initState() {
     super.initState();
@@ -142,18 +141,17 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                       }
                     });
                     for (int i = 0; i < state.listStudent.length; i++) {
-                      if (!listClassName.contains(state.listStudent[i].lop)) {
-                        listClassName.add(state.listStudent[i].lop);
-                        print(state.listStudent[i].lop);
+                      if (!listClassName
+                          .contains(state.listStudent[i].lop.trim())) {
+                        listClassName.add(state.listStudent[i].lop.trim());
                       }
                       if (!listHeDaoTao
-                          .contains(state.listStudent[i].heDaoTao)) {
-                        listHeDaoTao.add(state.listStudent[i].heDaoTao);
-                        print(state.listStudent[i].heDaoTao);
+                          .contains(state.listStudent[i].heDaoTao.trim())) {
+                        listHeDaoTao.add(state.listStudent[i].heDaoTao.trim());
                       }
-                      if (!listKhoa.contains(state.listStudent[i].khoa)) {
-                        listKhoa.add(state.listStudent[i].khoa);
-                        print(state.listStudent[i].khoa);
+                      if (!listKhoa
+                          .contains(state.listStudent[i].khoa.trim())) {
+                        listKhoa.add(state.listStudent[i].khoa.trim());
                       }
                     }
                   }
@@ -228,7 +226,7 @@ class _InviteStudentScreenState extends State<InviteStudentScreen> {
                                           Transform.scale(
                                             scale: 0.8,
                                             child: Checkbox(
-                                              value: user[index],
+                                              value: user[index] ?? false,
                                               activeColor: ColorApp.mediumBlue,
                                               checkColor: ColorApp.lightGrey,
                                               shape: CircleBorder(),

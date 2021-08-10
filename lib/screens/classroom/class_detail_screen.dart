@@ -704,7 +704,6 @@ class ItemNoti extends StatelessWidget {
                                                   list[index].url,
                                                   list[index].nameFile,
                                                   context);
-                                              print('có');
                                             }
                                           },
                                           child: Row(
