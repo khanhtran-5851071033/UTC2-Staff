@@ -24,12 +24,19 @@ class TaskOfScheduleBloc
         );
         for (var task in list) {
           DateTime now = DateTime.now();
-          
+
           if (task.note - 1 == now.weekday) {
             todayList.add(task);
-            if (now.hour >= DateTime.parse(task.timeStart).hour &&
-                now.hour <= DateTime.parse(task.timeEnd).hour) {
+
+            if (now.hour > DateTime.parse(task.timeStart).hour &&
+                now.hour < DateTime.parse(task.timeEnd).hour)
               nowList.add(task);
+            else if (now.hour == DateTime.parse(task.timeStart).hour) {
+              if (now.minute >= DateTime.parse(task.timeStart).minute)
+                nowList.add(task);
+            } else if (now.hour == DateTime.parse(task.timeEnd).hour) {
+              if (now.minute < DateTime.parse(task.timeEnd).minute)
+                nowList.add(task);
             }
           }
         }

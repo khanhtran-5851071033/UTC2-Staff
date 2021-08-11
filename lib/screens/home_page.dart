@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/model.dart';
 import 'package:geocoder/services/base.dart';
@@ -92,6 +93,7 @@ class _HomePageState extends State<HomePage> {
   Position location;
   Geocoding geocoding;
   List<Address> results = [];
+  String scheduleName = '';
 
   Widget taskThisTime(Size size) {
     return Container(
@@ -128,8 +130,19 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white.withOpacity(.85),
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(10)),
-              child: BlocBuilder<TaskOfScheduleBloc, TaskOfScheduleState>(
-                  builder: (context, state) {
+              child: BlocConsumer<TaskOfScheduleBloc, TaskOfScheduleState>(
+                  listener: (context, state) async {
+                if (state is LoadedTaskOfSchedule) {
+                  await teacherDatabase
+                      .getScheduleById(
+                          widget.idTeacher, state.nowList[0].idSchedule)
+                      .then((value) {
+                    setState(() {
+                      scheduleName = value.titleSchedule;
+                    });
+                  });
+                }
+              }, builder: (context, state) {
                 if (state is LoadingTaskOfSchedule)
                   return Container(
                     child: Center(
@@ -160,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                                 Row(
                                   children: [
                                     Text(
-                                      state.nowList[index].titleTask,
+                                      scheduleName,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                           color: ColorApp.mediumBlue,
@@ -269,6 +282,15 @@ class _HomePageState extends State<HomePage> {
                                                 ',' +
                                                 location.longitude.toString(),
                                             results[0].addressLine);
+                                        Fluttertoast.showToast(
+                                            msg: "Đã điểm danh",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                                ColorApp.mediumBlue,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
                                       },
                                       icon: Icon(
                                           Icons.library_add_check_outlined,

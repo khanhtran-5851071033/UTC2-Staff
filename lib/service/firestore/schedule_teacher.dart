@@ -114,6 +114,14 @@ class Schedule {
     this.timeEnd = json['timeEnd'];
     this.note = json['note'];
   }
+  Schedule.fromJson(Map<String, dynamic> json) {
+    this.idSchedule = json['idSchedule'];
+    this.idTeacher = json['idTeacher'];
+    this.titleSchedule = json['titleSchedule'];
+    this.timeStart = json['timeStart'];
+    this.timeEnd = json['timeEnd'];
+    this.note = json['note'];
+  }
 }
 
 class TaskOfSchedule {

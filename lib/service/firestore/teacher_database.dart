@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:utc2_staff/service/firestore/schedule_teacher.dart';
 
 class TeacherDatabase {
   Future<void> createTeacher(Map<String, String> dataTeacher, String id) async {
@@ -9,8 +10,8 @@ class TeacherDatabase {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-  void attend(String idTeacher, String idSchedule, String idTask,String idAttend,
-      String location, String address) {
+  void attend(String idTeacher, String idSchedule, String idTask,
+      String idAttend, String location, String address) {
     var data = {
       'idTaskOfSchedule': idTask.toString(),
       'id': idAttend,
@@ -112,6 +113,19 @@ class TeacherDatabase {
     var data = await FirebaseFirestore.instance.collection('Teacher').get();
     list = data.docs.map((e) => Teacher(e)).toList();
     return list;
+  }
+
+  Future<Schedule> getScheduleById(String idTeacher, String idSchedule) async {
+    Schedule schedule;
+    var data = await FirebaseFirestore.instance
+        .collection('Teacher')
+        .doc(idTeacher)
+        .collection('Schedule')
+        .doc(idSchedule)
+        .get();
+
+    schedule = Schedule.fromJson(data.data());
+    return schedule;
   }
 }
 
