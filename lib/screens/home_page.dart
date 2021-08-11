@@ -250,14 +250,12 @@ class _HomePageState extends State<HomePage> {
                                           var geocoding = Geocoder.local;
                                           var longitude = location.longitude;
                                           var latitude = location.latitude;
-                                          var results = await geocoding
+                                          var results1 = await geocoding
                                               .findAddressesFromCoordinates(
                                                   new Coordinates(
                                                       latitude, longitude));
-                                          this.setState(() {
-                                            this.results = results;
-                                          });
-                                          print(results[0].addressLine);
+                                          results = results1;
+                                          print(results1[0].addressLine);
                                         } catch (e) {
                                           print("Error occured: ");
                                         }
@@ -265,13 +263,8 @@ class _HomePageState extends State<HomePage> {
                                             widget.idTeacher,
                                             state.nowList[index].idSchedule,
                                             state.nowList[index].idTask,
-                                            DateTime.now().year.toString() +
-                                                '-' +
-                                                DateTime.now()
-                                                    .month
-                                                    .toString() +
-                                                "-" +
-                                                DateTime.now().day.toString(),
+                                            DateFormat("yyyy-MM-dd")
+                                                .format(DateTime.now()),
                                             location.latitude.toString() +
                                                 ',' +
                                                 location.longitude.toString(),
