@@ -31,11 +31,11 @@ class FirebaseApiGetFile {
 
   static Future downloadFile(
       String url, String name, BuildContext context) async {
-    var status = await Permission.storage.status;
-    // String url = await ref.getDownloadURL();
-
+    await Permission.storage.request();
     Response response = await http.get(Uri.parse(url));
-    if (status.isDenied) {
+
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
       await Permission.storage.request();
       final file = File('/storage/emulated/0/Download/$name');
       await file.writeAsBytes(response.bodyBytes);

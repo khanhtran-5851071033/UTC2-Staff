@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     final settingsAndroid = AndroidInitializationSettings('app_icon');
 
     final settingsIOS = IOSInitializationSettings(
@@ -122,7 +123,8 @@ class _HomePageState extends State<HomePage> {
             create: (context) => TaskOfScheduleBloc()),
         BlocProvider<TestBloc>(create: (context) => TestBloc()),
         BlocProvider<FileBloc>(create: (context) => FileBloc()),
-        BlocProvider<AttendTeacherBloc>(create: (context) => AttendTeacherBloc()),
+        BlocProvider<AttendTeacherBloc>(
+            create: (context) => AttendTeacherBloc()),
       ],
       child: GetMaterialApp(
         theme: ThemeData(
@@ -185,7 +187,7 @@ class _HomePageState extends State<HomePage> {
         'date': DateTime.now().toString(), //time nhận được
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
-    } else if((message.data['idNoti'] == 'newClass')) {
+    } else if ((message.data['idNoti'] == 'newClass')) {
       print('Thông báo NEW CLASS-------------------------------------');
       MyLocalNotification.showNotificationNewClass(
         notifications,
@@ -208,10 +210,10 @@ class _HomePageState extends State<HomePage> {
       };
       notifyAppDatabase.createNotifyApp(dataNotifyApp, teacher.id, id);
     }
-    
   }
 
   getTokenFCM() async {
+   
     try {
       FirebaseMessaging.instance.getToken().then((token) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
