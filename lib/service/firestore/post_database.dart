@@ -73,7 +73,9 @@ class Post {
       idAtten,
       timeAtten,
       idQuiz,
-      quizContent;
+      quizContent,
+      location,
+      address;
   List file;
 
   Post(QueryDocumentSnapshot<Map<String, dynamic>> json) {
@@ -88,5 +90,7 @@ class Post {
     this.timeAtten = json['timeAtten'];
     this.idQuiz = json['idQuiz'];
     this.quizContent = json['quizContent'];
+    this.location = json['location'];
+    this.address = json['address'];
   }
 }

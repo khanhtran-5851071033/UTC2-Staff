@@ -3,6 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/services/base.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -18,6 +21,7 @@ import 'package:utc2_staff/service/firestore/class_database.dart';
 import 'package:utc2_staff/service/firestore/post_database.dart';
 import 'package:utc2_staff/service/firestore/quiz_database.dart';
 import 'package:utc2_staff/service/firestore/teacher_database.dart';
+import 'package:utc2_staff/service/geo_service.dart';
 import 'package:utc2_staff/service/push_noti_firebase.dart';
 import 'package:utc2_staff/utils/utils.dart';
 
@@ -48,11 +52,25 @@ class _NewNotifyState extends State<NewNotify> {
   final _formKey = GlobalKey<FormState>();
   QuizBloc quizBloc = new QuizBloc();
   List<FirebaseFile> listFile = [];
+  GeoService geoService = GeoService();
+  var location;
+  Geocoding geocoding = Geocoder.local;
+  var results;
+
   @override
   void initState() {
     quizBloc = BlocProvider.of<QuizBloc>(context);
     quizBloc.add(GetQuizEvent(widget.teacher.id));
+
+    initLocation();
     super.initState();
+  }
+
+  void initLocation() async {
+    //Lay lat long
+    location = await getLocation(geoService);
+    results = await geocoding.findAddressesFromCoordinates(
+        new Coordinates(location.latitude, location.longitude));
   }
 
   void submitPost() async {
@@ -117,6 +135,10 @@ class _NewNotifyState extends State<NewNotify> {
                 quizAdd.totalQuestion +
                 ' câu'
             : null,
+        'location': (location?.latitude.toString() ?? '') +
+            ',' +
+            (location?.longitude.toString() ?? ''),
+        'address': results[0].addressLine.toString(),
       };
       await postDatabase.createPost(dataPost, widget.classUtc.id, idPost);
       if (listFile.isNotEmpty) {

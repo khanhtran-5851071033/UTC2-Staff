@@ -1,4 +1,4 @@
-package com.example.utc2_staff
+package vn.utc2.staff
 
 import io.flutter.embedding.android.FlutterActivity
 

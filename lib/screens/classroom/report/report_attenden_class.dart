@@ -298,6 +298,21 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                   ),
                 ],
               ),
+              BlocBuilder<AttendStudentBloc, AttendStudentState>(
+                builder: (context, state) {
+                  if (state is LoadedAttend) {
+                    var attended = 0;
+                    for (var e in state.list) {
+                      if (e.status == "Thành công") attended += 1;
+                    }
+
+                    return Text(attended.toString() +
+                        '/' +
+                        state.listStudent.length.toString());
+                  } else
+                    return SizedBox();
+                },
+              ),
               Expanded(
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
