@@ -306,9 +306,35 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                       if (e.status == "Thành công") attended += 1;
                     }
 
-                    return Text(attended.toString() +
-                        '/' +
-                        state.listStudent.length.toString());
+                    return Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.check,
+                                    size: 15, color: Colors.lightGreen),
+                                Text(' Có mặt : '),
+                                Text((attended).toString()),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.close, size: 15, color: Colors.red),
+                                Text(' Vắng : '),
+                                Text((state.listStudent.length - attended)
+                                    .toString()),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('Tổng sv: '),
+                                Text(state.listStudent.length.toString()),
+                              ],
+                            )
+                          ],
+                        ));
                   } else
                     return SizedBox();
                 },
