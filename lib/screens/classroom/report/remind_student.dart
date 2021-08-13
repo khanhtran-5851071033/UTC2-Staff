@@ -40,16 +40,19 @@ class _RemindState extends State<Remind> {
   void initState() {
     for (int i = 0; i < widget.listStudent.length; i++) {
       user.add(true);
+      listInvite.add(widget.listStudent[i].email);
     }
     print(widget.listStudent.length);
     super.initState();
   }
 
-  Future<void> send(String nameClass, List<String> listEmail) async {
+  Future<void> send(
+      Class classutc, Teacher teacher, List<String> listEmail) async {
     final Email email = Email(
       body: 'Cố gắng đi học đều nha em',
-      subject: nameClass,
-      recipients: listEmail,
+
+      subject: classutc.name + ' - ' + teacher.name,
+       recipients: listEmail,
       // attachmentPaths: attachments,
       isHTML: true,
     );
@@ -59,17 +62,47 @@ class _RemindState extends State<Remind> {
     try {
       await FlutterEmailSender.send(email);
       platformResponse = 'success';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(platformResponse),
+        ),
+      );
     } catch (error) {
       platformResponse = error.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(platformResponse),
+        ),
+      );
     }
 
     if (!mounted) return;
+  }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(platformResponse),
-      ),
-    );
+  void showSnackBar(BuildContext context, String text, bool show) {
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                text,
+                style: TextStyle(color: Colors.white, fontSize: 17),
+              ),
+              show
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : Container(
+                      height: 5,
+                    )
+            ],
+          ),
+          backgroundColor: Colors.lightBlue,
+        ),
+      );
   }
 
   @override
@@ -98,7 +131,10 @@ class _RemindState extends State<Remind> {
             TextButton(
               onPressed: () async {
                 if (listInvite.isNotEmpty) {
-                  send(widget.classUtc.name, listInvite);
+                  send(widget.classUtc, widget.teacher, listInvite);
+                } else {
+                  showSnackBar(
+                      context, 'Chọn sinh viên cần gửi lời nhắc !', true);
                 }
               },
               child: Text('Gửi nhắc nhở'),
