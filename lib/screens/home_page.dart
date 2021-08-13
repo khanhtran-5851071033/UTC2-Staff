@@ -133,14 +133,16 @@ class _HomePageState extends State<HomePage> {
               child: BlocConsumer<TaskOfScheduleBloc, TaskOfScheduleState>(
                   listener: (context, state) async {
                 if (state is LoadedTaskOfSchedule) {
-                  await teacherDatabase
-                      .getScheduleById(
-                          widget.idTeacher, state.nowList[0].idSchedule)
-                      .then((value) {
-                    setState(() {
-                      scheduleName = value.titleSchedule;
+                  if (state.nowList.isNotEmpty) {
+                    await teacherDatabase
+                        .getScheduleById(
+                            widget.idTeacher, state.nowList[0].idSchedule)
+                        .then((value) {
+                      setState(() {
+                        scheduleName = value.titleSchedule;
+                      });
                     });
-                  });
+                  }
                 }
               }, builder: (context, state) {
                 if (state is LoadingTaskOfSchedule)
@@ -194,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                                     Container(
                                       padding: EdgeInsets.all(5),
                                       child: Text(
-                                        'Now, ' +
+                                        'Bây giờ, ' +
                                             DateTime.parse(state
                                                     .nowList[index].timeStart)
                                                 .hour

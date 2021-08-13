@@ -83,6 +83,7 @@ dependencies:
 
   # pick file
   file_picker: ^3.0.1
+  flutter_email_sender: ^5.0.2
   
 
  

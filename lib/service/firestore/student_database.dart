@@ -79,6 +79,23 @@ class StudentDatabase {
         .collection('Post')
         .doc(idPost)
         .collection('Student')
+        
+        .get();
+    print(data.docs.length);
+    list = data.docs.map((e) => StudentAttend(e)).toList();
+    return list;
+  }
+
+   static getStudentsOfClassOfAttendOfStudent(String idClass, String idPost,String idStudent) async {
+    List<StudentAttend> list = [];
+    var data = await FirebaseFirestore.instance
+        .collection('Class')
+        .doc(idClass)
+        .collection('Post')
+        .doc(idPost)
+        .collection('Student')
+        .where('idStudent',isEqualTo: idStudent)
+        
         .get();
     print(data.docs.length);
     list = data.docs.map((e) => StudentAttend(e)).toList();

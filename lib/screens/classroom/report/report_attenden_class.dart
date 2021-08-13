@@ -7,6 +7,7 @@ import 'package:utc2_staff/blocs/atttend_student_bloc/attend_event.dart';
 import 'package:utc2_staff/blocs/atttend_student_bloc/attend_state.dart';
 import 'package:utc2_staff/blocs/student_bloc/student_bloc.dart';
 import 'package:utc2_staff/screens/classroom/report/info_atten.dart';
+import 'package:utc2_staff/screens/classroom/report/remind_student.dart';
 import 'package:utc2_staff/service/excel/excel_api.dart';
 import 'package:utc2_staff/service/excel/excel_class_attend.dart';
 import 'package:utc2_staff/service/firestore/class_database.dart';
@@ -242,6 +243,7 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
                     widget.classUtc.id, widget.listPost[i].id);
                 listStudentAttend = listStudentAttend + item;
               }
+
               if (listStudent.isNotEmpty) {
                 final excelFile = await ExcelAttendApi.generate(
                     widget.teacher,
@@ -260,6 +262,96 @@ class _ReportAttendenClassState extends State<ReportAttendenClass> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: TextButton.icon(
+          icon: Icon(Icons.sms_failed_rounded),
+          label: Text(
+            'Nhắc nhở',
+            style: TextStyle(fontSize: 18),
+          ),
+          onPressed: () async {
+            for (int i = 0; i < widget.listPost.length; i++) {
+              var item = await StudentDatabase.getStudentsOfClassOfAttend(
+                  widget.classUtc.id, widget.listPost[i].id);
+              listStudentAttend = listStudentAttend + item;
+            }
+            if (listStudent.isNotEmpty) {
+              List<Score> listScore = [];
+              List<Score> listScore1 = [];
+              for (int i = 0; i < listStudent.length; i++) {
+                for (int j = 0; j < widget.listPost.length; j++) {
+                  if (listStudentAttend
+                      .where((element) =>
+                          element.id == listStudent[i].id &&
+                          element.idPost == widget.listPost[j].id &&
+                          element.idAttend == widget.listPost[j].idAtten)
+                      .isNotEmpty) {
+                    if (listStudentAttend
+                            .where((element) =>
+                                element.id == listStudent[i].id &&
+                                element.idPost == widget.listPost[j].id &&
+                                element.idAttend == widget.listPost[j].idAtten)
+                            .first
+                            .status ==
+                        'Thành công') {
+                      listScore.add(Score(
+                          id: listStudent[i].id,
+                          score: 1,
+                          name: listStudent[i].name,
+                          email: listStudent[i].email,
+                          avatar: listStudent[i].avatar));
+                    } else
+                      print(false);
+                  }
+                  listScore.add(Score(
+                      id: listStudent[i].id,
+                      score: 0,
+                      name: listStudent[i].name,
+                      email: listStudent[i].email,
+                      avatar: listStudent[i].avatar));
+                }
+              }
+
+              for (int i = 0; i < listStudent.length; i++) {
+                listScore1.add(Score(
+                    id: listStudent[i].id,
+                    score: (1 -
+                            (listScore
+                                    .where((element) =>
+                                        element.id == listStudent[i].id &&
+                                        element.score == 1)
+                                    .length) /
+                                widget.listPost.length)
+                        .toDouble(),
+                    name: listStudent[i].name,
+                    email: listStudent[i].email,
+                    avatar: listStudent[i].avatar));
+              }
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Remind(
+                            teacher: widget.teacher,
+                            classUtc: widget.classUtc,
+                            listStudent: listScore1
+                                .where((element) => element.score>0.5)
+                                .toList(),
+                          )));
+            }
+          },
+          style: ButtonStyle(
+              elevation: MaterialStateProperty.all<double>(3),
+              shadowColor: MaterialStateProperty.all<Color>(Colors.lightBlue),
+              overlayColor: MaterialStateProperty.all<Color>(
+                  Colors.white.withOpacity(.4)),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.lightBlue),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )))),
       body: Container(
           width: size.width,
           height: size.height,

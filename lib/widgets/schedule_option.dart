@@ -101,10 +101,9 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
                   DateTime(date.year, date.month, date.day, eh, em);
 
               meetings.add(Meeting(tenMon + '\n\n' + room, startTime, endTime,
-                  ColorRandom.colors[maMon][0], false));
-              teacherDatabase.createTeacherAttend(
-                idTeacher, maMon, maLich, DateFormat("yyyy-MM-dd").format(date)
-              );
+                  ColorRandom.colors[maMon][1], false));
+              teacherDatabase.createTeacherAttend(idTeacher, maMon, maLich,
+                  DateFormat("yyyy-MM-dd").format(date));
               if (date.day == today.day &&
                   date.month == today.month &&
                   date.year == today.year) {
@@ -154,7 +153,7 @@ class _OpitonScheduleState extends State<OpitonScheduleMonth>
         showDatePickerButton: true,
         showNavigationArrow: true,
         headerHeight: 50,
-        todayHighlightColor: ColorApp.blue,
+        todayHighlightColor: ColorApp.red,
         appointmentTextStyle: TextStyle(fontSize: 15),
 
         // scheduleViewMonthHeaderBuilder: (BuildContext buildercontext,ScheduleView),
